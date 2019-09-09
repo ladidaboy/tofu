@@ -1,0 +1,198 @@
+== MySQL ==
+================================================================================================================================
+数据库表命名规范
+------------+-------+-----------------------------------------------------------------------------------------------------------
+| MetaData  | TA_*  | META 元数据 (数据量较小，10000条记录以内，且变动频率很低，几个月甚至几年才会变动)
+| JavaBean  | TB_*  | BEAN 业务对象
+| Config    | TC_*  | CONF 配置信息
+| Mapping   | TM_*  | MAPP 关系表
+| Temporary | TT_*  | TEMP 临时表
+| Global    | GL_*  | GLBL 全局表
+|-----------+-------+--------------------
+| History   | *_HIS | *HIS 历史表
+| LOG       | *_LOG | *LOG 日志表
+|-----------+-------+--------------------
+| View      | VU_*  | VIEW 数据库表视图
+| Function  | FN_*  | FUNC 数据库功能函数
+| Procedure | PJ_*  | PRCJ 数据库存储过程
+|
+================================================================================================================================
+https://www.cnblogs.com/yybrhr/p/9779972.html
+================================================================================================================================
+1,新建表以及添加表和字段的注释.
+    create table t_user(
+        ID INT(19) primary key auto_increment  comment '主键',
+        NAME VARCHAR(300) comment '姓名',
+        CREATE_TIME date comment '创建时间'
+    )comment  = '用户信息表';
+
+2,修改表/字段的注释.
+    alter table t_user comment = '修改后的表注释信息(用户信息表)';
+    alter table t_user modify column id int comment '主键ID';
+    --注意：字段名和字段类型照写就行
+
+3,查询数据库所有表的详细信息(包括表的注释).
+use information_schema;
+select * from TABLES where TABLE_SCHEMA='my_db';
+--查询某一张表的
+use information_schema;
+select * from TABLES where TABLE_SCHEMA='my_db' and TABLE_NAME= 'auth_user';
+
+4,查询一张表的详细信息(包括字段注释,字段名称,类型等).
+use information_schema;
+select * from information_schema.columns where table_schema ='my_db' and table_name = 'auth_user';
+
+注:还有一种方式:
+show create table table_name;
+use my_db;
+show full columns from auth_user;
+
+USE OSS;
+SHOW FULL COLUMNS FROM D_AREA;
+SHOW FULL COLUMNS FROM D_COUNTRY;
+SHOW FULL COLUMNS FROM D_CITY;
+
+USE INFORMATION_SCHEMA;
+SELECT TABLE_NAME, COLUMN_NAME, COLUMN_TYPE, COLUMN_COMMENT
+FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'oss' AND COLUMN_NAME = 'flow_id';
+================================================================================================================================
+将old数据库复制到new数据库
+1、创建新的数据库
+    mysql -u root -p123456
+    CREATE DATABASE `new` DEFAULT CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
+2、使用mysqldump及mysql组合命令
+    mysqldump -u root -p123456 old  | mysql new -u root -p123456
+3、如果不在同一个mysql服务器上
+    mysqldump -u root -p123456 old  | mysql -h 10.1.1.2 new -u root -p123456
+
+Eg.  mysqldump -h10.64.3.46:8010 -u root -p123456 oss  | mysql oss -u root
+--------------------------------------------------------------------------------------------------------------------------------
+mysqldump -u root -p source_db > /home/db_bak.sql #导出数据库
+123456 #输入数据库密码
+扩展：
+mysqldump -u root -p dz pre_portal_comment > /home/pre_portal_comment_bak.sql #导出数据库中的某个表
+
+创建数据库
+CREATE DATABASE target_db DEFAULT CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI
+
+mysql -uroot -p #进入MySQL数据库控制台
+123456 #输入数据库密码
+show databases; #查看数据库
+create database target_db; #创建新数据库dzbak
+use target_db #进入dzbak数据库目录
+source /home/db_bak.sql 导入dz_bak.sql到数据库dzbak中
+================================================================================================================================
+MYSQL命令行备份数据库
+MySQL数据库使用命令行备份|MySQL数据库备份命令
+例如：
+数据库地址：127.0.0.1
+数据库用户名：root
+数据库密码：pass
+数据库名称：myweb
+
+备份数据库到D盘跟目录
+mysqldump -h127.0.0.1 -uroot -ppass myweb > d:/backupfile.sql
+
+备份到当前目录 备份MySQL数据库为带删除表的格式，能够让该备份覆盖已有数据库而不需要手动删除原有数据库
+mysqldump --add-drop-table -h127.0.0.1 -uroot -ppass myweb > backupfile.sql
+
+直接将MySQL数据库压缩备份  备份到D盘跟目录
+mysqldump -h127.0.0.1 -uroot -ppass myweb | gzip > d:/backupfile.sql.gz
+
+备份MySQL数据库某个(些)表。此例备份table1表和table2表。备份到linux主机的/home下
+mysqldump -h127.0.0.1 -uroot -ppass myweb table1 table2 > /home/backupfile.sql
+
+同时备份多个MySQL数据库
+mysqldump -h127.0.0.1 -uroot -ppass --databases myweb myweb2 > multibackupfile.sql
+
+仅仅备份数据库结构。同时备份名为myweb数据库和名为myweb2数据库
+mysqldump --no-data -h127.0.0.1 -uroot -ppass --databases myweb myweb2 > structurebackupfile.sql
+
+备份服务器上所有数据库
+mysqldump --all-databases -h127.0.0.1 -uroot -ppass > allbackupfile.sql
+
+还原MySQL数据库的命令。还原当前备份名为backupfile.sql的数据库
+mysql -h127.0.0.1 -uroot -ppass myweb < backupfile.sql
+
+还原压缩的MySQL数据库
+gunzip < backupfile.sql.gz | mysql -h127.0.0.1 -uroot -ppass myweb
+
+将数据库转移到新服务器。此例为将本地数据库myweb复制到远程数据库名为serweb中，其中远程数据库必须有名为serweb的数据库
+mysqldump -h127.0.0.1 -uroot -ppass myweb | mysql --host=***.***.***.*** -u数据库用户名 -p数据库密码 -C serweb
+
+================================================================================================================================
+在SQL语句多表连接中，IN、EXISTS、JOIN 哪个效率更高一点
+--------------------------------------------------------------------------------------------------------------------------------
+EXISTS、IN与JOIN，都可以用来实现形如“查询A表中在(或不在)B表中的记录”的查询逻辑。
+在查询的两个表大小相当的情况下，3种查询方式的执行时间通常是:
+    EXISTS <=     IN <=      JOIN
+NOT EXISTS <= NOT IN <= LEFT JOIN
+只有当表中字段允许NULL时，NOT IN的方式最慢:
+NOT EXISTS <= LEFT JOIN <= NOT IN
+但是如果两个表中一个较小，一个较大，则子查询表大的用exists，子查询表小的用in，因为in 是把外表和内表作hash连接，而exists是对外表作loop循环，每次loop循环再对内表进行查询。
+而无论那个表大，用not exists都比not in要快。这是因为如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引;而not extsts 的子查询依然能用到表上的索引。
+IN的好处是逻辑直观简单(通常是独立子查询);缺点是只能判断单字段，并且当NOT IN时效率较低，而且NULL会导致不想要的结果。
+EXISTS的好处是效率高，可以判断单字段和组合字段，并不受NULL的影响;缺点是逻辑稍微复杂(通常是相关子查询)。
+JOIN用在这种场合，往往是吃力不讨好。JOIN的用途是联接两个表，而不是判断一个表的记录是否在另一个表。
+
+================================================================================================================================
+Mysql 分组聚合实现 over partition by 功能
+--------------------------------------------------------------------------------------------------------------------------------
+--  Table structure for `tb_client_speed_limit`
+DROP TABLE IF EXISTS `tb_client_speed_limit`;
+CREATE TABLE `tb_client_speed_limit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) COMMENT '客户编号',
+  `operate_type` tinyint DEFAULT '1' COMMENT '操作类型 (1:设定限速; 2:解除限速)',
+  `resource_check` tinyint DEFAULT '0' COMMENT '资源确认 (0: Uncheck; 1:Checked)',
+  `resource_remark` varchar(255) COMMENT '资源备注',
+  `resource_check_log` varchar(255) COMMENT '资源确认记录(User Time)',
+  `operate_check` tinyint DEFAULT '0' COMMENT '操作确认 [设定限速 / 解除限速] (0: Uncheck; 1:Checked)',
+  `operate_remark` varchar(255) COMMENT '操作备注',
+  `create_time` datetime,
+  `update_time` datetime,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+--  Records of `tb_client_speed_limit`
+BEGIN;
+INSERT INTO `tb_client_speed_limit` VALUES 
+('1', '1081', '1', '1', '端口全部已确认', 'ROOT @ 2019-06-06 14:45:24', '1', '所有端口限速完成', '2019-06-04 09:28:10', '2019-06-06 14:45:24'), 
+('2', '1081', '2', '1', '已确认所有资源', 'ROOT @ 2019-06-06 14:45:24', '1', '端口限速解除成功', '2019-06-07 11:05:31', '2019-06-10 17:29:49'), 
+('3', '1081', '1', '0', null, null, '0', null, '2019-06-17 16:30:09', null), 
+('4',   '42', '1', '0', null, null, '0', null, '2019-06-14 09:50:03', null);
+COMMIT;
+-- 只找出一行记录, 则可以直接只用聚合函数来进行。前提一定是(1) 只需要一行数据, (2) 子查询中已排好序, (3) mysql关闭 strict-mode
+SELECT _t_.* 
+FROM (SELECT * FROM tb_client_speed_limit ORDER BY operate_check, update_time DESC) _t_ GROUP BY client_id;
+
+-- 找出指定个数的记录编号。注意group_concat的内排序, 否则顺序不保证, 拿到的就不一定是第一个
+SELECT _t_.*, substring_index(group_concat(_t_.id ORDER BY _t_.operate_check), ',', 2 ) record_ids
+FROM (SELECT * FROM tb_client_speed_limit ORDER BY operate_check, update_time DESC) _t_ GROUP BY client_id;
+
+================================================================================================================================
+Mysql开发人员团队宣布8.0版本将有Common Table Expressions in MySQL (CTEs)。
+--------------------------------------------------------------------------------------------------------------------------------
+所以可以写这样的查询：
+WITH RECURSIVE my_cte AS
+(
+  SELECT 1 AS n
+  UNION ALL
+  SELECT 1+n FROM my_cte WHERE n<10
+)
+SELECT * FROM my_cte;
++------+
+| n    |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
+|    5 |
+|    6 |
+|    7 |
+|    8 |
+|    9 |
+|   10 |
++------+
+10 rows in set (0,00 sec)
+================================================================================================================================

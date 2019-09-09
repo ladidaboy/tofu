@@ -1,0 +1,287 @@
+ax -- (斧头) 工具类 ***Utils
+ox -- (公牛) 学习类 *.Tester
+TOFU
+  +- Brain (豆腐脑) 业务
+  +- Juice (豆腐汁) 数据
+  +- Dregs (豆腐渣) 错误
+
+ABALONE
+ADDER(蝰蛇) <--> ZEBRA(斑马)
+Crest(波峰) <--> Trough(波谷)
+Peak(峰值) <--> Mean(均值) <--> Valley(谷值)
+
+== SIT-集成测试 | UAT-验收测试 ==
+    从时间上看，UAT要在SIT后面，UAT测试要在系统测试完成后才开始。
+    从测试人员看，SIT由公司的测试员来测试，而UAT一般是由用户来测试。
+=> SIT: System Integration TestCase（系统集成测试，即内部测试）
+    根据用例描述测试每一个场景，优化系统性能，提交数据库性能excution plan给DBA review。
+    对系统进行压力测试（必要情况下提交到APCC的压力测试组进行测试）。
+    > 里程碑：完成内部测试报告和得到DBA的上线批准。
+=> UAT: User Acceptance Test（用户接受测试，即用户测试）
+    用户根据用例描述测试每一个场景，反馈系统issue。
+    开发人员基于issue对系统影响和对业务impact判断，适当的修正系统或记录业务需求，根据业务优先等级，集成进下一个演进阶段。
+    > 里程碑：UAT Sign off。
+
+_________________________
+..↑...↓...←...→...↕...↔..
+Stay Hungry,Stay Foolish!
+..Make Easy,Make Sexy!..|
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+================================================================================================================================
+== JAVA类的加载机制 ==
+                   连接
+过程：加载--(验证--准备--解析)--初始化--使用--卸载
+--
+加载器：BootstrapClassLoader(JDK\jre\lib，C++实现)、ExtensionClassLoader(JDK\jre\lib\ext)、ApplicationClassLoader(用户类路径ClassPath)
+加载方式：JVM初始化加载、Class.forName(执行static块)、ClassLoader.loadClass(不执行static块)
+双亲委派模型：系统类防止内存中出现多份同样的字节码；保证Java程序安全稳定运行
+--
+验证动作：文件格式验证、元数据验证、字节码验证、符号引用验证
+--
+准备：为类的静态变量分配内存，并将其初始化为默认值
+--
+解析对象：类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符 7类符号引用进行
+--
+初始化方法：类构造器<client>方法
+类初始化时机：创建类的实例(new)、访问某个类或接口的静态变量或者对该静态变量赋值、调用类的静态方法、反射(Class.forName)、子类初始化时父类先初始化、Java虚拟机启动时被标明为启动类的类
+
+================================================================================================================================
+== JVM内存结构 ==
+控制参数
+-Xms设置堆的最小空间大小。
+-Xmx设置堆的最大空间大小。
+-XX:NewSize设置新生代最小空间大小。
+-XX:MaxNewSize设置新生代最大空间大小。
+-XX:PermSize设置永久代最小空间大小。
+-XX:MaxPermSize设置永久代最大空间大小。
+-Xss设置每个线程的堆栈大小。
+--------
+GC Roots包括：
+  虚拟机栈中引用的对象。
+  方法区中类静态属性实体引用的对象。
+  方法区中常量引用的对象。
+  本地方法栈中JNI引用的对象。
+--------
+垃圾收集算法：标记-清除(老年代)、复制(新生代)、标记-压缩/整理(老年代)
+垃圾收集器：
+Serial：
+  -XX:+UseSerialGC
+  新生代复制算法、老年代标记-压缩
+ParNew：
+  -XX:+UseParNewGC  ParNew收集器
+  -XX:ParallelGCThreads 限制线程数量
+  Serial收集器的多线程版本
+  新生代并行、老年代串行
+Parallel：
+  -XX:+UseParallelGC  使用Parallel收集器 + 老年代串行
+Parallel Old：
+  -XX:+UseParallelOldGC 使用Parallel收集器 + 老年代并行
+CMS(Concurrent Mark Sweep)：
+  -XX:+UseConcMarkSweepGC  使用CMS收集器
+  -XX:+UseCMSCompactAtFullCollection Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长
+  -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理
+  -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量）
+  基于“标记-清除”算法实现的老年代收集器（新生代使用ParNew）
+  优点：并发收集、低停顿
+  缺点：产生大量空间碎片、并发阶段会降低吞吐量
+  收集步骤：初始标记(单线程，STW)->并发标记(多线程，与业务线程同步进行)->重新标记(多线程，STW)->并发清除(多线程，与业务线程同步进行)
+G1(Garbage First)：
+  新生代收集跟ParNew类似，当新生代占用达到一定比例的时候，开始并发收集。老年代收集和CMS类似，会有短暂停顿。
+  收集步骤：标记阶段(STW，MinorGC)->RootRegionScanning(young GC之前完成)->ConcurrentMarking->Remark(STW，snapshot-at-the-beginning[SATB])->Copy/CleanUp(STW)
+流行的组合：Serial、ParNew + CMS、ParallelYoung + ParallelOld、G1GC
+--------
+安全点：循环的末尾、方法临返回前/调用方法的call指令后、可能抛出异常的位置
+--------
+常用调优工具分为两类：jdk自带监控工具(jconsole和jvisualvm)，第三方(MAT[Memory Analyzer Tool]、GChisto)
+
+================================================================================================================================
+###LINUX杀掉firefox进程###
+kill -9 $(ps -aux | grep firefox | awk 'NR==1{print $1}')
+kill -9 ` ps -aux | grep firefox | awk 'NR==1{print $1}'`
+ps -ef | grep firefox | awk '{print $2}' | xargs kill -9
+kill -s 9 `ps -aux | grep firefox | awk '{print $2}'`
+kill -s 9 `pgrep firefox` #pgrep=ps+grep
+pkill -9 firefox #pkill=pgrep+kill
+
+================================================================================================================================
+== Spring Cloud 核心组件 ==
+Zuul：如果前端、移动端要调用后端系统，统一从 Zuul 网关进入，由 Zuul 网关转发请求给对应的服务。
+Eureka：各个服务启动时，Eureka Client 都会将服务注册到 Eureka Server，并且 Eureka Client 还可以反过来从 Eureka Server 拉取注册表，从而知道其他服务在哪里。
+Ribbon：服务间发起请求的时候，基于 Ribbon 做负载均衡，从一个服务的多台机器中选择一台。
+Feign：基于 Feign 的动态代理机制，根据注解和选择的机器，拼接请求 URL 地址，发起请求。
+Hystrix：发起请求是通过 Hystrix 的线程池来走的，不同的服务走不同的线程池，实现了不同服务调用的隔离，避免了服务雪崩的问题。
+
+================================================================================================================================
+== SQL GroupBy & Top N ==
+Table student(id, name, score, classname)
+按照classname信息获取score前10的name，数据量级100万
+1、采用row_number方法，执行5次，平均下来8秒左右，速度最快。
+select no, id, name from
+  (select no = row_number() over (partition by classname order by score desc), * from student) t
+where no < 11 order by classname asc, score desc;
+2、采用cross apply方法，执行了3次，基本都在3分5秒以上，已经很慢了。
+select distinct b.id, b.name, b.classname from student a
+cross apply (select top 10 * from student where classname = a.classname order by score desc) b;
+3、采用Count查询，只执行了两次，第一次执行到5分钟时，取消任务执行了；第二次执行到13分钟时，没有hold住又直接停止了，实在无法忍受。
+select id, name, classname from student a where
+    (select count(classname) from student where a.classname = classname and score > a.score) < 10
+order by classname asc, score desc;
+4、采用游标方法，这个最后测试的，执行了5次，每次都是10秒完成，感觉还不错。
+declare @classname nvarchar(10)
+create table #Top(id int, name nvarchar(50), score int, classname nvarchar(10))
+declare mycursor cursor for
+select distinct classname from student order by classname asc
+open mycursor
+fetch next from mycursor into @classname
+while @@fetch_status = 0
+begin
+    insert into #Top
+    select top 10 id,name,score,classname from student where classname = @classname
+    fetch next from mycursor into @classname
+end
+close mycursor
+deallocate mycursor
+Select * from #Top order by classname asc,score desc
+drop table #Top
+通过上述对比不难发现，在面临Group获取Top N场景时，可以首选row_number，游标cursor其次，另外两个就基本不考虑了，数据量大的时候根本没法使用。
+
+================================================================================================================================
+      Executors(工具类)
+          ↓
+<Inf> Executor <- - - ExecutorService <- - - ScheduleExecutorService
+                           ↑                            ↑
+              AbstractExecutorService                   |
+                           ↑                            |
+                   ThreadPoolExecutor <----- ScheduleThreadPoolExecutor
+
+ThreadPoolExecutor(int corePoolSize,
+                   int maximumPoolSize,
+                   long keepAliveTime,
+                   TimeUnit unit,
+                   BlockingQueue<Runnable> workQueue,
+                   ThreadFactory threadFactory,
+                   RejectedExecutionHandler handler)
+// 阻塞队列。
+private final BlockingQueue<Runnable> workQueue;
+// 互斥锁
+private final ReentrantLock mainLock = new ReentrantLock();
+// 线程集合。一个Worker对应一个线程。
+private final HashSet<Worker> workers = new HashSet<Worker>();
+// “终止条件”，与“mainLock”绑定。
+private final Condition termination = mainLock.newCondition();
+// 线程池中线程数量曾经达到过的最大值。
+private int largestPoolSize;
+// 已完成任务数量
+private long completedTaskCount;
+// ThreadFactory对象，用于创建线程。
+private volatile ThreadFactory threadFactory;
+// 拒绝策略的处理句柄。
+private volatile RejectedExecutionHandler handler;
+// 保持线程存活时间。
+private volatile long keepAliveTime;
+private volatile boolean allowCoreThreadTimeOut;
+// 核心池大小
+private volatile int corePoolSize;
+// 最大池大小
+private volatile int maximumPoolSize;
+
+================================================================================================================================
+AbstractQueuedSynchronizer就是被称之为AQS的类，它是一个非常有用的超类，可用来定义锁以及依赖于排队阻塞线程的其他同步器；
+ReentrantLock，ReentrantReadWriteLock，CountDownLatch，CyclicBarrier和Semaphore等这些类都是基于AQS类实现的。
+CountDownLatch是一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。（一桌子四个人全吃完饭了才能打扫桌子）
+CyclicBarrier是一个同步辅助类，允许一组线程互相等待，直到到达某个公共屏障点 (common barrier point)。
+因为该 barrier 在释放等待线程后可以重用，所以称它为循环 的 barrier。（一桌子只有坐满了四个人才能开始吃饭）
+Semaphore是一个计数信号量，它的本质是一个"共享锁"。
+信号量维护了一个信号量许可集。线程可以通过调用acquire()来获取信号量的许可；当信号量中有可用的许可时，线程能获取该许可；否则线程必须等待，直到有可用的许可为止。
+线程可以通过release()来释放它所持有的信号量许可。（一桌子最多只能同时四个人吃饭，吃完一个下个才能坐上来吃）
+
+================================================================================================================================
+一般Linked开头的都是链表。Array开头的都是数组。Tree开头的就是二叉树。Hash开头的就是散列表。
+经常增添、删除，且还需要检索时为插入顺序用Linked 和 linkedhash
+经常增添、删除用hash
+如果要自动排序 且 去重 用 Tree    
+经常需要遍历查数据，用Array，遍历ArrayList用for循环效率比迭代器高。
+//
+List list1 = new ArrayList();// 底层数据结构是数组，查询快，增删慢;线程不安全，效率高
+List list2 = new Vector();// 底层数据结构是数组，查询快，增删慢;线程安全，效率低,几乎已经淘汰了这个集合
+List list3 = new LinkedList();// 底层数据结构是链表，查询慢，增删快;线程不安全，效率高
+//
+Set hashSet = new HashSet();// 不能保证元素的顺序；不可重复；不是线程安全的；集合元素可以为 NULL（base HashMap）
+Set linkedHashSet = new LinkedHashSet();// 底层采用 链表 和 哈希表的算法。链表保证元素的添加顺序，哈希表保证元素的唯一性（extend HashSet）
+Set treeSet = new TreeSet();// 有序；不可重复，底层使用 红黑树算法，擅长于范围查询（base NavigableMap）
+// 以上三个 Set 接口的实现类的共同点：1、都不允许元素重复 ；2、都不是线程安全的类
+Set set = Collections.synchronizedSet(hashSet);
+//
+Map hashmap = new HashMap<>();// 采用哈希表算法，key不会保证添加顺序，key不可重复，key判定重复的标准是equals为true并且hashcode相等
+Map treemap = new TreeMap<>();// 采用红黑树算法，key会按照自然顺序或定制排序进行排序，key不可重复，key判定重复的标准是compareTo/compare的返回值是否为0
+Map linkedHashmap = new LinkedHashMap<>();// 采用链表和哈希表算法，key保证先后添加的顺序，key不可重复，key判定重复的标准同HashMap
+Map hashtable = new Hashtable<>();// 采用哈希表算法，是HashMap的前身，所有的公开方法使用synchronized修饰符， 线程安全
+Map properties = new Properties();// Hashtable子类，要求key和value都是String
+Map map = Collections.synchronizedMap(hashmap);
+//
+// Map 和 Set 集合的关系
+// 1、都有几个类型的集合。HashMap 和 HashSet ，都采 哈希表算法；TreeMap 和 TreeSet 都采用
+// 红-黑树算法；LinkedHashMap 和 LinkedHashSet 都采用 哈希表算法和红-黑树算法。
+// 2、分析 Set 的底层源码，我们可以看到，Set 集合 就是 由 Map 集合的 Key 组成。
+
+================================================================================================================================
+-- 如何判断一个数字是不是2的n次方幂 --
+方法一：
+function check(num){
+    if(num != 1){
+        while(num != 1){
+            if(num%2 == 0){
+                num = num / 2;
+            }else{
+                return false;
+            }
+
+        }
+        return true;
+    }else{
+        return true;
+    }
+}
+方法二：
+function check(num){
+    return (num > 0) && ((num & (num - 1)) == 0);
+}
+
+================================================================================================================================
+
+/^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\
+|                                             |
+|                   _ooOoo_                   |
+|                  o8888888o                  |
+|                  88" . "88                  |
+|                  (| -_- |)                  |
+|                  O\  =  /O                  |
+|               ____/`---'\____               |
+|             .'  \\|     |//  `.             |
+|            /  \\|||  :  |||//  \            |
+|           /  _||||| -:- |||||-  \           |
+|           |   | \\\  -  /// |   |           |
+|           | \_|  ''\---/''  |   |           |
+|           \  .-\__  `-`  ___/-. /           |
+|         ___`. .'  /--.--\  `. . __          |
+|      ."" '<  `.___\_<|>_/___.'  >'"".       |
+|     | | :  `- \`.;`\ _ /`;.`/ - ` : | |     |
+|     \  \ `-.   \_ __\ /__ _/   .-` /  /     |
+|======`-.____`-.___\_____/___.-`____.-'======|
+|                   `=---='                   |
+|---------------------------------------------|
+||===>>>>  Buddha bless, Never BUG!   <<<<===||
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+:..............................................
++ 佛曰:
+: 　　写字楼里写字间，写字间里程序员；
+: 　　程序人员写程序，又拿程序换酒钱。
+: 　　酒醒只在网上坐，酒醉还来网下眠；
+: 　　酒醉酒醒日复日，网上网下年复年。
+: 　　但愿老死电脑间，不愿鞠躬老板前；
+: 　　奔驰宝马贵者趣，公交自行程序员。
+: 　　别人笑我忒疯癫，我笑自己命太贱；
+: 　　不见满街漂亮妹，哪个归得程序员？
+:
+================================================================================================================================

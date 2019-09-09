@@ -1,0 +1,72 @@
+== SHELL BASH/ZSH/SH etc ==
+================================================================================================================================
+MAC命令：open -a "Google Chrome" --args --disable-web-security  --user-data-dir
+
+今天在装Java JDK的时候突然出现一些命令command not found的命令，之前配置java path的时候可能修改了profile导致的。
+只有ls cd等命令可以用， vim, sudo, man等提示command not found。
+    vim ~/.bash_profile
+    export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:${JAVA_HOME}:${JAVA_HOME}/bin"
+    source ~/.bash_profile
+退出terminal, 重新打开，输入vim查看是否有效
+
+>> 查看端口占用情况命令
+sudo lsof -i :9000
+# 冒号后面就是你需要查看的端口号。
+>> 杀掉占用当前端口号的进程
+sudo kill -9 123
+# -9后面加一个空格，然后加上占用端口的进程PID，就可以杀掉占用端口的进程。
+
+>> bash和zsh切换
+查看已有SHELL more /etc/shells
+显示当前使用 echo $SHELL
+切换到bash chsh -s /bin/bash
+切换到zsh  chsh -s /bin/zsh
+记得输入切换命令后，要重新打开终端terminal才生效哦！
+
+>> bash清空屏幕
+printf '\033c'
+printf '\ec'
+它的工作原理是什么？\033 == \x1B == 27 == ESC 于是，这个命令变成了c，它是VT-XXX中表示“Full Reset (RIS)”的转义码。
+printf是bash里内置的命令，内置命令的优先级比其它可执行文件要高。
+reset也是真正地清空终端屏幕。这个命令执行起来有点慢，但它的兼容性显然比之前的那个要好。reset命令在你的终端控制错乱时非常有用。
+
+================================================================================================================================
+== JS获取URL中的一些参数的意思
+location - 含有当前URL的信息. 属性 href = 整个URL字符串
+protocol - 含有URL第一部分的字符串. 如 http:
+host     - 包含有URL中主机名:端口号部分的字符串. 如 //www.cenpok.net/server/
+hostname - 包含URL中主机名的字符串. 如 http://www.cenpok.net
+port     - 包含URL中可能存在的端口号字符串.
+pathname - URL中"/"以后的部分. 如 ~list/index.htm
+hash     - "#"号(CGI参数)之后的字符串.
+search   - "?"号(CGI参数)之后的字符串.
+
+================================================================================================================================
+git config -l
+ssh-keygen -t rsa -C hyman.li@zenlayer.com
+cd ~/.ssh
+cat ~/.ssh/id_rsa.pub
+cd ~/workspace
+git clone git@gitlab.zenlayer.net:guoxin/zenlayer_oss.git
+brew search tomcat
+brew install tomcat
+catalina -h #查看帮助
+catalina run #运行服务
+echo $PATH
+env
+brew list/ls
+catalina version
+git --version
+node -v
+npm -v
+npm list -g
+ant -version
+
+#检索日志
+cat -n catalina.out | grep '检索关键字'
+#显示 113444463～ 113444463 + 100 行
+cat -n catalina.out | tail -n +113444463 | head -n 100
+sed -n '/2018-12-17 16:17:20/,/2014-12-17 16:17:36/p'  test.log
+cat -n 10 catalina.out | grep '检索关键字'
+
+================================================================================================================================

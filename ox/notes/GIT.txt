@@ -1,0 +1,112 @@
+== GIT ==
+================================================================================================================================
+-- 原理 --
+1、四大区域的理解
+   1、工作区：项目所在目录
+   2、暂存区：暂时保存 git add 后的文件
+   3、本地仓库：本地保存文件的修改记录的地方
+   4、远程仓库：服务端保存文件的修改记录的地方
+
+2、四大区域之间的转换
+   1、将文件从工作区添加到暂存区命令 git add <file>;
+   2、将文件从暂存区移除到工作区命令 git reset head <file>;
+   3、将文件从暂存区提交到本地仓库 git commit <file>;
+   4、将某一次改动的文件从本地仓库，返回到暂存区(保存修改内容)
+      git reset —soft  3dee976bb02fe195d726(commit 标识)
+   5、远程更新代码到本地命令 git pull
+   6、将本地代码从本地推送到远程 git push
+
+3、常见流程区域的转换(操作前状态：从远程库刚拉下代码)
+   1、修改文件,文件此时处于工作目录，点击 Android studio 下方 Version Control 可以看到修改文件
+   2、此时使用 git commit 提交某个文件是不行的，得先执行git add 把修改文件放到暂存区
+   3、放到暂存区以后执行 git commit 命令可以把代码提交到本地仓库(在文件上点击右键实际上是执行了两步)
+   4、代码提交本地库，再次修改代码，修改文件又处于工作区状态，这是再次提交仍然需要先 git add 再 git commit 两个操作。
+   5、执行 git push 本地仓库的代码推送的远程
+
+================================================================================================================================
+-- 常见的命令操作 --
+1、查看状态
+   1、查看文件修改状态：git status
+   2、查看添加记录：git log
+2、分支操作
+   1、查看所有分支：git branch - -all
+   2、将某分支合并到当前分支：git merge dev
+   3、切换到某本地已存在分支：git checkout dev
+   4、在当前分支克隆新分支并切换到新分支：git checkout -b dev
+3、提交操作
+   1、本地提加到暂存区：git add
+   2、暂存区添加到本地仓库：git commit
+   3、本地仓库更新代码：git pull
+   4、本地代码推到远程：git push
+   5、恢复到某一次提交（提交以后的修改全部清除，慎用）
+      git reset - -hard 3dee975b85a555d726(commit 标识)
+   6、恢复到某一次提交（提交以后的修改全部返回暂存区）
+      git reset - -soft 3ded635b85a555d726(commit 标识)
+四、常见问题以及解决
+   1、本地提交出错或想修改提交注释
+      git reset - -soft  3dee976bb02fe15a555d726(commit 标识)
+      上面命令可以让提交恢复到暂存区，让你重新做人
+   2、保存本地工作目录修改状态，切换其他分支干其他事情（最喜欢用命令）
+      git stash 保存状态
+      git stash pop 恢复
+      最神奇命令，很多时候开发到一半，不能提交。但不提交还不能切换其他分支，这时候这个命令就非常神奇
+   3、避免冲突扩大话
+      在向远程推送代码前先更新代码，解决冲突再提交，然后在推代码
+
+================================================================================================================================
+-- GIT切换远程分支 --
+git clone只能clone远程库的master分支，无法clone所有分支，解决办法如下： 
+1. 找一个干净目录，假设是git_work 
+2. cd git_work 
+3. git clone http://myrepo.xxx.com/project/.git  这样在git_work目录下得到一个project子目录
+ 4. cd project
+ 5. git branch -a  列出所有分支名称如下：
+    remotes/origin/dev 
+    remotes/origin/release 
+6. git checkout -b dev origin/dev  作用是checkout远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支 
+7. git checkout -b release origin/release  作用参见上一步解释 
+8. git checkout dev  切换回dev分支，并开始开发。
+
+================================================================================================================================
+|GIT  https://www.cnblogs.com/ludashi/p/8093145.html
+|VIM  https://www.cnblogs.com/yangjig/p/6014198.html
+
+GIT本地分支和远程分支改名
+#1 将本地分支进行改名
+git branch -m old_branch new_branch
+#2 将远程分支的老分支删除
+git push origin :old_branch
+#3 将改名后的分支push到远程
+git push origin new_branch
+
+开发分支(dev)上的代码达到上线的标准后,要合并到主(master)分支
+git checkout dev
+git pull
+git checkout master
+git pull
+git merge dev
+git push -u origin master
+
+先输入双引号，但是不要输入后面的双引号，然后就可以输入多行了，直到最后输入双引号，再回车就是结束即可。
+git commit -m "提交注释"
+
+================================================================================================================================
+-- 如何删除github上的commit历史记录 --
+# Clone your git repo
+git clone https://github.com/someone/project.github.io.git;
+# Entre your local repo
+cd project.github.io;
+# Checkout
+git checkout --orphan latest_branch;
+# Add all the files
+git add -A;
+# Commit the changes
+git commit -am "Reinitialize";
+# Delete the branch
+git branch -D master;
+# Rename the current branch to master
+git branch -m master;
+# Finally, force update your repository
+git push -f origin master;
+
+================================================================================================================================
