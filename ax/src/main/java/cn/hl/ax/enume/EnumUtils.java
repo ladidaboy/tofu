@@ -1,0 +1,72 @@
+package cn.hl.ax.enume;
+
+import cn.hl.ax.clone.ReflectionUtils;
+
+import java.util.EnumSet;
+
+/**
+ * Enumeration Utils
+ * @author hyman
+ * @date 2019-08-22 15:33:44
+ * @version $ Id: EnumUtils.java, v 0.1  hyman Exp $
+ */
+public class EnumUtils {
+    /**
+     * 通过name获取对应的Enum Class
+     * @param clz class
+     * @param name 名称
+     * @param <E> enum *
+     * @return E
+     */
+    public static <E extends Enum<E>> E fromName(Class<E> clz, String name) {
+        EnumSet<E> set = EnumSet.allOf(clz);
+        for (E e : set) {
+            if (e.name().equals(name)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 通过ordinal获取对应的Enum Class
+     * @param clz class
+     * @param ordinal 序号
+     * @param <E> enum *
+     * @return E
+     */
+    public static <E extends Enum<E>> E fromOrdinal(Class<E> clz, int ordinal) {
+        EnumSet<E> set = EnumSet.allOf(clz);
+        for (E e : set) {
+            if (e.ordinal() == ordinal) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 通过指定的field获取对应的Enum Class
+     * @param clz class
+     * @param field 属性
+     * @param value 数值
+     * @param <E> enum *
+     * @return E
+     */
+    public static <E extends Enum<E>> E fromField(Class<E> clz, String field, Object value) {
+        if (value == null) {
+            return null;
+        }
+        EnumSet<E> set = EnumSet.allOf(clz);
+        for (E e : set) {
+            Object result = ReflectionUtils.getFieldValue(e, field);
+            if (result == null) {
+                continue;
+            }
+            if (result == value || result.equals(value) || result.toString().equals(value.toString())) {
+                return e;
+            }
+        }
+        return null;
+    }
+}
