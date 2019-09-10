@@ -9,9 +9,9 @@ public class SystemProperty {
         //msg = DataUtils.rightPadEx(msg, 32, ' ');
         msg += "\t " + val;
         if (even) {
-            System.out.println("← " + msg);
+            System.out.println("➢ " + msg);
         } else {
-            System.out.println("→ " + msg);
+            System.out.println("➣ " + msg);
         }
         even = !even;
     }

@@ -589,23 +589,23 @@ public class MySnmpUtils {
         // public C#Edge123
         String community = "C#Edge123";
         //
-        collectCPU(ip, port, community);
-        collectMemory(ip, port, community);
-        collectDisk(ip, port, community);
-        collectProcess(ip, port, community);
-        collectService(ip, port, community);
-        collectInterface(ip, port, community);
-        collectPort(ip, port, community);
-        collectSoft(ip, port, community);
+        //collectCPU(ip, port, community);
+        //collectMemory(ip, port, community);
+        //collectDisk(ip, port, community);
+        //collectProcess(ip, port, community);
+        //collectService(ip, port, community);
+        //collectInterface(ip, port, community);
+        //collectPort(ip, port, community);
+        //collectSoft(ip, port, community);
 
         //OID oid = Mib2Library.SysName.getOID();
         //snmpSet(ip, port, community, oid, "Test.System.Name");
         //PDU retGet = snmpGet(ip, port, community, new OID[] {oid});
         //printPduResponse(retGet);
 
-        //PDU result = snmpGet(ip, port, community, new OID[] {Mib2Library.UDP.getOID()});
-        //printPduResponse(result);
-        //List<TableEvent> list = collect(ip, port, community, new OID[] {Mib2Library.IfMIB.getOID()});
-        //printTableEvents(list);
+        PDU result = snmpGet(ip, port, community, new OID[] {Mib2Library.UDP.getOID()});
+        printPduResponse(result);
+        List<TableEvent> list = collect(ip, port, community, new OID[] {Mib2Library.IfMIB.getOID()});
+        printTableEvents(list);
     }
 }

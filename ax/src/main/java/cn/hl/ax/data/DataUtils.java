@@ -392,10 +392,10 @@ public class DataUtils extends StringUtils {
      * @return true:合法, false:非法
      */
     public static boolean isValid(char ch) {
-        return (ch >= 0x4E00 && ch <= 0X9FA5) //
-                || (ch >= 'a' && ch <= 'z')   //
-                || (ch >= 'A' && ch <= 'Z')   //
-                || (ch >= '0' && ch <= '9');  //
+        return (ch >= 0x4E00 && ch <= 0X9FA5)
+            || (ch >= 'a' && ch <= 'z')
+            || (ch >= 'A' && ch <= 'Z')
+            || (ch >= '0' && ch <= '9');
     }
 
     /**
@@ -527,7 +527,7 @@ public class DataUtils extends StringUtils {
      * @return
      */
     public static String rightPadEx(String txt, int len) {
-        return rightPadEx(txt, len, (char) 32);//
+        return rightPadEx(txt, len, (char) 32);
     }
 
     /**
@@ -721,16 +721,16 @@ public class DataUtils extends StringUtils {
         bean.setAge(9999);
         System.out.println(bean + " - Valid: " + isValid(bean));
         //
-        System.out.println("statusHasFlag(12, 2) → " + statusHasFlag(12, 2));
-        System.out.println("isFullStatus(15, 4) → " + isFullStatus(15, 4));
-        System.out.println("isMonoStatus(9) → " + isMonoStatus(9));
+        System.out.println("ⓘ statusHasFlag(12, 2) → " + statusHasFlag(12, 2));
+        System.out.println("ⓘ isFullStatus(15, 4) → " + isFullStatus(15, 4));
+        System.out.println("ⓘ isMonoStatus(9) → " + isMonoStatus(9));
         //
-        System.out.println("randomInt(8) ← " + randomInt(8));
+        System.out.println("randomInt(8) ➣ " + randomInt(8));
         String sp;
         for (int i = 0; i < 22; i++) {
-            sp = i / 10 % 2 == 0 ? " → " : " ← ";
+            sp = i / 10 % 2 == 0 ? " ➢ " : " ➣ ";
             System.out.println("randomInt(10, MONO)" + sp + randomInt(10, "MONO"));
         }
-        System.out.println("randomInt(256, 512) ← " + randomInt(256, 512));
+        System.out.println("randomInt(256, 512) ➣ " + randomInt(256, 512));
     }
 }

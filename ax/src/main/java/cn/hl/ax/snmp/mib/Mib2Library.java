@@ -674,7 +674,7 @@ public class Mib2Library {
 
     // VariableFormatter
     static {
-        java.lang.System.out.println("Mib2Library.mib.size = " + mibs.size());
+        java.lang.System.out.println("ⓘ Mib2Library.mib.size = " + mibs.size());
         maps.put(IfType.getName(), new IfTypeVF());
         maps.put(IfAdminStatus.getName(), new IfStatusVF());
         maps.put(IfOperStatus.getName(), new IfStatusVF());
@@ -686,20 +686,20 @@ public class Mib2Library {
 
     // ==-TEST-CODE-===========================================================================================================
     private Mib2Library() {
-        java.lang.System.out.println("[TEST-CODE] 构造方法执行了");
+        java.lang.System.out.println("ⓘ [TEST-CODE] 构造方法执行了");
     }
 
     static {
-        java.lang.System.out.println("[TEST-CODE] 静态代码块执行了");
+        java.lang.System.out.println("ⓘ [TEST-CODE] 静态代码块执行了");
     }
 
     {
-        java.lang.System.out.println("[TEST-CODE] 普通代码块执行了");
+        java.lang.System.out.println("ⓘ [TEST-CODE] 普通代码块执行了");
     }
 
     public static void main(String[] args) {
-        java.lang.System.out.println("[TEST-CODE] main方法开始执行");
+        java.lang.System.out.println("ⓘ [TEST-CODE] main方法开始执行");
         new Mib2Library();
-        java.lang.System.out.println("[TEST-CODE] main方法执行完毕");
+        java.lang.System.out.println("ⓘ [TEST-CODE] main方法执行完毕");
     }
 }

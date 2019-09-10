@@ -107,16 +107,16 @@ public class ArrayUtility extends ArrayUtils {
         String[] s1 = {"bd", "22", "i8", "Hi", "pq", "wx", "zZ", "po"};
 
         String[] intersect12 = intersect(s1, s2);
-        System.out.println("交集是：" + DataUtils.join(intersect12, ' '));
+        System.out.println("ⓘ 交集是：" + DataUtils.join(intersect12, ' '));
 
         String[] differ12 = differ(s1, s2);
-        System.out.println("差集是：" + DataUtils.join(differ12, ' '));
+        System.out.println("ⓘ 差集是：" + DataUtils.join(differ12, ' '));
 
         String[] union12 = union(s1, s2);
-        System.out.println("并集是：" + DataUtils.join(union12, ' '));
+        System.out.println("ⓘ 并集是：" + DataUtils.join(union12, ' '));
 
         String[] join12 = addAll(s1, s2);
-        System.out.println("原始集：" + DataUtils.join(join12, ' '));
+        System.out.println("ⓘ 原始集：" + DataUtils.join(join12, ' '));
 
         System.out.println();
         String t1 = "Apache Commons Logging is a thin adapter allowing configurable bridging to others, well known logging systems.";

@@ -9,8 +9,8 @@ public class Chinese2Pinyin {
 
 	static {
 		initialize();
-		System.out.println("[i] Chinese Transfer Spell Done!");
-		System.out.println("[i] Initialize " + spellMapSize + " Mappings!\r\n");
+		System.out.println("ⓘ Chinese Transfer Spell Done!");
+		System.out.println("ⓘ Initialize " + spellMapSize + " Mappings!");
 	}
 
 	private static void putMap(String spell, int ascii) {
@@ -183,14 +183,14 @@ public class Chinese2Pinyin {
 			"ˉ",	"ˇ",	"¨",	"‘",	"’",	"“",	"”",	"々",	"～",	"‖",
 			"∶",	"＇",	"＂",	"｀",	"｜",	"〃",	"〔",	"〕",	"〈",	"〉",
 			"《",	"》",	"「",	"」",	"『",	"』",	"．",	"〖",	"〗",	"【",
-			"】",	"（",	"）",	"［",	"］",	"｛",	"｝"
+			"】",	"（",	"）",	"［",	"］",	"｛",	"｝",	"➢",	"➣"
 		};
 		String[] asciiSymbols = {
 			". ",	", ",	", ",	"; ",	": ",	"? ",	"! ",	"... ",	"-",	" ",
 			"-",	"^",	" ",	"'",	"'",	"\"",	"\"",	" ",	"~",	"||",
 			": ",	"'",	"\"",	"'",	"|",	"\"",	"(",	")",	"<",	">",
 			"<<",	">>",	"[",	"]",	"[",	"]",	".",	"[",	"]",	"[",
-			"]",	"(",	")",	"[",	"]",	"{",	"}", 	" "
+			"]",	"(",	")",	"[",	"]",	"{",	"}",	">",	">",	" "
 		};
 		int rpi = 0;
 		for (int idx = 0; idx < chineseSymbols.length; idx++) {
@@ -237,19 +237,19 @@ public class Chinese2Pinyin {
 	public static void main(String[] args) {
 		String str = null;
 		boolean blank = true;
-		str = "上海101,普降喜雨";
+		str = "➢ 上海101,普降喜雨";
 		System.out.println(str + " --> " + getFullSpell(str, blank));
 
-		str = "张牙舞爪，啊》。";
+		str = "➣ 张牙舞爪，啊》。";
 		System.out.println(str + " --> " + getFullSpell(str, blank));
 
-		str = "小强，可耻下场。";
+		str = "➢ 小强，可耻下场。";
 		System.out.println(str + " --> " + getFullSpell(str, blank));
 
-		str = "中文";
+		str = "➣ 中文";
 		System.out.println(str + " --> " + getFullSpell(str, blank));
 
-		str = "忠雯";
+		str = "➢ 忠雯";
 		System.out.println(str + " --> " + getFullSpell(str, blank));
 	}
 }
