@@ -86,7 +86,7 @@ public class HPeriod {
         if (periods == null || periods.size() <= 1) return periods;
         int psize = periods.size();
         // 准备数据initialize
-        System.out.println("-+- HPeriod.Initialize -------↓-----------------------");
+        System.out.println("-+- HPeriod.Initialize --------↓----------------------");
         Object[] hpos = new Object[psize];
         for (int i = 0; i < psize; i++) {
             HPO hpo = new HPO(periods.get(i));
@@ -94,7 +94,7 @@ public class HPeriod {
             hpos[i] = hpo;
         }
         // 开始排序
-        System.out.println("-+- Sorted " + (asc ? "ASC --" : "DESC -") + "-------------⇣-----------------------");
+        System.out.println("-+- Sorted " + (asc ? "ASC --" : "DESC -") + "--------------⇣----------------------");
         HPC hpc = new HPC(asc);
         Arrays.sort(hpos, hpc);
         List<String> ohps = new ArrayList<>();
@@ -105,7 +105,7 @@ public class HPeriod {
                 System.out.println(hpo);
             }
         }
-        System.out.println("-+- Sorted DONE --------------↑-----------------------");
+        System.out.println("-+- Sorted DONE ---------------↑----------------------");
         return ohps;
     }
     /**

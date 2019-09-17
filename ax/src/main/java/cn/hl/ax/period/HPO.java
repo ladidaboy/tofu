@@ -174,7 +174,8 @@ public class HPO {
         return sortValue;
     }
 
+    @Override
     public String toString() {
-        return "{ @PERIOD: " + DataUtils.rightPadEx(period, 18) + " @SortValue: " + sortValue + " }";
+        return "{ ⓘPERIOD: " + DataUtils.rightPadEx(period, 18) + " ⓥSortValue: " + sortValue + " }";
     }
 }

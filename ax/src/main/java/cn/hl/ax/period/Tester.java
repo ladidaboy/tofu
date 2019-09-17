@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 
 public class Tester {
     public static void main(String args[]) {
-        System.out.println("matches(HPeriod.PATTERN_P_QM, \"Y2011-Q1-JAN\"): " + Pattern.matches(HPeriod.PATTERN_P_QM, "Y2011-Q1-JAN"));
-        System.out.println("HPeriod.checkIllegalPeriod(\"Y2011-Q1-JAN-2\"): " + HPeriod.checkIllegalPeriod("Y2011-Q1-JAN-2"));
+        System.out.println("➢ matches(HPeriod.PATTERN_P_QM, \"Y2011-Q1-JAN\"): " + Pattern.matches(HPeriod.PATTERN_P_QM, "Y2011-Q1-JAN"));
+        System.out.println("➣ HPeriod.checkIllegalPeriod(\"Y2011-Q1-JAN-2\"): " + HPeriod.checkIllegalPeriod("Y2011-Q1-JAN-2"));
         //---------------------------------------------------------------------------------------------------------------------------
         List<String> ppps = new ArrayList<>();
         ppps.add("Y2010");
