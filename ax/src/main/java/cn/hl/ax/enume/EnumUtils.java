@@ -1,6 +1,7 @@
 package cn.hl.ax.enume;
 
 import cn.hl.ax.clone.ReflectionUtils;
+import org.apache.http.annotation.Contract;
 
 import java.util.EnumSet;
 
@@ -68,5 +69,19 @@ public class EnumUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 是否一致
+     * @param e enum
+     * @param flag 标识
+     * @param <E> 枚举类
+     * @return true: 一致; false: 不一致
+     */
+    public static <E extends Enum<E>> boolean isSame(E e, String flag) {
+        if (e == null || flag == null) {
+            return false;
+        }
+        return e.name().equalsIgnoreCase(flag);
     }
 }
