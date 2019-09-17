@@ -133,11 +133,9 @@ public class Tester {
         List<String> list = new ArrayList<>();
         list.add("list1");
         list.add("list2");
-        list.add("list3");
         Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         map.put("key2", "value2");
-        map.put("key3", "value3");
         String[] codes = new String[] {"CODE1", "CODE2"};
         // ---------------------------------------------------------------------
         org.setId("ID123");
@@ -166,17 +164,17 @@ public class Tester {
             e.printStackTrace();
         }
         // ---------------------------------------------------------------------
+        org.getCodes()[0] = "ORGN";
         org.getListValue().add("NewLIST");
         org.getMapValue().put("KKKK", "VALUE");
-        org.getCodes()[0] = "ORGN";
 
+        out1.getCodes()[0] = "SIMPLE";
         out1.getListValue().add("SIMPLE");
         out1.getMapValue().put("OUT1", "SIMPLE");
-        out1.getCodes()[0] = "SIMPLE";
 
+        out2.getCodes()[0] = "DEEPLY";
         out2.getListValue().add("DEEPLY");
         out2.getMapValue().put("OUT2", "DEEPLY");
-        out2.getCodes()[0] = "DEEPLY";
         // ---------------------------------------------------------------------
         System.out.println("origin : " + org.info());
         System.out.println("simple : " + out1.info());

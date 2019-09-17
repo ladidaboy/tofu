@@ -4,14 +4,19 @@
  */
 package cn.hl.ox.file;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class FileUtil {
-    public static void createFile(File file) throws Exception {
+    public static void createFile(File file) throws IOException {
         if (!file.exists()) {
             String _folder_ = file.getAbsolutePath();
             _folder_ = _folder_.substring(0, _folder_.lastIndexOf("\\"));
@@ -24,14 +29,25 @@ public class FileUtil {
     }
 
     /**
+     * 读取文件
+     */
+    public static String readFile(File file) throws IOException {
+        StringBuilder content = new StringBuilder();
+        try (FileReader reader = new FileReader(file); BufferedReader br = new BufferedReader(reader)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                content.append(line).append(System.lineSeparator());
+            }
+        }
+        return content.toString();
+    }
+
+    /**
      * 复制文件
-     * @param file
-     * @param newPath
-     * @throws Exception
      */
     public static void copyFile(File file, String newPath) throws Exception {
-        if (file.exists()) { // 文件存在时
-            InputStream input = new FileInputStream(file); // 读入原文件
+        if (file.exists()) {
+            InputStream input = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(newPath + file.getName());
             byte[] buffer = new byte[8192];
             int length = 0;
@@ -46,9 +62,6 @@ public class FileUtil {
 
     /**
      * 追加写文件(UTF-8)
-     * @param fileName
-     * @param content
-     * @throws Exception
      */
     public static void append2File(String fileName, String content) throws Exception {
         File file = new File(fileName);
@@ -57,24 +70,21 @@ public class FileUtil {
         fos.write(content.getBytes("UTF-8"));
         fos.flush();
         fos.close();
-		/*FileWriter fw = new FileWriter(file, true);
-		fw.write(content);
-		fw.close();*/
+        /*FileWriter fw = new FileWriter(file, true);
+        fw.write(content);
+        fw.close();*/
     }
 
     /**
      * 写文件
-     * @param fileName
-     * @param content
-     * @throws Exception
      */
     public static void write2File(String fileName, String content) throws Exception {
         File file = new File(fileName);
         createFile(file);
-		/*FileOutputStream fos = new FileOutputStream(file);
-		fos.write(content.getBytes("UTF-8"));
-		fos.flush();
-		fos.close();*/
+        /*FileOutputStream fos = new FileOutputStream(file);
+        fos.write(content.getBytes("UTF-8"));
+        fos.flush();
+        fos.close();*/
         FileWriter fw = new FileWriter(file);
         fw.write(content);
         fw.close();
