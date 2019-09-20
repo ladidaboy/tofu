@@ -1,5 +1,6 @@
 package cn.hl.ox.jsnative;
 
+import cn.hl.ox.BuddhaBless;
 import cn.hl.ox.log.MyLogger;
 
 import javax.script.Invocable;
@@ -106,7 +107,7 @@ public class Js {
 	 */
 	public static void main(String[] args) {
 		simple();
-		MyLogger.SP();
+		BuddhaBless.printSplitLine();
 		advance();
 	}
 }

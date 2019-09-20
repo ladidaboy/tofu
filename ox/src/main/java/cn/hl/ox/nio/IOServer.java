@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ox.nio;
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -2,6 +2,7 @@ package cn.hl.ox.clone;
 
 import cn.hl.ax.clone.CloneBean;
 import cn.hl.ax.clone.ReflectionUtils;
+import cn.hl.ox.BuddhaBless;
 import cn.hl.ox.clone.bean.Alpaca;
 import cn.hl.ox.clone.bean.Animal;
 import cn.hl.ox.clone.bean.BP;
@@ -15,14 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Tester {
-    private static void sp() {
-        String line = "----";
-        for (int i = 0; i < 5; i++) {
-            line += line;
-        }
-        System.out.println(line);
-    }
-
     public static void main(String[] args) {
         try {
             test0();
@@ -30,15 +23,15 @@ public class Tester {
             e.printStackTrace();
         }
 
-        sp();
+        BuddhaBless.printSplitLine(128);
 
         test1();
 
-        sp();
+        BuddhaBless.printSplitLine(128);
 
         test2();
 
-        sp();
+        BuddhaBless.printSplitLine(128);
 
         try {
             test3();
@@ -46,7 +39,7 @@ public class Tester {
             e.printStackTrace();
         }
 
-        sp();
+        BuddhaBless.printSplitLine(128);
 
         try {
             test4();
@@ -68,7 +61,7 @@ public class Tester {
         System.out.println(first);
         System.out.println(third);
 
-        sp();
+        BuddhaBless.printSplitLine(68);
 
         Animal forth = new Animal("#4th");
         Animal fifth = new Animal("#5th");

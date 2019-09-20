@@ -169,17 +169,6 @@ public class MyLogger implements Serializable {
 
 	// --------------------------------------------------------------------------------------------------------
 
-	public static void SP() {
-		SP(4);
-	}
-
-	public static void SP(int m) {
-		String line = "----";
-		for (int i = 0; i < m; i++)
-			line += line;
-		System.out.println(line);
-	}
-
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static void log2Console(String msg) {

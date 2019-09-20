@@ -1,22 +1,18 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ox.thread;
 
 public class Worker extends Thread {
-	private String user;
+    private String user;
 
-	public Worker(String user) {
-		this.user = user;
-	}
+    public Worker(String user) {
+        this.user = user;
+    }
 
-	public void run() {
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println(Thread.currentThread().getName() + " > " + user);
-	}
+    public void run() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName() + " > " + user);
+    }
 }

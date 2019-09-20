@@ -1,10 +1,7 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ox.regexp;
 
 import cn.hl.ax.data.DataUtils;
+import cn.hl.ox.BuddhaBless;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -235,33 +232,29 @@ public class Test {
         System.out.println("替换为空即可达到删除的功能");
     }
 
-    private static void printsp() {
-        System.out.println("--------------------------------------------------------------------------------");
-    }
-
     public static void main(String args[]) {
         Test basics = new Test();
         try {
             basics._test1();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test2();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test3();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test4();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test5();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test6();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._test7();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._testGet();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._testSplit();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._testQuery();
-            printsp();
+            BuddhaBless.printSplitLine();
             basics._testReplaceOrDelete();
         } catch (Exception e) {
             e.printStackTrace();

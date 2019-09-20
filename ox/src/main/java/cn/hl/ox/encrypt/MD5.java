@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ox.encrypt;
 
 import cn.hl.ax.ascii.Chinese2Pinyin;
@@ -120,9 +116,6 @@ public class MD5 {
 	/**
 	 * md5Update是MD5的主计算过程，inbuf是要变换的字节串，inputlen是长度，这个
 	 * 函数由getMD5ofStr调用，调用之前需要调用md5init，因此把它设计成private的
-	 * @param Byte[] inbuf
-	 * @param int inputlen
-	 * 
 	 */
 	private static void md5Update(byte[] inbuf, int inputLen) {
 
@@ -276,10 +269,6 @@ public class MD5 {
 
 	/**
 	 * Encode把long数组按顺序拆成byte数组，因为java的long类型是64bit的， 只拆低32bit，以适应原始C实现的用途
-	 * @param byte[] output
-	 * @param long[] input
-	 * @param int len
-	 * 
 	 */
 	private static void Encode(byte[] output, long[] input, int len) {
 		for (int i = 0, j = 0; j < len; i++, j += 4) {

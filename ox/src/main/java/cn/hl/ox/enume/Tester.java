@@ -1,6 +1,7 @@
 package cn.hl.ox.enume;
 
 import cn.hl.ax.enume.EnumUtils;
+import cn.hl.ox.BuddhaBless;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -32,8 +33,7 @@ public class Tester {
             Entry<Week, String> entry = iter.next();
             System.out.println("➢ " + entry.getKey().name() + ":" + entry.getValue());
         }
-
-        System.err.println("------------------我是分隔线------------------");
+        BuddhaBless.printSplitLine();
 
         Week test = EnumUtils.fromOrdinal(Week.class, (int) (Math.random() * 8));
         switch (test) {
@@ -74,8 +74,7 @@ public class Tester {
                 System.out.println("TUE 与 MON 在同一位置");
                 break;
         }
-
-        System.err.println("------------------我是分隔线------------------");
+        BuddhaBless.printSplitLine();
 
         Week week = EnumUtils.fromName(Week.class, "SAT");
         // getDeclaringClass()
@@ -85,13 +84,15 @@ public class Tester {
         System.out.println("➣ toString(): " + week.toString());
         // ordinal() 返回值是从 0 开始
         System.out.println("➢ ordinal(): " + week.ordinal());
-
-        System.err.println("------------------我是分隔线------------------");
+        BuddhaBless.printSplitLine();
 
         MyEnum myenum = EnumUtils.fromField(MyEnum.class, "tag", "WoWo");
         System.out.println("EnumUtils.fromField(MyEnum, tag, WoWo)-> " + myenum);
         myenum = EnumUtils.fromField(MyEnum.class, "no", 3);
         System.out.println("EnumUtils.fromField(MyEnum, no, 3)-> " + myenum);
         System.out.println("EnumUtils.isSame(MyEnum, wow)-> " + EnumUtils.isSame(myenum, "wow"));
+
+        boolean flag = org.apache.commons.lang3.EnumUtils.isValidEnum(MyEnum.class, "WOW");
+        System.out.println("commons->EnumUtils.isValidEnum(MyEnum, WOW) := " + flag);
     }
 }

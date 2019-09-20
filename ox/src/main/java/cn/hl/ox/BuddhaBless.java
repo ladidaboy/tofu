@@ -1,6 +1,28 @@
 package cn.hl.ox;
 
+import cn.hl.ax.data.DataUtils;
+
 public class BuddhaBless {
+    public static void printSplitLine() {
+        printSplitLine(0);
+    }
+
+    public static void printSplitLine(int len) {
+        len = Math.max(len, 64) / 2 - 12;
+        String ss = DataUtils.rightPadEx("", len, '-');
+        String ll = "( S P L I T ~ L I N E )-";
+        //ll = "( Ⓢ ⓟ Ⓛ Ⓘ Ⓣ - Ⓛ Ⓘ Ⓝ Ⓔ )-";
+        //ll = "( ⓢ Ⓟ ⓛ ⓘ ⓣ - ⓛ ⓘ ⓝ ⓔ )-";
+        try {
+            Thread.sleep(16);
+        } catch (InterruptedException e) {
+            ll = "( E R R O R ~ L I N E )-";
+            //ll = "( Ⓔ Ⓡ Ⓡ Ⓞ Ⓡ - Ⓛ Ⓘ Ⓝ Ⓔ )-";
+            //ll = "( ⓔ ⓡ ⓡ ⓞ ⓡ - ⓛ ⓘ ⓝ ⓔ )-";
+        }
+        System.err.println(ss + ll + ss);
+    }
+
     public static void pray2theBuddha() {
         StringBuilder sb = new StringBuilder();
         sb.append("\r\n/^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\");
