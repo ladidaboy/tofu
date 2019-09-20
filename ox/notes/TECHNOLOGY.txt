@@ -252,6 +252,54 @@ function check(num){
 
 ================================================================================================================================
 
+Throw                          抛出
+Throwable                      (可抛出的)表示所有异常类的祖先类
+Throws                         (投掷)表示强制异常处理
+ArithmeticException            算术异常
+ArrayIndexOutOfBoundsException 数组下标越界异常
+ClassNotFoundException         类没有发现异常
+NullPointerException           空引用(指针)异常
+NumberFormatException          数字格式异常(字符串不能转化为数字)
+
+  extends 继承   base class 基类  parent class 父类
+interface 接口  child class 子类   super class 超类
+implements                     实现
+import                         导入
+overload                       重载
+override                       重写覆盖
+package                        包
+parameter                      参数
+variable                       变量
+void                           无(返回类型)
+Class                          类
+Collection                     集合
+ArrayList                      数组列表,表示动态数组
+HashMap                        散列表哈希表
+Swing                          轻巧的
+member-function                成员函数
+member-variable                成员变量
+
+Awt(abstract window toolkit)   抽象窗口工具包
+DriverManager                  驱动管理器
+JDBC(java database connectivity)Java数据库连接
+Metadata                       元数据
+PreparedStatement              表示预执行对象
+ResultSet                      结果集
+SQL(Structured Query Language) 结构化查询语言，对数据库进行操作
+Statement                      表示执行对象
+executeQuery                   执行查询
+
+access                         访问
+archetype                      原型
+catalog                        目录
+derived class                  派生类
+release                        v:发布; n:版本,等价于version
+standalone                     独立的
+Lang                           language,语言
+stub                           存根
+
+================================================================================================================================
+
 /^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\
 |                                             |
 |                   _ooOoo_                   |
