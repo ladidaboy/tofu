@@ -114,6 +114,14 @@ Ribbon：服务间发起请求的时候，基于 Ribbon 做负载均衡，从一
 Feign：基于 Feign 的动态代理机制，根据注解和选择的机器，拼接请求 URL 地址，发起请求。
 Hystrix：发起请求是通过 Hystrix 的线程池来走的，不同的服务走不同的线程池，实现了不同服务调用的隔离，避免了服务雪崩的问题。
 
+4种典型RPC远程调用框架
+（1）RMI实现，利用java.rmi包实现，基于Java远程方法协议(Java Remote Method Protocol)和java的原生序列化。
+（2）Hessian，是一个轻量级的remoting onhttp工具，使用简单的方法提供了RMI的功能。 基于HTTP协议，采用二进制编解码。
+（3）thrift是一种可伸缩的跨语言服务的软件框架。thrift允许你定义一个描述文件，描述数据类型和服务接口。依据该文件，编译器方便地生成RPC客户端和服务器通信代码。
+（4）DUBBO，阿里的RPC框架。
+（5）还有SpringCloud框架，微服务全家桶。为开发人员提供了快速构建分布式系统的一些工具，包括配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等。
+
+微服务在本质上，就是rpc。rpc有基于tcp的，http的，mq的等等。spring cloud是基于spring boot的，spring boot 实现的是http协议的rpc，算是rpc的一个子集。
 ================================================================================================================================
 == SQL GroupBy & Top N ==
 Table student(id, name, score, classname)
