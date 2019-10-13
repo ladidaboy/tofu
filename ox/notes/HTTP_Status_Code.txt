@@ -1,0 +1,71 @@
+HTTP状态码（英语：HTTP Status Code）是用以表示网页服务器超文本传输协议响应状态的3位数字代码。
+它由 RFC 2616 规范定义的，并得到 RFC 2518、RFC 2817、RFC 2295、RFC 2774 与 RFC 4918 等规范扩展。
+所有状态码的第一个数字代表了响应的五种状态之一。所示的消息短语是典型的，但是可以提供任何可读取的替代方案。
+除非另有说明，状态码是HTTP / 1.1标准（RFC 7231）的一部分。
+
+HTTP状态码的官方注册表由互联网号码分配局（Internet Assigned Numbers Authority）维护。
+
+1 消息
+▪ 100 Continue
+▪ 101 Switching Protocols
+▪ 102 Processing
+2 成功
+▪ 200 OK
+▪ 201 Created
+▪ 202 Accepted
+▪ 203 Non-Authoritative Information
+▪ 204 No Content
+▪ 205 Reset Content
+▪ 206 Partial Content
+▪ 207 Multi-Status
+3 重定向
+▪ 300 Multiple Choices
+▪ 301 Moved Permanently
+▪ 302 Move Temporarily
+▪ 303 See Other
+▪ 304 Not Modified
+▪ 305 Use Proxy
+▪ 306 Switch Proxy
+▪ 307 Temporary Redirect
+4 请求错误
+▪ 400 Bad Request
+▪ 401 Unauthorized
+▪ 402 Payment Required
+▪ 403 Forbidden
+▪ 404 Not Found
+▪ 405 Method Not Allowed
+▪ 406 Not Acceptable
+▪ 407 Proxy Authentication Required
+▪ 408 Request Timeout
+▪ 409 Conflict
+▪ 410 Gone
+▪ 411 Length Required
+▪ 412 Precondition Failed
+▪ 413 Request Entity Too Large
+▪ 414 Request-URI Too Long
+▪ 415 Unsupported Media Type
+▪ 416 Requested Range Not Satisfiable
+▪ 417 Expectation Failed
+▪ 418 I'm a teapot
+▪ 421 Too Many Connections
+▪ 422 Unprocessable Entity
+▪ 423 Locked
+▪ 424 Failed Dependency
+▪ 425 Too Early
+▪ 426 Upgrade Required
+▪ 449 Retry With
+▪ 451 Unavailable For Legal Reasons
+5 服务器错误
+▪ 500 Internal Server Error
+▪ 501 Not Implemented
+▪ 502 Bad Gateway
+▪ 503 Service Unavailable
+▪ 504 Gateway Timeout
+▪ 505 HTTP Version Not Supported
+▪ 506 Variant Also Negotiates
+▪ 507 Insufficient Storage
+▪ 509 Bandwidth Limit Exceeded
+▪ 510 Not Extended
+▪ 600 Unparseable Response Headers
+
+https://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81
