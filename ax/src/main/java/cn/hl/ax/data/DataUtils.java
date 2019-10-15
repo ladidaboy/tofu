@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html
@@ -646,6 +648,55 @@ public class DataUtils extends StringUtils {
 
     //--------------------------------------------------------------------------------------------------------------------------
 
+    private static Pattern linePattern = Pattern.compile("_(\\w)");
+    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+
+    /**
+     * 下划线转驼峰
+     * @param attr 下划线规则的名称
+     * @return 驼峰规则的名称
+     */
+    public static String lineToHump(String attr) {
+        attr = attr.toLowerCase();
+        Matcher matcher = linePattern.matcher(attr);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(sb);
+
+        return uncapitalize(sb.toString());
+    }
+
+    /**
+     * 驼峰转下划线(效率高于{@link #humpToLine2(String)})
+     * @param attr 驼峰规则的名称
+     * @return 下划线规则的名称
+     */
+    public static String humpToLine(String attr) {
+        Matcher matcher = humpPattern.matcher(attr);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        if (startsWith(sb, "_")) {
+            return sb.substring(1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 驼峰转下划线(简单写法，效率低于{@link #humpToLine(String)})
+     * @param attr 驼峰规则的名称
+     * @return 属性名称
+     */
+    public static String humpToLine2(String attr) {
+        return attr.replaceAll("[A-Z]", "_$0").toLowerCase();
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------
+
     private static HashMap<String, ArrayList<Integer>> numberMap = new HashMap<>();
 
     public static void randomCycleClear() {
@@ -732,5 +783,10 @@ public class DataUtils extends StringUtils {
             System.out.println("randomInt(10, MONO)" + sp + randomInt(10, "MONO"));
         }
         System.out.println("randomInt(256, 512) ➣ " + randomInt(256, 512));
+        //
+        System.out.println("humpToLine(userName) " + humpToLine("userName"));
+        System.out.println("humpToLine(UserName) " + humpToLine("UserName"));
+        System.out.println("lineToHump(user_name) " + lineToHump("user_name"));
+        System.out.println("lineToHump(_user_name) " + lineToHump("_user_name"));
     }
 }
