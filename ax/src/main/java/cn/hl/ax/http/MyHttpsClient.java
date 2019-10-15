@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +52,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 /**
  * @author hyman
@@ -59,28 +59,49 @@ import java.util.Optional;
  * @version $ Id: MyClient.java, v 0.1  hyman Exp $
  */
 public class MyHttpsClient {
-    public static  Boolean PRINT_LOG = true;
-    private static String  CHARSET   = "UTF-8";
-    private static int     TIMEOUT   = 10000;//10秒
+    private static String               TAG       = "ⓘMyHttpsClient";
+    private static String               CHARSET   = "UTF-8";
+    private static int                  TIMEOUT   = 1000 * 20;//20秒
+    private static ThreadLocal<Integer> LOG_LEVEL = new ThreadLocal<Integer>() {
+        @Override
+        protected Integer initialValue() {
+            return 1;
+        }
+    };
 
+    //HTTP请求枚举取值范围为：GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS,TRACE, 常用的是GET和POST请求。
     public static enum Method {
         GET,
         POST,
         DELETE
     }
 
+    public static void detailLog() {
+        LOG_LEVEL.set(2);
+    }
+
+    public static void simpleLog() {
+        LOG_LEVEL.set(1);
+    }
+
+    public static void hideLog() {
+        LOG_LEVEL.set(0);
+    }
+
     private static DefaultHttpClient getHttpsClient() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
-
+            @Override
             public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
                     throws java.security.cert.CertificateException {
             }
 
+            @Override
             public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
                     throws java.security.cert.CertificateException {
             }
 
+            @Override
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
@@ -116,15 +137,21 @@ public class MyHttpsClient {
     }
 
     private static String execute(HttpRequestBase request, String message)
-            throws IOException, KeyManagementException, NoSuchAlgorithmException {
-        CloseableHttpClient httpclient = getHttpsClient();
-        HttpParams clientParams = httpclient.getParams();
+            throws KeyManagementException, NoSuchAlgorithmException, IOException {
+        CloseableHttpClient client = getHttpsClient();
+        HttpParams clientParams = client.getParams();
         clientParams.setParameter(CoreConnectionPNames.SO_TIMEOUT, TIMEOUT);
         clientParams.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, TIMEOUT);
-        message = Optional.of(message).orElse(request.getURI().getPath());
+        if (StringUtils.isBlank(message) || LOG_LEVEL.get() == 1) {
+            URI uri = request.getURI();
+            message = TAG + " " + request.getMethod() + " → ";
+            message += uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + uri.getPath();
+            message += (StringUtils.isBlank(uri.getQuery()) ? "" : ("?" + uri.getQuery())) + "\n";
+        }
+        message = "================================================================\n" + message;
         String body = null;
         try {
-            CloseableHttpResponse response = httpclient.execute(request);
+            CloseableHttpResponse response = client.execute(request);
             try {
                 // 处理请求结果
                 HttpEntity entity = response.getEntity();
@@ -141,58 +168,67 @@ public class MyHttpsClient {
                     }
                     body = EntityUtils.toString(entity, CHARSET);
                     String json = body;
-                    try {
-                        json = JSONObject.toJSONString(JSONObject.parseObject(body), true);
-                    } catch (Exception e) {
+                    if (LOG_LEVEL.get() == 2) {
                         try {
-                            json = JSONObject.toJSONString(JSONObject.parseArray(body), true);
-                        } catch (Exception ee) {
+                            json = JSONObject.toJSONString(JSONObject.parseObject(body), true);
+                        } catch (Exception e) {
+                            try {
+                                json = JSONObject.toJSONString(JSONObject.parseArray(body), true);
+                            } catch (Exception ee) {
+                                json = body;
+                            }
                         }
+                        message += "➥ Result: " + json;
+                    } else {
+                        message += json;
                     }
-                    message += "➥ Result: " + json;
                 }
                 EntityUtils.consume(entity);
             } finally {
                 response.close();
             }
         } finally {
-            httpclient.close();
-            if (PRINT_LOG) {
+            client.close();
+            if (LOG_LEVEL.get() > 0) {
                 System.out.println(message);
             }
         }
         return body;
     }
 
-    public static String execute(String url, Method method, Object params, Map<String, String> header, boolean postJson) throws Exception {
+    public static String execute(String url, Method method, Object params, Map<String, String> header, boolean postJson)
+            throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
         // 判断请求地址和请求类型是否合法
         if (StringUtils.isBlank(url) || method == null || !StringUtils.startsWithIgnoreCase(url, "http")) {
             return null;
         }
         // 初始化请求对象
         url = url.trim();
-        String msg = "================================================================\nZenClient ";
+        String msg = TAG;
         HttpRequestBase request = null;
         switch (method) {
             case GET:
-                msg += "GET";
+                msg += " GET ";
                 request = new HttpGet(url);
                 break;
             case POST:
-                msg += "POST" + (postJson ? "{JSON}" : "");
+                msg += " POST" + (postJson ? "{JSON} " : " ");
                 request = new HttpPost(url);
                 break;
             case DELETE:
-                msg += "DELETE";
+                msg += " DELETE ";
                 request = new HttpDelete(url);
                 break;
             default:
                 return null;
         }
-        msg += " -> " + url + "\n";
+        msg += "→ " + url + "\n";
         // 设置超时
-        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
-                .setSocketTimeout(TIMEOUT).build();
+        RequestConfig requestConfig = RequestConfig.custom() //
+                .setConnectionRequestTimeout(TIMEOUT) //
+                .setConnectTimeout(TIMEOUT) //
+                .setSocketTimeout(TIMEOUT) //
+                .build();
         request.setConfig(requestConfig);
         // 设置Header
         if (header == null) {
@@ -244,15 +280,18 @@ public class MyHttpsClient {
         return execute(request, msg);
     }
 
-    public static String doGet(String url, Map<String, Object> params, Map<String, String> header) throws Exception {
+    public static String doGet(String url, Map<String, Object> params, Map<String, String> header)
+            throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
         return execute(url, Method.GET, params, header, false);
     }
 
-    public static String doPost(String url, Map<String, Object> params, Map<String, String> header) throws Exception {
+    public static String doPost(String url, Map<String, Object> params, Map<String, String> header)
+            throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
         return execute(url, Method.POST, params, header, false);
     }
 
-    public static String doPostJson(String url, Map<String, Object> params, Map<String, String> header) throws Exception {
+    public static String doPostJson(String url, Map<String, Object> params, Map<String, String> header)
+            throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
         String json = null;
         if (params != null && !params.isEmpty()) {
             for (Iterator<Entry<String, Object>> it = params.entrySet().iterator(); it.hasNext(); ) {
@@ -266,17 +305,32 @@ public class MyHttpsClient {
         return execute(url, Method.POST, params, header, true);
     }
 
-    public static String doDelete(String url, Map<String, Object> params, Map<String, String> header) throws Exception {
+    public static String doDelete(String url, Map<String, Object> params, Map<String, String> header)
+            throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
         return execute(url, Method.DELETE, params, header, false);
     }
 
-    public static String doUpload(String url, String name, String path) throws Exception {
+    /*
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpmime</artifactId>
+        <version>4.5.9</version>
+    </dependency>
+     */
+    public static String doUpload(String url, String name, String path)
+            throws NoSuchAlgorithmException, KeyManagementException, IOException {
         Map<String, Object> params = new HashMap<>();
         params.put(name, new File(path));
         return doUpload(url, params);
     }
 
-    public static String doUpload(String url, Map<String, Object> params) throws Exception {
+    public static String doUpload(String url, Map<String, Object> params)
+            throws NoSuchAlgorithmException, KeyManagementException, IOException {
         String msg = "Upload File @ " + url + "\n";
         HttpPost httpPost = new HttpPost(url.trim());
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
@@ -300,7 +354,7 @@ public class MyHttpsClient {
         return execute(httpPost, msg);
     }
 
-    public static void doDownload(String url, Map<String, Object> params, String localFileName) throws Exception {
+    public static void doDownload(String url, Map<String, Object> params, String localFileName) throws IOException {
         if (params != null && !params.isEmpty()) {
             url = url.trim();
             String str = EntityUtils.toString(new UrlEncodedFormEntity(map2NameValuePairList(params)));
