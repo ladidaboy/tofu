@@ -2,10 +2,12 @@ package cn.hl.ax.clone;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -20,7 +22,7 @@ public class CloneBean implements Serializable {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public <T extends CloneBean> T deepCopy() throws Exception {
+    public <T extends CloneBean> T deepCopy() throws IOException, ClassNotFoundException {
         return (T) deepCopy(this);
     }
 
@@ -31,7 +33,7 @@ public class CloneBean implements Serializable {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static <T extends CloneBean> T deepCopy(T obj) throws Exception {
+    public static <T extends CloneBean> T deepCopy(T obj) throws IOException, ClassNotFoundException {
         // 将该对象序列化成流,因为写在流里的是对象的一个拷贝,而原对象仍然存在于JVM里面.
         // 所以利用这个特性可以实现对象的深拷贝
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -48,7 +50,8 @@ public class CloneBean implements Serializable {
      * @return 拷贝对象
      * @throws Exception
      */
-    public <T extends CloneBean> T selfClone() throws Exception {
+    public <T extends CloneBean> T selfClone()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return this.selfClone(true);
     }
 
@@ -59,7 +62,8 @@ public class CloneBean implements Serializable {
      * @throws Exception
      */
     @SuppressWarnings({"unchecked"})
-    public <T extends CloneBean> T selfClone(boolean copySuper) throws Exception {
+    public <T extends CloneBean> T selfClone(boolean copySuper)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return (T) selfClone(this, copySuper);
     }
 
@@ -71,7 +75,8 @@ public class CloneBean implements Serializable {
      * @throws Exception
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static <T> T selfClone(T obj, boolean copySuper) throws Exception {
+    public static <T> T selfClone(T obj, boolean copySuper)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Class clz = obj.getClass();
         T val = (T) clz.newInstance();
         if (copySuper) {
@@ -85,7 +90,8 @@ public class CloneBean implements Serializable {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <T> void cloneFieldValue(Class clz, T obj, T val) throws Exception {
+    private static <T> void cloneFieldValue(Class clz, T obj, T val)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Field fields[] = clz.getDeclaredFields();
         Method methodSet, methodGet;
         String field, _field_;
@@ -118,7 +124,8 @@ public class CloneBean implements Serializable {
      * @return toClz.newInstance
      * @throws Exception
      */
-    public static <T> Object cloneSameField(T fromBean, Class<?> toClz) throws Exception {
+    public static <T> Object cloneSameField(T fromBean, Class<?> toClz)
+            throws IllegalAccessException, InstantiationException, InvocationTargetException {
         Object toBean = toClz.newInstance();
         cloneSameField(fromBean, toBean);
         return toBean;
@@ -130,7 +137,7 @@ public class CloneBean implements Serializable {
      * @param to 目标实体对象
      * @throws Exception
      */
-    public static void cloneSameField(Object from, Object to) throws Exception {
+    public static void cloneSameField(Object from, Object to) throws InvocationTargetException, IllegalAccessException {
         if (from == null) {
             return;
         }

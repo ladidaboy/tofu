@@ -3,6 +3,10 @@ package cn.hl.ax.clone;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -227,5 +231,42 @@ public class ReflectionUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 判定是否是常用的数据类型
+     * <br>byte、char、short、int、long、float、double、boolean
+     * <br>Date、String、BigDecimal、BigInteger、LocalDateTime
+     * @param obj
+     * @return
+     */
+    public static boolean isBasicDataType(Object obj) {
+        Class clazz = obj.getClass();
+        return (clazz.isPrimitive() ||//是否是原始基础数据类型(byte、char、short、int、long、float、double、boolean)
+                clazz.equals(Byte.class) ||       //byte
+                clazz.equals(Character.class) ||  //char
+                clazz.equals(Short.class) ||      //short
+                clazz.equals(Integer.class) ||    //int
+                clazz.equals(Long.class) ||       //long
+                clazz.equals(Float.class) ||      //float
+                clazz.equals(Double.class) ||     //double
+                clazz.equals(Boolean.class) ||    //boolean
+                clazz.equals(Date.class) ||       //
+                clazz.equals(String.class) ||     //
+                clazz.equals(BigDecimal.class) || //
+                clazz.equals(BigInteger.class) || //
+                clazz.equals(LocalDateTime.class) //
+        );
+    }
+
+    /**
+     * 判定是否是原始数据类型
+     * <br>byte、char、short、int、long、float、double、boolean
+     * <br>byte < short < char < int < long < float < double
+     * @param clazz
+     * @return
+     */
+    public static boolean isPrimitiveType(Class clazz) {
+        return clazz.isPrimitive();
     }
 }

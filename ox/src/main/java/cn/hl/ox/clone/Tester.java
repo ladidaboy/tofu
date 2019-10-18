@@ -46,6 +46,10 @@ public class Tester {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        BuddhaBless.printSplitLine(128);
+
+        test5();
     }
 
     // test CloneBean.newInstance.deepCopy
@@ -196,5 +200,14 @@ public class Tester {
         s.setsId("WoW");
         System.out.println(p);
         System.out.println(s);
+    }
+
+    private static void test5() {
+        BS bs = new BS();
+        System.out.println("BS is a BasicData type? " + ReflectionUtils.isBasicDataType(bs));
+        int i = 2;
+        System.out.println("int is a BasicData type? " + ReflectionUtils.isBasicDataType(i));
+        System.out.println("int is a Primitive type? " + ReflectionUtils.isPrimitiveType(int.class));
+        System.out.println("Integer is a Primitive type? " + ReflectionUtils.isPrimitiveType(Integer.class));
     }
 }
