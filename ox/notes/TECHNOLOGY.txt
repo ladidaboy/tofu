@@ -10,6 +10,8 @@ ADDER(蝰蛇) <--> ZEBRA(斑马)
 Crest(波峰) <--> Trough(波谷)
 Peak(峰值) <--> Mean(均值) <--> Valley(谷值)
 
+air <<>> arm <<>> ash
+
 == SIT-集成测试 | UAT-验收测试 ==
     从时间上看，UAT要在SIT后面，UAT测试要在系统测试完成后才开始。
     从测试人员看，SIT由公司的测试员来测试，而UAT一般是由用户来测试。
