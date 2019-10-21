@@ -177,8 +177,8 @@ public class MyLogger implements Serializable {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) {
-		MyLogger log = new MyLogger("NULL Pointer");
-		log.printStackTrace();
+		//MyLogger log = new MyLogger("NULL Pointer");
+		//log.printStackTrace();
 
 		log2Console("Test LogUtil.");
 

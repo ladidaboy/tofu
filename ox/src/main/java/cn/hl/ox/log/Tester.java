@@ -29,7 +29,7 @@ public class Tester {
             // 日志输出路径
             String logPath = System.getProperty("user.dir");
             OUT.println("LOG PATH: " + logPath);
-            System.setOut(new PrintStream(new File(logPath + "/logs/Tester.log")));
+            System.setOut(new PrintStream(new File(logPath + "/zen/logs/Tester.log")));
         } catch (Exception e) {
             e.printStackTrace();
         }
