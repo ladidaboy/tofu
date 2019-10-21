@@ -91,6 +91,13 @@ git push -u origin master
 git commit -m "提交注释"
 
 ================================================================================================================================
+-- 本地git同步github --
+git init
+git add
+git commit -m
+git remote add origin http://
+git push -u origin master
+
 -- 如何删除github上的commit历史记录 --
 # Clone your git repo
 git clone https://github.com/someone/project.github.io.git;
