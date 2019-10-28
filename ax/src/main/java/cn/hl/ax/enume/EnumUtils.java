@@ -1,7 +1,6 @@
 package cn.hl.ax.enume;
 
 import cn.hl.ax.clone.ReflectionUtils;
-import org.apache.http.annotation.Contract;
 
 import java.util.EnumSet;
 
@@ -9,7 +8,6 @@ import java.util.EnumSet;
  * Enumeration Utils
  * @author hyman
  * @date 2019-08-22 15:33:44
- * @version $ Id: EnumUtils.java, v 0.1  hyman Exp $
  */
 public class EnumUtils {
     /**
@@ -26,7 +24,7 @@ public class EnumUtils {
                 return e;
             }
         }
-        return null;
+        throw new EnumConstantNotPresentException(clz, name);
     }
 
     /**
@@ -43,7 +41,7 @@ public class EnumUtils {
                 return e;
             }
         }
-        return null;
+        throw new EnumConstantNotPresentException(clz, "ordinal#" + ordinal);
     }
 
     /**
@@ -56,7 +54,7 @@ public class EnumUtils {
      */
     public static <E extends Enum<E>> E fromField(Class<E> clz, String field, Object value) {
         if (value == null) {
-            return null;
+            throw new EnumConstantNotPresentException(clz, field + "(null)");
         }
         EnumSet<E> set = EnumSet.allOf(clz);
         for (E e : set) {
@@ -68,7 +66,7 @@ public class EnumUtils {
                 return e;
             }
         }
-        return null;
+        throw new EnumConstantNotPresentException(clz, field + "(" + value + ")");
     }
 
     /**
