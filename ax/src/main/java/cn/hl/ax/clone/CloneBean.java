@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 可序列化(可复制拷贝)的实体父类
@@ -19,7 +22,6 @@ public class CloneBean implements Serializable {
     /**
      * 对当前对象的深度拷贝(JAVA对象数值拷贝)
      * @return 拷贝对象
-     * @throws Exception
      */
     @SuppressWarnings("unchecked")
     public <T extends CloneBean> T deepCopy() throws IOException, ClassNotFoundException {
@@ -30,7 +32,6 @@ public class CloneBean implements Serializable {
      * 对指定对象的深度拷贝(JAVA对象数值拷贝)
      * @param obj 指定对象
      * @return 拷贝对象
-     * @throws Exception
      */
     @SuppressWarnings("unchecked")
     public static <T extends CloneBean> T deepCopy(T obj) throws IOException, ClassNotFoundException {
@@ -48,7 +49,6 @@ public class CloneBean implements Serializable {
     /**
      * 对当前对象的浅度拷贝(JAVA对象引用拷贝)
      * @return 拷贝对象
-     * @throws Exception
      */
     public <T extends CloneBean> T selfClone()
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -59,7 +59,6 @@ public class CloneBean implements Serializable {
      * 对当前对象的浅度拷贝(JAVA对象引用拷贝)
      * @param copySuper 是否拷贝父对象属性
      * @return 拷贝对象
-     * @throws Exception
      */
     @SuppressWarnings({"unchecked"})
     public <T extends CloneBean> T selfClone(boolean copySuper)
@@ -72,7 +71,6 @@ public class CloneBean implements Serializable {
      * @param obj 指定对象
      * @param copySuper 是否拷贝父对象属性
      * @return 拷贝对象
-     * @throws Exception
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <T> T selfClone(T obj, boolean copySuper)
@@ -90,9 +88,9 @@ public class CloneBean implements Serializable {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <T> void cloneFieldValue(Class clz, T obj, T val)
+    private static <T> void cloneFieldValue(Class<T> clz, T obj, T val)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Field fields[] = clz.getDeclaredFields();
+        List<Field> fields = getAllFields(clz);
         Method methodSet, methodGet;
         String field, _field_;
         for (Field fd : fields) {
@@ -122,7 +120,6 @@ public class CloneBean implements Serializable {
      * @param fromBean 来源实体对象
      * @param toClz 目标实体JAVA类
      * @return toClz.newInstance
-     * @throws Exception
      */
     public static <T> Object cloneSameField(T fromBean, Class<?> toClz)
             throws IllegalAccessException, InstantiationException, InvocationTargetException {
@@ -135,14 +132,24 @@ public class CloneBean implements Serializable {
      * 按照from对象的属性拷贝值到to对象中(只拷贝两个对象中都有的属性)
      * @param from 来源实体对象
      * @param to 目标实体对象
-     * @throws Exception
      */
     public static void cloneSameField(Object from, Object to) throws InvocationTargetException, IllegalAccessException {
+        cloneSameFieldEx(from, to, false);
+    }
+
+    /**
+     * 按照from对象的属性拷贝值到to对象中(只拷贝两个对象中都有的属性)
+     * @param from 来源实体对象
+     * @param to 目标实体对象
+     * @param onlyCopyValidValue 只拷贝有值的属性
+     */
+    public static void cloneSameFieldEx(Object from, Object to, boolean onlyCopyValidValue)
+            throws InvocationTargetException, IllegalAccessException {
         if (from == null) {
             return;
         }
         Class<?> frClz = from.getClass(), toClz = to.getClass();
-        Field fields[] = frClz.getDeclaredFields();
+        List<Field> fields = getAllFields(frClz);
         Method methodGet, methodSet;
         String field, _field_;
         Object _val_;
@@ -169,8 +176,36 @@ public class CloneBean implements Serializable {
             }
             if (methodGet != null && methodSet != null) {
                 _val_ = methodGet.invoke(from);
-                methodSet.invoke(to, _val_);
+                if (onlyCopyValidValue) {
+                    if (_val_ != null) {
+                        methodSet.invoke(to, _val_);
+                    }
+                } else {
+                    methodSet.invoke(to, _val_);
+                }
             }
         }
+    }
+
+    public static List<Field> getAllFields(Class<?> clz) {
+        List<Field> fieldList = new LinkedList<>();
+        if (clz == null) {
+            return fieldList;
+        }
+        for (; clz != Object.class; clz = clz.getSuperclass()) {
+            Field[] fields = clz.getDeclaredFields();
+            for (Field field : fields) {
+                /** 过滤静态属性**/
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+                /** 过滤transient 关键字修饰的属性**/
+                if (Modifier.isTransient(field.getModifiers())) {
+                    continue;
+                }
+                fieldList.add(field);
+            }
+        }
+        return fieldList;
     }
 }
