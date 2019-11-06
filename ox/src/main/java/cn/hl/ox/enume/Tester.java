@@ -74,7 +74,7 @@ public class Tester {
                 System.out.println("TUE 与 MON 在同一位置");
                 break;
         }
-        BuddhaBless.printSplitLine();
+        BuddhaBless.printSplitWave();
 
         Week week = EnumUtils.fromName(Week.class, "SAT");
         // getDeclaringClass()

@@ -3,12 +3,66 @@ package cn.hl.ox;
 import cn.hl.ax.data.DataUtils;
 
 public class BuddhaBless {
+    private static final int MIN_LEN = 64;
+
+    public static void printHeadline(String tag, Object... msg) {
+        printHeadline(tag, 0, msg);
+    }
+
+    public static void printHeadline(String tag, int len, Object... msg) {
+        tag = tag == null ? "^" : tag.trim();
+        tag = " " + tag + " ";
+        len = Math.max(len, MIN_LEN) - 16;
+        int lmin = tag.length(), lmax = (int) (Math.ceil(lmin / 2.0) * 2), smax = Math.max(len, lmax);
+        tag = DataUtils.leftPad(tag, lmax + (smax - lmax) / 2, "/");
+        tag = DataUtils.rightPad(tag, smax, "\\");
+        tag = "____////" + tag + "\\\\\\\\____";
+        try {
+            Thread.sleep(5);
+            System.err.println(tag);
+            Thread.sleep(5);
+            if (msg.length > 0) {
+                for (Object mm : msg) {
+                    System.out.println(mm);
+                }
+            }
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            //
+        }
+    }
+
+    public static void printCornerTitle(String tag, Object... msg) {
+        printCornerTitle(tag, 0, msg);
+    }
+
+    public static void printCornerTitle(String tag, int len, Object... msg) {
+        tag = tag == null ? "!" : tag.trim();
+        len = Math.max(len, MIN_LEN);
+        int lmin = tag.length(), lmax = Math.max(lmin + 18, len);
+        tag = DataUtils.rightPad("\\" + tag + "/", lmin + 10, "^");
+        tag = DataUtils.leftPad(tag, lmax, "^");
+        try {
+            Thread.sleep(5);
+            if (msg.length > 0) {
+                for (Object mm : msg) {
+                    System.out.println(mm);
+                }
+            }
+            Thread.sleep(5);
+            System.err.println(tag);
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            //
+        }
+    }
+
     public static void printSplitLine() {
         printSplitLine(0);
     }
 
     public static void printSplitLine(int len) {
-        len = Math.max(len, 64) / 2 - 12;
+        len = Math.max(len, MIN_LEN) / 2 - 12;
         String ss = DataUtils.rightPadEx("", len, '-');
         String ll = "( S P L I T ~ L I N E )-";
         //ll = "( Ⓢ ⓟ Ⓛ Ⓘ Ⓣ - Ⓛ Ⓘ Ⓝ Ⓔ )-";
@@ -19,6 +73,22 @@ public class BuddhaBless {
             ll = "( E R R O R ~ L I N E )-";
             //ll = "( Ⓔ Ⓡ Ⓡ Ⓞ Ⓡ - Ⓛ Ⓘ Ⓝ Ⓔ )-";
             //ll = "( ⓔ ⓡ ⓡ ⓞ ⓡ - ⓛ ⓘ ⓝ ⓔ )-";
+        }
+        System.err.println(ss + ll + ss);
+    }
+
+    public static void printSplitWave() {
+        printSplitWave(0);
+    }
+
+    public static void printSplitWave(int len) {
+        len = Math.max(len, MIN_LEN) / 2 - 12;
+        String ss = DataUtils.rightPadEx("", len, '^');
+        String ll = "\\ S P L I T ~ L I N E /^";
+        try {
+            Thread.sleep(16);
+        } catch (InterruptedException e) {
+            ll = "\\ E R R O R ~ L I N E /^";
         }
         System.err.println(ss + ll + ss);
     }
@@ -48,7 +118,7 @@ public class BuddhaBless {
         sb.append("\r\n|---------------------------------------------|");
         sb.append("\r\n||===>>>>  Buddha bless, Never BUG!   <<<<===||");
         sb.append("\r\n+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+");
-        sb.append("\r\n: -  -  -  -  -  -  -  -  -  -  -  -  -  -  - -");
+        sb.append("\r\n: -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  ");
         sb.append("\r\n+ 佛曰:");
         sb.append("\r\n: 　　写字楼里写字间，写字间里程序员；");
         sb.append("\r\n: 　　程序人员写程序，又拿程序换酒钱。");
@@ -60,10 +130,17 @@ public class BuddhaBless {
         sb.append("\r\n: 　　不见满街漂亮妹，哪个归得程序员？");
         sb.append("\r\n:");
         System.out.println(sb);
-        printSplitLine();
+
     }
 
     public static void main(String[] args) {
         pray2theBuddha();
+        printHeadline("Headline", "Used to display customer information.");
+        System.out.println(".\n.");
+        printSplitLine();
+        System.out.println(".\n.");
+        printSplitWave();
+        System.out.println(".\n.");
+        printCornerTitle("CornerTitle", "Something interesting ^.^");
     }
 }

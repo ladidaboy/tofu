@@ -153,7 +153,8 @@ public class Test {
                 + "或者说。缓冲区中现存元素的计数。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置(position): "
                 + "下一个要被读或写的元素的索引，位置会自己主动由对应的get()和put()函数更新。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "&nbsp;&nbsp;&nbsp;标记(mark): 一个备忘位置，调用mark()来设定mark=position.调用reset()设定position=mark。"
-                + "标记在设定前是没有定义的(undefied)。</p><title>401 Forbidden</title><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这四个属性的关系例如以下：</p>";
+                + "标记在设定前是没有定义的(undefied)。</p><title>401 Forbidden</title><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                + "这四个属性的关系例如以下：</p>";
         Pattern p = Pattern.compile(reg, Pattern.MULTILINE);
         str = str.replace("&nbsp;", "");
         Matcher m = p.matcher(str);
@@ -236,26 +237,27 @@ public class Test {
         Test basics = new Test();
         try {
             basics._test1();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test2();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test3();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test4();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test5();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test6();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._test7();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._testGet();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._testSplit();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._testQuery();
-            BuddhaBless.printSplitLine();
+            BuddhaBless.printCornerTitle("!");
             basics._testReplaceOrDelete();
+            BuddhaBless.printCornerTitle("!", ".");
         } catch (Exception e) {
             e.printStackTrace();
         }
