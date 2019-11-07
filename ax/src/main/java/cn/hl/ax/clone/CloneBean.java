@@ -187,6 +187,11 @@ public class CloneBean implements Serializable {
         }
     }
 
+    /**
+     * 获取类中所有的属性，包括父类中的
+     * @param clz 类对象
+     * @return 属性列表
+     */
     public static List<Field> getAllFields(Class<?> clz) {
         List<Field> fieldList = new LinkedList<>();
         if (clz == null) {

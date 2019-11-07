@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -152,6 +154,38 @@ public class ReflectionUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 直接读取对象的属性值, 忽略 private/protected 修饰符, 也不经过 getter
+     *
+     * @param object 子类对象
+     * @param fieldName 父类中的属性名，可迭代进属性内 (super.sub / super.list[0].map[key])
+     * @return 父类中的属性值
+     */
+    public static Object getFieldValueEx(Object object, String fieldName) {
+        String[] fields = fieldName.split("[.]");
+        if (fields.length > 1) {
+            object = getFieldValueEx(object, fields[0]);
+            String subField = fieldName.substring(fieldName.indexOf(".") + 1);
+            return getFieldValueEx(object, subField);
+        }
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)\\[(.*?)]");
+        Matcher matcher = pattern.matcher(fieldName);
+        if (matcher.find()) {
+            //group #0 - all; #1 - (name); #2 - (index/key)
+            String name = matcher.group(1);
+            try {
+                int index = Integer.parseInt(matcher.group(2));
+                List list = (List) getFieldValue(object, name);
+                return list.get(index);
+            } catch (Exception ex) {
+                String key = matcher.group(2);
+                Map map = (Map) getFieldValue(object, name);
+                return map.get(key);
+            }
+        }
+        return getFieldValue(object, fieldName);
     }
 
     /**

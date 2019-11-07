@@ -3,13 +3,13 @@ package cn.hl.ox;
 import cn.hl.ax.data.DataUtils;
 
 public class BuddhaBless {
-    private static final int MIN_LEN = 64;
+    private static final int MIN_LEN = 48;
 
     public static void printHeadline(String tag, Object... msg) {
-        printHeadline(tag, 0, msg);
+        printHeadlineEx(tag, 0, msg);
     }
 
-    public static void printHeadline(String tag, int len, Object... msg) {
+    public static void printHeadlineEx(String tag, int len, Object... msg) {
         tag = tag == null ? "^" : tag.trim();
         tag = " " + tag + " ";
         len = Math.max(len, MIN_LEN) - 16;
@@ -33,10 +33,10 @@ public class BuddhaBless {
     }
 
     public static void printCornerTitle(String tag, Object... msg) {
-        printCornerTitle(tag, 0, msg);
+        printCornerTitleEx(tag, 0, msg);
     }
 
-    public static void printCornerTitle(String tag, int len, Object... msg) {
+    public static void printCornerTitleEx(String tag, int len, Object... msg) {
         tag = tag == null ? "!" : tag.trim();
         len = Math.max(len, MIN_LEN);
         int lmin = tag.length(), lmax = Math.max(lmin + 18, len);
@@ -83,12 +83,12 @@ public class BuddhaBless {
 
     public static void printSplitWave(int len) {
         len = Math.max(len, MIN_LEN) / 2 - 12;
-        String ss = DataUtils.rightPadEx("", len, '^');
-        String ll = "\\ S P L I T ~ L I N E /^";
+        String ss = DataUtils.rightPadEx("", len, '~');
+        String ll = "( S P L I T - L I N E )~";
         try {
             Thread.sleep(16);
         } catch (InterruptedException e) {
-            ll = "\\ E R R O R ~ L I N E /^";
+            ll = "( E R R O R - L I N E )~";
         }
         System.err.println(ss + ll + ss);
     }
@@ -135,7 +135,7 @@ public class BuddhaBless {
 
     public static void main(String[] args) {
         pray2theBuddha();
-        printHeadline("Headline", "Used to display customer information.");
+        printHeadline("HEADLINE", "Used to display customer information.");
         System.out.println(".\n.");
         printSplitLine();
         System.out.println(".\n.");
