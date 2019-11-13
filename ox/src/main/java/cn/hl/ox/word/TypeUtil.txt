@@ -82,17 +82,17 @@ public class TypeUtil {
      * @return 种别编码
      */
     public int getType(String args) {
-        int type = -1;
+        Integer type1 = -1;
         Field[] fields = KeyTypes.class.getDeclaredFields();
         for (Field field : fields) {
             if (field.getName().equals(args)) {
                 try {
-                    type = (Integer) field.get(new KeyTypes());
+                    type1 = (Integer) field.get(new KeyTypes());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        return type;
+        return type1;
     }
 }

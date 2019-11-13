@@ -21,11 +21,11 @@ public class Tester {
         // 通过SerializeFilter定制序列化 ➢ ➢
         BuddhaBless.printSplitLine(88);
         testPropertyFilter();
-        BuddhaBless.printSplitLine(88);
+        BuddhaBless.printSplitWave(88);
         testNameFilter();
         BuddhaBless.printSplitLine(88);
         testValueFilter();
-        BuddhaBless.printSplitLine(88);
+        BuddhaBless.printSplitWave(88);
         testBeforeFilter();
         BuddhaBless.printSplitLine(88);
         testAfterFilter();

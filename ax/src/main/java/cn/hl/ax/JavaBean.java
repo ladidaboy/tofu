@@ -5,7 +5,6 @@ import java.util.Date;
 /**
  * @author hyman
  * @date 2019-08-20 11:22:42
- * @version $ Id: JavaBean.java, v 0.1  hyman Exp $
  */
 public class JavaBean {
     private String  id;

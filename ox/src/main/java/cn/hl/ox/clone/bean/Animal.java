@@ -2,6 +2,8 @@ package cn.hl.ox.clone.bean;
 
 import cn.hl.ax.clone.CloneBean;
 
+import java.util.Random;
+
 /**
  * 动物
  */
@@ -12,10 +14,11 @@ public class Animal extends CloneBean {
     protected              String id;
 
     private int RS() {
-        double db = Math.random() * 4;
-        db *= (Math.random() * 32 + 993);
-        db *= (Math.random() * 32 + 993);
-        return Double.valueOf(db).intValue();
+        Random rd = new Random();
+        int out = (rd.nextInt(4) + 1);
+        out *= (rd.nextInt(24) + 1001);
+        out *= (rd.nextInt(24) + 1001);
+        return out;
     }
 
     public Animal() {
@@ -35,7 +38,8 @@ public class Animal extends CloneBean {
 
     @Override
     public String toString() {
-        return "Animal@" + hashCode() + "(" + id + ")[" + bd.length + "]" + (next == null ? "" : " -> " + next.toString());
+        String info = "Animal@%010d(%s)[%d]%s";
+        return String.format(info, hashCode(), id, bd.length, (next == null ? "" : " -> " + next.toString()));
     }
 
     // -------------------------------------------------------------------------------------------------------------------------

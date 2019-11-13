@@ -93,6 +93,6 @@ public class Tester {
         System.out.println("EnumUtils.isSame(MyEnum, wow)-> " + EnumUtils.isSame(myenum, "wow"));
 
         boolean flag = org.apache.commons.lang3.EnumUtils.isValidEnum(MyEnum.class, "WOW");
-        System.out.println("commons->EnumUtils.isValidEnum(MyEnum, WOW) := " + flag);
+        System.out.println("apache.EnumUtils.isValidEnum(MyEnum, WOW)-> " + flag);
     }
 }

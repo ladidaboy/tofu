@@ -49,85 +49,85 @@ import cn.hl.ax.clone.CloneBean;
  */
 @SuppressWarnings("serial")
 public class DataTypeOfBasic extends CloneBean {
-	private String parent;
-	private Byte byteValue;
-	private Short shortValue;
-	private Integer intValue;
-	private Long longValue;
-	private Float floatValue;
-	private Double doubleValue;
-	private Character charValue;
-	private Boolean booleanValue;
+    private String parent;
+    private Byte byteValue;
+    private Short shortValue;
+    private Integer intValue;
+    private Long longValue;
+    private Float floatValue;
+    private Double doubleValue;
+    private Character charValue;
+    private Boolean booleanValue;
 
-	public String getParent() {
-		return parent;
-	}
+    public String getParent() {
+        return parent;
+    }
 
-	public void setParent(String parent) {
-		this.parent = parent;
-	}
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
 
-	public Byte getByteValue() {
-		return byteValue;
-	}
+    public Byte getByteValue() {
+        return byteValue;
+    }
 
-	public void setByteValue(Byte byteValue) {
-		this.byteValue = byteValue;
-	}
+    public void setByteValue(Byte byteValue) {
+        this.byteValue = byteValue;
+    }
 
-	public Short getShortValue() {
-		return shortValue;
-	}
+    public Short getShortValue() {
+        return shortValue;
+    }
 
-	public void setShortValue(Short shortValue) {
-		this.shortValue = shortValue;
-	}
+    public void setShortValue(Short shortValue) {
+        this.shortValue = shortValue;
+    }
 
-	public Integer getIntValue() {
-		return intValue;
-	}
+    public Integer getIntValue() {
+        return intValue;
+    }
 
-	public void setIntValue(Integer intValue) {
-		this.intValue = intValue;
-	}
+    public void setIntValue(Integer intValue) {
+        this.intValue = intValue;
+    }
 
-	public Long getLongValue() {
-		return longValue;
-	}
+    public Long getLongValue() {
+        return longValue;
+    }
 
-	public void setLongValue(Long longValue) {
-		this.longValue = longValue;
-	}
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
 
-	public Float getFloatValue() {
-		return floatValue;
-	}
+    public Float getFloatValue() {
+        return floatValue;
+    }
 
-	public void setFloatValue(Float floatValue) {
-		this.floatValue = floatValue;
-	}
+    public void setFloatValue(Float floatValue) {
+        this.floatValue = floatValue;
+    }
 
-	public Double getDoubleValue() {
-		return doubleValue;
-	}
+    public Double getDoubleValue() {
+        return doubleValue;
+    }
 
-	public void setDoubleValue(Double doubleValue) {
-		this.doubleValue = doubleValue;
-	}
+    public void setDoubleValue(Double doubleValue) {
+        this.doubleValue = doubleValue;
+    }
 
-	public Character getCharValue() {
-		return charValue;
-	}
+    public Character getCharValue() {
+        return charValue;
+    }
 
-	public void setCharValue(Character charValue) {
-		this.charValue = charValue;
-	}
+    public void setCharValue(Character charValue) {
+        this.charValue = charValue;
+    }
 
-	public Boolean getBooleanValue() {
-		return booleanValue;
-	}
+    public Boolean getBooleanValue() {
+        return booleanValue;
+    }
 
-	public void setBooleanValue(Boolean booleanValue) {
-		this.booleanValue = booleanValue;
-	}
+    public void setBooleanValue(Boolean booleanValue) {
+        this.booleanValue = booleanValue;
+    }
 }

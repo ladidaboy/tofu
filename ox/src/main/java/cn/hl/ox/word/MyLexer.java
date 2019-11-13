@@ -2,6 +2,7 @@ package cn.hl.ox.word;
 
 import cn.hl.ax.data.DataUtils;
 import cn.hl.ax.enume.EnumUtils;
+import cn.hl.ox.BuddhaBless;
 import cn.hl.ox.file.FileUtil;
 
 import java.io.File;
@@ -217,7 +218,8 @@ public class MyLexer extends TypeUtil {
                 sb.append(' ');
             }
         }
-        System.out.println("➣ After compression: \n" + sb.toString());
+        BuddhaBless.printHeadlineEx("➣ After compression", 128, sb);
+        //System.out.println("➣ After compression: \n" + sb.toString());
     }
 
     private boolean check(OI oi) {

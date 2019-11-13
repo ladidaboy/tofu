@@ -14,13 +14,14 @@ public class Alpaca extends Animal {
 
     @Override
     public String toString() {
-        return "Alpaca@" + hashCode() + "(" + id + ")[" + bd.length + "]" + (next == null ? "" : " -> " + next.toString());
+        String info = "Alpaca@%010d(%s)[%d]%s";
+        return String.format(info, hashCode(), id, bd.length, (next == null ? "" : " -> " + next.toString()));
     }
 
     // -------------------------------------------------------------------------------------------------------------------------
-	/*
-	 以下方法实现对transient对象的深度拷贝
-	 */
+    /*
+     以下方法实现对transient对象的深度拷贝
+     */
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();

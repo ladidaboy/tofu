@@ -1,12 +1,14 @@
 package cn.hl.ax.data;
 
 import cn.hl.ax.JavaBean;
+import cn.hl.ax.exp.ParamException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -644,6 +646,147 @@ public class DataUtils extends StringUtils {
             }
         }
         return value;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 通过IP整数数值获取IP.V4表示的数值
+     */
+    public static String parseIpV4(int ipbit) {
+        String ipBinary = Integer.toBinaryString(ipbit);
+        List<Integer> ipV4Sections = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            ipV4Sections.add(Integer.valueOf(ipBinary.substring((i - 1) * 8, i * 8), 2));
+        }
+        return StringUtils.join(ipV4Sections, ".");
+    }
+
+    /**
+     * 获取IP地址数组
+     * @param ip e.g. 1.2.3.4 or 1.2.3.4/8
+     * @return 数组[sec1, sec2, sec3, sec4, ipbit, mask]
+     * @throws ParamException
+     */
+    public static int[] getNumbricIpV4(String ip) throws ParamException {
+        String[] segments = ip.split("[/]");
+        String[] sections = segments[0].split("[.]");
+        if (sections.length != 4) {
+            throw new ParamException("Wrong IP address[" + ip + "]");
+        }
+        int bit = 0;
+        int[] ips = new int[6];
+        for (int i = 0; i < 4; i++) {
+            int ss = Integer.parseInt(sections[i]);
+            if (ss < 0 || ss > 255) {
+                throw new ParamException("Wrong IP address[" + ip + "]");
+            }
+            bit |= (ss << (8 * (3 - i)));
+            ips[i] = ss;
+        }
+        ips[4] = bit;
+        if (segments.length > 1) {
+            ips[5] = Integer.parseInt(segments[1]);
+        }
+        return ips;
+    }
+
+    /**
+     * 三个私有地址IP地址区域
+     * <ol>
+     *     <li>10.0.0.0/8:     10.0.0.0 ~~ 10.255.255.255</li>
+     *     <li>172.16.0.0/12:  172.16.0.0 ~~ 172.31.255.255</li>
+     *     <li>192.168.0.0/16: 192.168.0.0 ~~ 192.168.255.255</li>
+     * </ol>
+     * @param ip e.g. 1.2.3.4 or 1.2.3.4/8
+     * @return
+     */
+    public static boolean isInternalIp(String ip) throws ParamException {
+        return isInternalIp(getNumbricIpV4(ip));
+    }
+
+    /**
+     * @see #isInternalIp(String)
+     * @param address IP地址数组, 长度必须为4, 每位数值范围[0,255)
+     * @return
+     */
+    public static boolean isInternalIp(int[] address) {
+        final int S1 = address[0];
+        final int S2 = address[1];
+        final int S3 = address[2];
+        final int S4 = address[3];
+        final int SB = address[4];//ip bit
+        final int SM = address[5];//ip mask
+        // Benchmark 1: 10.x.x.x/8
+        final int B1S1 = 10;
+        // Benchmark 2: 172.(16~31).x.x/12
+        final int B2S1 = 172;
+        final int B2S2S = 16;
+        final int B2S2B = 31;
+        // Benchmark 3: 192.168.x.x/16
+        final int B3S1 = 192;
+        final int B3S2 = 168;
+        // 判定是否是内网IP地址
+        boolean intranet = S1 == B1S1 || (S1 == B2S1 && S2 >= B2S2S && S2 <= B2S2B) || (S1 == B3S1 && S2 == B3S2);
+        // 判定IP网段是否有效(判定高位归零后，IP地址是否为0)
+        if (intranet && SM >= 8 && SM < 32) {
+            int ipbit = SB;//S1 << 24 | S2 << 16 | S3 << 8 | S4;
+            // 高位归0(在segment之前的位数)
+            ipbit &= 0xFFFFFFFF >>> SM;
+            // 低位归0(在segment之后的8整位数)
+            //ipbit = ipbit >> ((32 - SM) / 8 * 8);
+            return ipbit == 0;
+        }
+        return intranet;
+    }
+
+    /**
+     * 判定ip地址是否在ipSegment这个地址段里(IP网段地址是否一致)
+     * @param ip
+     * @param ipSegment
+     * @return
+     * @throws ParamException
+     */
+    public static boolean ipInSegment(String ip, String ipSegment) throws ParamException {
+        int[] ips = getNumbricIpV4(ip), segmentIps = getNumbricIpV4(ipSegment);
+        //ips[5] = segmentIps[5];
+        boolean intranet = isInternalIp(ips);
+        int netmask = 0xFFFFFFFF << (32 - segmentIps[5]);
+        return intranet && (ips[4] & netmask) == (segmentIps[4] & netmask);
+    }
+
+    /**
+     * 获取IP网段的IP地址范围
+     * @param ipSegment IP网段
+     * @return [ Min, Max ]
+     * @throws ParamException
+     */
+    public static int[] getIpSegmentRange(String ipSegment) throws ParamException {
+        int[] ips = getNumbricIpV4(ipSegment);
+        int sb = ips[4], sm = ips[5];
+        if (sm < 8 || sm > 32 || !isInternalIp(ips)) {
+            throw new ParamException("Invalid IP segment(" + ipSegment + ")");
+        }
+        //
+        String msg = "IpSegment(" + ipSegment + ").Usable-IP-Range = ";
+        int ipRoot, ipRoof;
+        if (sm == 32) {
+            ipRoot = ipRoof = sb;
+            msg += "(" + parseIpV4(sb) + ")<*>";
+        } else if (sm == 31) {
+            ipRoot = sb;
+            ipRoof = sb + 1;
+            msg += "(" + parseIpV4(ipRoof) + ")<1>";
+        } else {
+            // IP网段：首地址为网关地址，尾地址为广播地址
+            ipRoof = 0xFFFFFFFF >>> ips[5] ^ 1;
+            ipRoot = ips[4];
+            ipRoof |= ipRoot;
+            ipRoot |= 1;
+            msg += "[" + parseIpV4(ipRoot) + ", " + parseIpV4(ipRoof) + "]<" + (ipRoof - ipRoot + 1) + ">";
+        }
+        System.out.println(msg);
+        return new int[] {ipRoot, ipRoof};
     }
 
     //--------------------------------------------------------------------------------------------------------------------------

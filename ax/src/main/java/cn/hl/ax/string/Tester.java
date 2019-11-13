@@ -29,6 +29,7 @@ public class Tester {
 		System.out.println(String.format("%1$-9d", -31));
 		System.out.println(String.format("%1$(9d", -31));
 		System.out.println(String.format("%1$#9x", 5689));
+		System.out.println("........................");
 		/**
 		 * 2.对浮点数进行格式化：%[index$][标识][最少宽度][.精度]转换方式
 		 * 		我们可以看到，浮点数的转换多了一个“精度”选项，可以控制小数点后面的位数。 
@@ -48,6 +49,7 @@ public class Tester {
 		 */
 		System.out.println(String.format("%1$ 0,7.2f", -12.345d));
 		System.out.println(String.format("%1$+0,7.0f", 1234.5678901d));
+		System.out.println("........................");
 
 		/**
 		 * 3.对字符进行格式化：对字符进行格式化是非常简单的，c表示字符，标识中'-'表示左对齐，其他就没什么了。
@@ -56,6 +58,7 @@ public class Tester {
 		 */
 		System.out.println(String.format("%c", 'A'));
 		System.out.println(String.format("Hello %s%s", "String.format", "!"));
+		System.out.println("........................");
 
 		/**
 		 * 4.对百分比符号进行格式化:
@@ -64,13 +67,16 @@ public class Tester {
 		 * 		换句话说，下面这条语句可以输出一个“12%”：
 		 */
 		System.out.println(String.format("%1$d%%", 12));
+		System.out.println("........................");
 
 		/**
 		 * 5.取得平台独立的行分隔符：
 		 * 		System.getProperty("line.separator")可以取得平台独立的行分隔符，但是用在format中间未免显得过于烦琐了。
 		 * 		于是format函数自带了一个平台独立的行分隔符那就是String.format("%n")。
 		 */
+		System.out.println("%n");
 		System.out.println(String.format("%n"));
+		System.out.println("........................");
 
 		/**
 		 * 6.对日期类型进行格式化:
@@ -117,12 +123,14 @@ public class Tester {
 		 */
 		System.out.println(String.format("%tR", System.currentTimeMillis()));
 		System.out.println(String.format("%1$tF %1$tT.%1$tL", System.currentTimeMillis()));
+		System.out.println("........................");
 		/**
 		 * 参数索引   参数索引是一个十进制整数，用于表明参数在参数列表中的位置。第一个参数由 "1$" 引用，第二个参数由 "2$" 引用，依此类推。
 		 * 根据位置引用参数的另一种方法是使用 '<' ('\u003c') 标志，这将会重用以前格式说明符的参数。例如，以下两条语句产生的字符相同：
 		 */
 		System.out.println(String.format("%1$tm %1$te,%1$tY", Calendar.getInstance()));
-		System.out.println(String.format("%1$tm %<$te,%<$tY", Calendar.getInstance()));
+		//System.out.println(String.format("%<$tm %<$te,%<$tY", Calendar.getInstance()));
+		System.out.println("........................");
 
 	}
 

@@ -34,12 +34,13 @@ public class TypeUtil {
      * @return boolean
      */
     public boolean isKeyWord(String ss) {
-        KeyType key = EnumUtils.fromName(KeyType.class, ss.toUpperCase());
-        if (key == null) {
+        try {
+            KeyType key = EnumUtils.fromName(KeyType.class, ss.toUpperCase());
+            int o = key.ordinal();
+            return o > KeyType.KA.ordinal() && o <= KeyType.KZ.ordinal();
+        } catch (Exception e) {
             return false;
         }
-        int o = key.ordinal();
-        return o > KeyType.KA.ordinal() && o <= KeyType.KZ.ordinal();
     }
 
     /**

@@ -118,7 +118,7 @@ public class BuddhaBless {
         sb.append("\r\n|---------------------------------------------|");
         sb.append("\r\n||===>>>>  Buddha bless, Never BUG!   <<<<===||");
         sb.append("\r\n+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+");
-        sb.append("\r\n: -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  ");
+        sb.append("\r\n: -  -  -  -  -  -  -  -  -  -  -  -  -  -  -");
         sb.append("\r\n+ 佛曰:");
         sb.append("\r\n: 　　写字楼里写字间，写字间里程序员；");
         sb.append("\r\n: 　　程序人员写程序，又拿程序换酒钱。");

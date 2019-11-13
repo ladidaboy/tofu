@@ -186,7 +186,7 @@ public class KeywordUtils {
             //
             long time = System.currentTimeMillis();
             KeywordUtils.loadKeyword("keyword.txt");
-            System.out.println("初始化非法关键字耗时: " + (System.currentTimeMillis() - time) + "\tms");
+            System.out.println("初始化非法关键字耗时: " + (System.currentTimeMillis() - time) + "ms");
             //
             time = System.currentTimeMillis();
             List<String> words = KeywordUtils.getKeywords(text);
@@ -194,16 +194,16 @@ public class KeywordUtils {
             for (int i = 0; i < words.size(); i++) {
                 System.out.println((i + 1) + "\t" + words.get(i));
             }
-            System.out.println("检索完非法关键字耗时: " + (System.currentTimeMillis() - time) + "\tms");
+            System.out.println("检索完非法关键字耗时: " + (System.currentTimeMillis() - time) + "ms");
             //
             time = System.currentTimeMillis();
             text = KeywordUtils.processKeywords(text, words);
-            System.out.println("处理掉非法关键字耗时: " + (System.currentTimeMillis() - time) + "\tms");
+            System.out.println("处理掉非法关键字耗时: " + (System.currentTimeMillis() - time) + "ms");
             //
             time = System.currentTimeMillis();
             boolean exist = KeywordUtils.hasKeyword(text);
             System.out.println(">>> 非法关键字: " + (exist ? "存在" : "不存在"));
-            System.out.println("检索完非法关键字耗时: " + (System.currentTimeMillis() - time) + "\tms");
+            System.out.println("检索完非法关键字耗时: " + (System.currentTimeMillis() - time) + "ms");
         } catch (Exception e) {
             e.printStackTrace();
         }

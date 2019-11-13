@@ -1,5 +1,7 @@
 package cn.hl.ox._feature.v8;
 
+import cn.hl.ox.BuddhaBless;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
@@ -55,85 +57,82 @@ public class Tester4Streams2 {
      */
 
     public static void main(String args[]) {
-        System.out.println("==== 使用 Java 7: ");
-
-        // 计算空字符串
         List<String> strings = Arrays.asList("abc", "", "bc", "efg", "abcd", "", "jkl");
+        List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
+        List<Integer> integers = Arrays.asList(1, 2, 13, 4, 15, 6, 17, 8, 19);
+
+        //-----------------------------------------------------------------------------------------
+        BuddhaBless.printHeadline("Use JAVA 7");
         System.out.println("列表: " + strings);
+        // 计算空字符串
         long count = getCountEmptyStringUsingJava7(strings);
-
         System.out.println("空字符数量为: " + count);
+        // 计算字符串长度为3的数量
         count = getCountLength3UsingJava7(strings);
-
         System.out.println("字符串长度为 3 的数量为: " + count);
-
         // 删除空字符串
         List<String> filtered = deleteEmptyStringsUsingJava7(strings);
         System.out.println("筛选后的列表: " + filtered);
-
         // 删除空字符串，并使用逗号把它们合并起来
         String mergedString = getMergedStringUsingJava7(strings, ", ");
         System.out.println("合并字符串: " + mergedString);
-        List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
-
         // 获取列表元素平方数
         List<Integer> squaresList = getSquares(numbers);
         System.out.println("平方数列表: " + squaresList);
-        List<Integer> integers = Arrays.asList(1, 2, 13, 4, 15, 6, 17, 8, 19);
-
-        System.out.println("列表: " + integers);
+        //
+        System.out.println(">> 列表: " + integers);
         System.out.println("列表中最大的数 : " + getMax(integers));
         System.out.println("列表中最小的数 : " + getMin(integers));
         System.out.println("所有数之和 : " + getSum(integers));
         System.out.println("平均数 : " + getAverage(integers));
-        System.out.println("随机数: ");
-
         // 输出10个随机数
+        System.out.println(">> 随机数(无排序): ");
         Random random = new Random();
-
         for (int i = 0; i < 10; i++) {
             System.out.println(random.nextInt());
         }
 
-        System.out.println("==== 使用 Java 8: ");
+        //-----------------------------------------------------------------------------------------
+        BuddhaBless.printHeadline("Use JAVA 8");
         System.out.println("列表: " + strings);
-
+        // 计算空字符串
         count = strings.stream().filter(string -> string.isEmpty()).count();
         System.out.println("空字符串数量为: " + count);
-
+        count = strings.stream().filter(String::isEmpty).count();
+        System.out.println("空字符串数量为: " + count);
+        count = strings.parallelStream().filter(String::isEmpty).count();// 并行处理
+        System.out.println("空字符串数量为: " + count);
+        // 计算字符串长度为3的数量
         count = strings.stream().filter(string -> string.length() == 3).count();
         System.out.println("字符串长度为 3 的数量为: " + count);
-
+        // 删除空字符串
         filtered = strings.stream().filter(string -> !string.isEmpty()).collect(Collectors.toList());
         System.out.println("筛选后的列表: " + filtered);
-
+        // 删除空字符串，并使用逗号把它们合并起来
         mergedString = strings.stream().filter(string -> !string.isEmpty()).collect(Collectors.joining(", "));
         System.out.println("合并字符串: " + mergedString);
-
+        // 获取列表元素平方数
         squaresList = numbers.stream().map(i -> i * i).distinct().collect(Collectors.toList());
-        System.out.println("Squares List: " + squaresList);
-        System.out.println("列表: " + integers);
-
+        System.out.println("平方数列表: " + squaresList);
+        //
+        System.out.println(">> 列表: " + integers);
         IntSummaryStatistics stats = integers.stream().mapToInt((x) -> x).summaryStatistics();
-
         System.out.println("列表中最大的数 : " + stats.getMax());
         System.out.println("列表中最小的数 : " + stats.getMin());
         System.out.println("所有数之和 : " + stats.getSum());
         System.out.println("平均数 : " + stats.getAverage());
-        System.out.println("随机数: ");
-
+        // 输出10个随机数
+        System.out.println(">> 随机数(已排序): ");
         random.ints().limit(10).sorted().forEach(System.out::println);
-
-        // 并行处理
-        count = strings.parallelStream().filter(string -> string.isEmpty()).count();
-        System.out.println("空字符串的数量为: " + count);
-
         //
-        String[] list = {"abc", "d", "ef", "ghi", "jklmn"};
+        System.out.println(">> Stream.iterate: ");
+        String[] list = {"AB", "C", "D", "EF", "GHI", "JKLMN"};
         Stream.iterate(0, i -> i + 1).limit(list.length).forEach(i -> {
             System.out.println(i + "." + list[i]);
         });
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private static int getCountEmptyStringUsingJava7(List<String> strings) {
         int count = 0;

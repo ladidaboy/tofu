@@ -21,7 +21,7 @@ Java8 新增了非常多的特性，我们主要讨论以下几个：
 
 ➤ Nashorn, JavaScript 引擎 − Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
 
-----
+>>>>
 
 ✤ Nashorn引擎: jjs
 jjs是一个基于标准Nashorn引擎的命令行工具，可以接受js源码并执行。例如，我们写一个func.js文件，内容如下：

@@ -73,8 +73,8 @@ public class MyAnnotation {
         public EnumType classType() default EnumType.UTIL;
 
         // 数组
-        int[] arr() default {3, 7, 5};
+        int[] arr() default {7, 1, 2};
 
-        String color() default "blue";
+        String color() default "DarkBlue";
     }
 }

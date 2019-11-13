@@ -1,13 +1,13 @@
 package cn.hl.ox.annotation;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-
 import cn.hl.ox.BuddhaBless;
 import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation;
 import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation.EnumType;
 import cn.hl.ox.annotation.MyAnnotation.MyClassAnnotation;
 import cn.hl.ox.annotation.MyAnnotation.MyMethodAnnotation;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * @author hyman
@@ -24,6 +24,8 @@ public class ParseAnnotation {
         try {
             T obj = clazz.newInstance();
             for (Method method : clazz.getDeclaredMethods()) {
+                BuddhaBless.printSplitWave(106);
+                System.out.println(method);
                 MyMethodAnnotation methodAnnotation = method.getAnnotation(MyMethodAnnotation.class);
                 if (methodAnnotation != null) {
                     // 通过反射调用带有此注解的方法
@@ -31,15 +33,10 @@ public class ParseAnnotation {
                 }
                 MyClassAndMethodAnnotation myClassAndMethodAnnotation = method.getAnnotation(MyClassAndMethodAnnotation.class);
                 if (myClassAndMethodAnnotation != null) {
-                    if (EnumType.UTIL.equals(myClassAndMethodAnnotation.classType())) {
-                        System.out.println("this is a util method");
-                    } else {
-                        System.out.println("this is a other method");
-                    }
-                    System.out.println(Arrays.toString(myClassAndMethodAnnotation.arr()));// 打印数组
-                    System.out.println(myClassAndMethodAnnotation.color());// 输出颜色
+                    System.out.println("MyClassAndMethodAnnotation.classType -> " + myClassAndMethodAnnotation.classType());
+                    System.out.println("MyClassAndMethodAnnotation.color -> " +myClassAndMethodAnnotation.color());
+                    System.out.println("MyClassAndMethodAnnotation.arr -> " + Arrays.toString(myClassAndMethodAnnotation.arr()));
                 }
-                System.out.println("-----------------------");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,17 +45,19 @@ public class ParseAnnotation {
 
     public static <T> void parseType(Class<T> clazz) {
         try {
+            System.out.println();
+            BuddhaBless.printSplitLine(106);
             MyClassAndMethodAnnotation myClassAndMethodAnnotation = clazz.getAnnotation(MyClassAndMethodAnnotation.class);
             if (myClassAndMethodAnnotation != null) {
                 if (EnumType.UTIL.equals(myClassAndMethodAnnotation.classType())) {
-                    System.out.println("this is a util class");
+                    System.out.println("MyClassAndMethodAnnotation.classType -> UTIL");
                 } else {
-                    System.out.println("this is a other class");
+                    System.out.println("MyClassAndMethodAnnotation.classType -> OTHER");
                 }
             }
             MyClassAnnotation myClassAnnotation = clazz.getAnnotation(MyClassAnnotation.class);
             if (myClassAnnotation != null) {
-                System.err.println("class info: " + myClassAnnotation.uri());
+                System.out.println("MyClassAnnotation.uri -> " + myClassAnnotation.uri());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +67,6 @@ public class ParseAnnotation {
 
     public static void main(String[] args) {
         parseMethod(TestAnnotation.class);
-        BuddhaBless.printSplitLine();
         parseType(TestAnnotation.class);
     }
 }

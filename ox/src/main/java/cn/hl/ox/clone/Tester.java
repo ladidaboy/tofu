@@ -23,15 +23,9 @@ public class Tester {
             e.printStackTrace();
         }
 
-        BuddhaBless.printSplitLine(128);
-
         test1();
 
-        BuddhaBless.printSplitLine(128);
-
         test2();
-
-        BuddhaBless.printSplitLine(128);
 
         try {
             test3();
@@ -39,22 +33,18 @@ public class Tester {
             e.printStackTrace();
         }
 
-        BuddhaBless.printSplitLine(128);
-
         try {
             test4();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        BuddhaBless.printSplitLine(128);
-
         test5();
     }
 
     // test CloneBean.newInstance.deepCopy
     private static void test0() throws Exception {
-        System.out.println("test0: 测试对象自身的深度拷贝(普通的Animal / 自实现对transient对象拷贝的Alpaca)");
+        BuddhaBless.printHeadlineEx("test0: 测试对象自身的深度拷贝(普通的Animal / 自实现对transient对象拷贝的Alpaca)", 128);
 
         Alpaca first = new Alpaca("#1st");
         Alpaca second = new Alpaca("#2nd");
@@ -65,7 +55,7 @@ public class Tester {
         System.out.println(first);
         System.out.println(third);
 
-        BuddhaBless.printSplitLine(68);
+        BuddhaBless.printSplitWave(68);
 
         Animal forth = new Animal("#4th");
         Animal fifth = new Animal("#5th");
@@ -79,7 +69,7 @@ public class Tester {
 
     // test CloneBean.selfClone
     private static void test1() {
-        System.out.println("test1: CloneBean.selfClone");
+        BuddhaBless.printHeadlineEx("test1: CloneBean.selfClone", 128);
         BS org = new BS(), out = null;
         // ---------------------------------------------------------------------
         org.setsId("33333");
@@ -125,7 +115,7 @@ public class Tester {
 
     // test CloneBean.newInstance.selfClone / CloneBean.newInstance.deepCopy
     private static void test2() {
-        System.out.println("test2: CloneBean.newInstance.selfClone / CloneBean.newInstance.deepCopy");
+        BuddhaBless.printHeadlineEx("test2: CloneBean.newInstance.selfClone / CloneBean.newInstance.deepCopy", 128);
         DataTypeOfAdvanced org = new DataTypeOfAdvanced(), out1 = null, out2 = null;
         List<String> list = new ArrayList<>();
         list.add("list1");
@@ -180,7 +170,7 @@ public class Tester {
 
     // test ReflectionUtils
     private static void test3() throws Exception {
-        System.out.println("test3: ReflectionUtils");
+        BuddhaBless.printHeadlineEx("test3: ReflectionUtils", 128);
         BS s = new BS();
         System.out.println("convertToMethodName : " + ReflectionUtils.convertToMethodName(s, "sId", true));
         System.out.println("getDeclaredField : " + ReflectionUtils.getDeclaredField(s, "pId"));
@@ -193,7 +183,7 @@ public class Tester {
 
     // test CloneBean.cloneSameField
     private static void test4() throws Exception {
-        System.out.println("test4: CloneBean.cloneSameField");
+        BuddhaBless.printHeadlineEx("test4: CloneBean.cloneSameField", 128);
         BP p = new BP();
         p.setpId("HaH");
         BS s = (BS) CloneBean.cloneSameField(p, BS.class);
@@ -203,11 +193,12 @@ public class Tester {
     }
 
     private static void test5() {
-        BS bs = new BS();
-        System.out.println("BS is a BasicData type? " + ReflectionUtils.isBasicDataType(bs));
+        BuddhaBless.printHeadlineEx("test5: ReflectionUtils", 128);
         int i = 2;
-        System.out.println("int is a BasicData type? " + ReflectionUtils.isBasicDataType(i));
-        System.out.println("int is a Primitive type? " + ReflectionUtils.isPrimitiveType(int.class));
-        System.out.println("Integer is a Primitive type? " + ReflectionUtils.isPrimitiveType(Integer.class));
+        BS bs = new BS();
+        System.out.println("BS is a BasicData type?       > " + ReflectionUtils.isBasicDataType(bs));
+        System.out.println("int is a BasicData type?      > " + ReflectionUtils.isBasicDataType(i));
+        System.out.println("int is a Primitive type?      > " + ReflectionUtils.isPrimitiveType(int.class));
+        System.out.println("Integer is a Primitive type?  > " + ReflectionUtils.isPrimitiveType(Integer.class));
     }
 }
