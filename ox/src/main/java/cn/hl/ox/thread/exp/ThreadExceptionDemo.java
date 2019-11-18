@@ -24,14 +24,14 @@ public class ThreadExceptionDemo {
         BuddhaBless.printHeadlineEx("test run ThreadException", max, msg);
         Thread thread = new Thread(new ThreadExceptionRunner());
         thread.start();
-        //join2M(thread);
+        join2M(thread);
         System.out.println(tag);
         //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
         BuddhaBless.printHeadlineEx("test catch ThreadException", max, msg);
         try {
             thread = new ThreadExceptionThread();
             thread.start();
-            //join2M(thread);
+            join2M(thread);
         } catch (Exception e) {
             String exp = String.format("[%16s] Caught -> %s", Thread.currentThread().getName(), e.getMessage());
             System.out.println(exp);
@@ -39,11 +39,11 @@ public class ThreadExceptionDemo {
         System.out.println(tag);
         //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
         BuddhaBless.printHeadlineEx("test MyHandleThreadFactory", max, msg);
-        //ExecutorService exec = Executors.newCachedThreadPool(new MyHandleThreadFactory());
-        /* 上面的方式是设置每一个线程执行时候的异常处理。*/
-        /* 如果每一个线程的异常处理相同，我们可以用如下的方式进行处理，使用Thread的静态方法。*/
-        Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandle());
-        ExecutorService exec = Executors.newCachedThreadPool();
+        ExecutorService exec = Executors.newCachedThreadPool(new MyHandleThreadFactory());
+        /* ↑↑ 上面的方式是设置每一个线程执行时候的异常处理。*/
+        /* ↓↓ 如果每一个线程的异常处理相同，我们可以用如下的方式进行处理，使用Thread的静态方法。*/
+        //Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandle());
+        //ExecutorService exec = Executors.newCachedThreadPool();
         exec.execute(new ThreadExceptionRunner());
         exec.execute(new ThreadExceptionThread());
         exec.shutdown();
