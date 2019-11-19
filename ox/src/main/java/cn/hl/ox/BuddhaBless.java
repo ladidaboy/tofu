@@ -93,6 +93,14 @@ public class BuddhaBless {
         System.err.println(ss + ll + ss);
     }
 
+    public static void printLine(int len) {
+        System.out.println(DataUtils.rightPad("", len, '='));
+    }
+
+    public static void printWave(int len) {
+        System.out.println(DataUtils.rightPad("", len, '~'));
+    }
+
     public static void pray2theBuddha() {
         StringBuilder sb = new StringBuilder();
         sb.append("\r\n/^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\");
