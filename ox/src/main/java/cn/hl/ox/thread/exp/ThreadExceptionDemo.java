@@ -19,12 +19,12 @@ public class ThreadExceptionDemo {
     }
     public static void main(String[] args) {
         int max = 92;
-        String tag = "^\n^", msg = ".\n.";
+        String tag = "↑\n↑", msg = "↓\n↓";
         //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
         BuddhaBless.printHeadlineEx("test run ThreadException", max, msg);
         Thread thread = new Thread(new ThreadExceptionRunner());
         thread.start();
-        join2M(thread);
+        //join2M(thread);
         System.out.println(tag);
         //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
         BuddhaBless.printHeadlineEx("test catch ThreadException", max, msg);
