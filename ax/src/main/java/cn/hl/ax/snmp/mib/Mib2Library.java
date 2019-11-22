@@ -5,6 +5,7 @@ import cn.hl.ax.snmp.formatter.IfTypeVF;
 import cn.hl.ax.snmp.formatter.IpForwardingVF;
 import cn.hl.ax.snmp.formatter.IpNetToMediaTypeVF;
 import cn.hl.ax.snmp.formatter.IpRouteTypeVF;
+import cn.hl.ax.snmp.formatter.TcpConnStateVF;
 import cn.hl.ax.snmp.formatter.TcpRtoAlgorithmVF;
 import cn.hl.ax.snmp.formatter.VariableFormatter;
 import cn.hl.ax.snmp.mib.Mib.AccessMode;
@@ -61,17 +62,21 @@ public class Mib2Library {
     }
 
     public static String[] fmtVB(VariableBinding vb) {
-        String[] mibInfos = new String[2];// {OID.name, Variable}
+        String[] mibInfos = new String[4];// {OID.name, Variable(format), Variable, OID.Syntax}
         Mib mib = getMib(vb.getOid());
         String oidText = vb.getOid().toString(), oidValue;
         if (mib == null) {
             mibInfos[0] = vb.getOid().toString();
             mibInfos[1] = vb.getVariable().toString();
+            mibInfos[2] = vb.getVariable().toString();
+            mibInfos[3] = "S#" + vb.getOid().getSyntax();
         } else {
             VariableFormatter formatter = maps.get(mib.getName());
             oidValue = formatter == null ? vb.getVariable().toString() : formatter.format(vb);
             mibInfos[0] = oidText.replace(mib.getOidText(), mib.getName());
             mibInfos[1] = mib.getDataType() + ": " + oidValue;
+            mibInfos[2] = oidValue;
+            mibInfos[3] = mib.getDataType();
         }
         return mibInfos;
     }
@@ -400,7 +405,7 @@ public class Mib2Library {
     public static final Mib IfOutOctets                  = put("ifOutOctets", IfEntry.child(16), "Counter", AccessMode.Read, "该接口上发送的字节数。该字节数也包括数据链路组帧的字节");
     public static final Mib IfOutUcastPkts               = put("ifOutUcastPkts", IfEntry.child(17), "Counter", AccessMode.Read, "上层协议(如IP)需要发送到一个网络单播地址的报文数。该数量包括丢弃的或未发送的报文数");
     public static final Mib IfOutNUcastPkts              = put("ifOutNUcastPkts", IfEntry.child(18), "Counter", AccessMode.Read, "上层协议(如IP)需要发送到一个非单播地址的报文数。该数量包括丢弃的或因为某种原因未发送的报文数");
-    public static final Mib IfOutDiscards                = put("ifOutDiscards", IfEntry.child(19), "Counter", AccessMode.Read, "由于某种与特定错误条件无关的原因，而不能发送的报文数。例如，可能由报文TTL超时导致()。");
+    public static final Mib IfOutDiscards                = put("ifOutDiscards", IfEntry.child(19), "Counter", AccessMode.Read, "由于某种与特定错误条件无关的原因，而不能发送的报文数。例如，可能由报文TTL超时导致");
     public static final Mib IfOutErrors                  = put("ifOutErrors", IfEntry.child(20), "Counter", AccessMode.Read, "由于错误而不能发送的报文数量");
     public static final Mib IfOutQlen                    = put("ifOutQlen", IfEntry.child(21), "Gauge", AccessMode.Read, "该设备上的输出报文队列长度");
     public static final Mib IfSpecific                   = put("ifSpecific", IfEntry.child(22), "ObjectIdentifier", AccessMode.Read, "MIB引用定义，指向一个用于实现该网络接口的特定介质类型");
@@ -413,7 +418,7 @@ public class Mib2Library {
     public static final Mib atNetAddress                 = put("atNetAddress", atEntry.child(3), "NetworkAddress", AccessMode.All, "介质相关物理地址所关联的IP地址");
     /**网际协议组 (.1.3.6.1.2.1.4)*/
     public static final Mib IP                           = put("ip", new int[] {1, 3, 6, 1, 2, 1, 4}, "OctetString", AccessMode.All, "[网际协议组]");
-    public static final Mib IpForwarding                 = put("ipForwarding", IP.child(1), "Integer", AccessMode.All, "指出系统是否作为一个IP网关(路由器)或者仅作为一个不提供转发服务的正规主机。可取的值有Forwarding(1)和notForwarding");
+    public static final Mib IpForwarding                 = put("ipForwarding", IP.child(1), "Integer", AccessMode.All, "指出系统是否作为一个IP网关(路由器)或者仅作为一个不提供转发服务的正规主机。可取的值有Forwarding(1)和notForwarding(2)");
     public static final Mib IpDefaultTTL                 = put("ipDefaultTTL", IP.child(2), "Integer", AccessMode.All, "置于IP报文的TTL字段中的生存期值");
     public static final Mib IpInReceives                 = put("ipInReceives", IP.child(3), "Counter", AccessMode.Read, "从系统所有可操作接口接收的输入报文的总数");
     public static final Mib IpInHdrError                 = put("ipInHdrError", IP.child(4), "Counter", AccessMode.Read, "由于IP报文头部错误而丢弃的输入报文数量");
@@ -505,11 +510,11 @@ public class Mib2Library {
     public static final Mib TcpRetransSegs               = put("tcpRetransSegs", TCP.child(12), "Counter", AccessMode.Read, "重发分组数量");
     public static final Mib TcpConnTable                 = put("tcpConnTable", TCP.child(13), "Sequence.tcpConnEntry", AccessMode.None, "TCP连接信息");
     public static final Mib TcpConnEntry                 = put("tcpConnEntry", TcpConnTable.child(1), "Sequence", AccessMode.None, "TcpConnEntry信息表");
-    public static final Mib TcpConnState                 = put("tcpConnState", TcpConnEntry.child(1), "Integer", AccessMode.All, "TCP连接的状态。");
-    public static final Mib TcpConnLocalAddress          = put("tcpConnLocalAddress", TcpConnEntry.child(2), "IpAddress", AccessMode.Read, "这个TCP连接的本地IP地址。当连接处于听的状态时，就可以和这个节点相连的任何IP接口建立连接，这时这个值是0.0.0.0。");
-    public static final Mib TcpConnLocalPort             = put("tcpConnLocalPort", TcpConnEntry.child(3), "Integer", AccessMode.Read, "该TCP连接的本地端口号。");
-    public static final Mib TcpConnRemAddress            = put("tcpConnRemAddress", TcpConnEntry.child(4), "IpAddress", AccessMode.Read, "该TCP连接的远程IP地址。");
-    public static final Mib TcpConnRemPort               = put("tcpConnRemPort", TcpConnEntry.child(5), "Integer", AccessMode.Read, "该TCP连接的远程端口号。");
+    public static final Mib TcpConnState                 = put("tcpConnState", TcpConnEntry.child(1), "Integer", AccessMode.All, "TCP连接的状态");
+    public static final Mib TcpConnLocalAddress          = put("tcpConnLocalAddress", TcpConnEntry.child(2), "IpAddress", AccessMode.Read, "这个TCP连接的本地IP地址。当连接处于听的状态时，就可以和这个节点相连的任何IP接口建立连接，这时这个值是0.0.0.0");
+    public static final Mib TcpConnLocalPort             = put("tcpConnLocalPort", TcpConnEntry.child(3), "Integer", AccessMode.Read, "该TCP连接的本地端口号");
+    public static final Mib TcpConnRemAddress            = put("tcpConnRemAddress", TcpConnEntry.child(4), "IpAddress", AccessMode.Read, "该TCP连接的远程IP地址");
+    public static final Mib TcpConnRemPort               = put("tcpConnRemPort", TcpConnEntry.child(5), "Integer", AccessMode.Read, "该TCP连接的远程端口号");
     public static final Mib TcpInErrors                  = put("tcpInErrors", TCP.child(14), "Counter", AccessMode.Read, "接收到错误的分组数");
     public static final Mib TcpOutRsts                   = put("tcpOutRsts", TCP.child(15), "Counter", AccessMode.Read, "发送包含RST标志的TCP分组的数量");
     /**UDP组 (.1.3.6.1.2.1.7)*/
@@ -532,28 +537,28 @@ public class Mib2Library {
     public static final Mib snmpInASNParseErrs           = put("snmpInASNParseErrs", SNMP.child(6), "Counter", AccessMode.Read, "对输入的SNMP消息解码时，发生BER和ASN错误的数量");
     public static final Mib snmpInTooBigs                = put("snmpInTooBigs", SNMP.child(8), "Counter", AccessMode.Read, "传递给该代理的SNMPPDU发生tooBig错误的数量");
     public static final Mib snmpInNoSuchNames            = put("snmpInNoSuchNames", SNMP.child(9), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`noSuchName`的错误信息");
-    public static final Mib snmpInBadValues              = put("snmpInBadValues", SNMP.child(10), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`badValue`的错误信息.");
-    public static final Mib snmpInReadOnlys              = put("snmpInReadOnlys", SNMP.child(11), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`readOnly`的错误信息.");
-    public static final Mib snmpInGenErrs                = put("snmpInGenErrs", SNMP.child(12), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`genErr`的错误信息.");
-    public static final Mib snmpInTotalReqVars           = put("snmpInTotalReqVars", SNMP.child(13), "Counter", AccessMode.Read, "返回对有效Get-Request and Get-Next PDUs回答的消息总数.");
-    public static final Mib snmpInTotalSetVars           = put("snmpInTotalSetVars", SNMP.child(14), "Counter", AccessMode.Read, "返回对有效Set-Request PDUs回答的消息总数.");
-    public static final Mib snmpInGetRequests            = put("snmpInGetRequests", SNMP.child(15), "Counter", AccessMode.Read, "被该代理接收和处理的Get-Request PDUs总数.");
-    public static final Mib snmpInGetNexts               = put("snmpInGetNexts", SNMP.child(16), "Counter", AccessMode.Read, "被该代理接收和处理的 Get-Next PDUs 总数.");
+    public static final Mib snmpInBadValues              = put("snmpInBadValues", SNMP.child(10), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`badValue`的错误信息");
+    public static final Mib snmpInReadOnlys              = put("snmpInReadOnlys", SNMP.child(11), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`readOnly`的错误信息");
+    public static final Mib snmpInGenErrs                = put("snmpInGenErrs", SNMP.child(12), "Counter", AccessMode.Read, "传递给该代理的SNMP PDUs 中error-status域中是`genErr`的错误信息");
+    public static final Mib snmpInTotalReqVars           = put("snmpInTotalReqVars", SNMP.child(13), "Counter", AccessMode.Read, "返回对有效Get-Request and Get-Next PDUs回答的消息总数");
+    public static final Mib snmpInTotalSetVars           = put("snmpInTotalSetVars", SNMP.child(14), "Counter", AccessMode.Read, "返回对有效Set-Request PDUs回答的消息总数");
+    public static final Mib snmpInGetRequests            = put("snmpInGetRequests", SNMP.child(15), "Counter", AccessMode.Read, "被该代理接收和处理的 Get-Request PDUs 总数");
+    public static final Mib snmpInGetNexts               = put("snmpInGetNexts", SNMP.child(16), "Counter", AccessMode.Read, "被该代理接收和处理的 Get-Next PDUs 总数");
     public static final Mib snmpInSetRequests            = put("snmpInSetRequests", SNMP.child(17), "Counter", AccessMode.Read, "由该代理接受并处理的SNMPset-requests的数量");
-    public static final Mib snmpInGetResponses           = put("snmpInGetResponses", SNMP.child(18), "Counter", AccessMode.Read, "被该代理接收和处理的Get-Response PDUs总数.");
-    public static final Mib snmpInTraps                  = put("snmpInTraps", SNMP.child(19), "Counter", AccessMode.Read, "别该代理接收和处理的Trap PDUs 总数.");
+    public static final Mib snmpInGetResponses           = put("snmpInGetResponses", SNMP.child(18), "Counter", AccessMode.Read, "被该代理接收和处理的 Get-Response PDUs 总数");
+    public static final Mib snmpInTraps                  = put("snmpInTraps", SNMP.child(19), "Counter", AccessMode.Read, "别该代理接收和处理的 Trap PDUs 总数");
     public static final Mib snmpOutTooBig                = put("snmpOutTooBig", SNMP.child(20), "Counter", AccessMode.Read, "由该代理产生的SNMPPDU发生tooBig错误的数量");
-    public static final Mib snmpOutNoSuchNames           = put("snmpOutNoSuchNames", SNMP.child(21), "Counter", AccessMode.Read, "由该代理产生的SNMP PDUs 发生noSuchName错误的数量.");
-    public static final Mib snmpOutBadValues             = put("snmpOutBadValues", SNMP.child(22), "Counter", AccessMode.Read, "由该代理产生的SNMP PDUs 出现badValue错误的数量.");
-    public static final Mib snmpOutGenErrs               = put("snmpOutGenErrs", SNMP.child(24), "Counter", AccessMode.Read, "由该代理产生的 SNMP PDUs 发生genErr错误的数量.");
-    public static final Mib snmpOutGetRequests           = put("snmpOutGetRequests", SNMP.child(25), "Counter", AccessMode.Read, "由该代理产生的 Get-Request PDUs 总数.");
-    public static final Mib snmpOutGetNexts              = put("snmpOutGetNexts", SNMP.child(26), "Counter", AccessMode.Read, "由该代理产生的 Get-Next PDUs 总数.");
-    public static final Mib snmpOutSetRequests           = put("snmpOutSetRequests", SNMP.child(27), "Counter", AccessMode.Read, "由该代理产生的 Set-Request PDUs 总数.");
-    public static final Mib snmpOutGetResponses          = put("snmpOutGetResponses", SNMP.child(28), "Counter", AccessMode.Read, "由该代理产生的Get-Response PDUs 总数.");
-    public static final Mib snmpOutTraps                 = put("snmpOutTraps", SNMP.child(29), "Counter", AccessMode.Read, "由该代理产生的Trap PDUs 总数");
+    public static final Mib snmpOutNoSuchNames           = put("snmpOutNoSuchNames", SNMP.child(21), "Counter", AccessMode.Read, "由该代理产生的 SNMP PDUs 发生noSuchName错误的数量");
+    public static final Mib snmpOutBadValues             = put("snmpOutBadValues", SNMP.child(22), "Counter", AccessMode.Read, "由该代理产生的 SNMP PDUs 出现badValue错误的数量");
+    public static final Mib snmpOutGenErrs               = put("snmpOutGenErrs", SNMP.child(24), "Counter", AccessMode.Read, "由该代理产生的 SNMP PDUs 发生genErr错误的数量");
+    public static final Mib snmpOutGetRequests           = put("snmpOutGetRequests", SNMP.child(25), "Counter", AccessMode.Read, "由该代理产生的 Get-Request PDUs 总数");
+    public static final Mib snmpOutGetNexts              = put("snmpOutGetNexts", SNMP.child(26), "Counter", AccessMode.Read, "由该代理产生的 Get-Next PDUs 总数");
+    public static final Mib snmpOutSetRequests           = put("snmpOutSetRequests", SNMP.child(27), "Counter", AccessMode.Read, "由该代理产生的 Set-Request PDUs 总数");
+    public static final Mib snmpOutGetResponses          = put("snmpOutGetResponses", SNMP.child(28), "Counter", AccessMode.Read, "由该代理产生的 Get-Response PDUs 总数");
+    public static final Mib snmpOutTraps                 = put("snmpOutTraps", SNMP.child(29), "Counter", AccessMode.Read, "由该代理产生的 Trap PDUs 总数");
     public static final Mib snmpEnableAuthenTraps        = put("snmpEnableAuthenTraps", SNMP.child(30), "Integer", AccessMode.All, "指定该代理是否允许产生认证错误的traps，有两个值enabled和disabled");
-    public static final Mib snmpSilentDrops              = put("snmpSilentDrops", SNMP.child(31), "Counter", AccessMode.Read, "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。 因为要求回答的包大小大于限制的值和最大的消息大小");
-    public static final Mib snmpProxyDrops               = put("snmpProxyDrops", SNMP.child(32), "Counter", AccessMode.Read, "传递给该代理但是被丢弃的 GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数because the transmission of the (possibly translated) message to a proxy target failed in a manner (other than a time-out) such that no Response-PDU could be returned.");
+    public static final Mib snmpSilentDrops              = put("snmpSilentDrops", SNMP.child(31), "Counter", AccessMode.Read, "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。因为要求回答的包大小大于限制的值和最大的消息大小");
+    public static final Mib snmpProxyDrops               = put("snmpProxyDrops", SNMP.child(32), "Counter", AccessMode.Read,  "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。Because the transmission of the (possibly translated) message to a proxy target failed in a manner (other than a time-out) such that no Response-PDU could be returned.");
     /**IfMIB (.1.3.6.1.2.1.31)*/
     public static final Mib IfMIB                        = put("ifMIB", new int[] {1, 3, 6, 1, 2, 1, 31}, "OctetString", AccessMode.Read, "[ifMIB MODULE-IDENTITY]");
     public static final Mib IfMIBObjects                 = put("ifMIBObjects", IfMIB.child(1), "OctetString", AccessMode.Read, "");
@@ -666,7 +671,7 @@ public class Mib2Library {
     public static final Mib SsRawInterrupts          = put("ssRawInterrupts", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 59}, "Counter", AccessMode.Read, "ssRawInterrupts");
     public static final Mib SsRawContexts            = put("ssRawContexts", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 60}, "Counter", AccessMode.Read, "ssRawContexts");
     public static final Mib SsCpuRawSoftIRQ          = put("ssCpuRawSoftIRQ", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 61}, "Counter", AccessMode.Read, "ssCpuRawSoftIRQ");
-    public static final Mib SsRawSwapIn              = put("ssRawSwapIn", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 62}, "Counter", AccessMode.Read, "ssRawSwapIn.");
+    public static final Mib SsRawSwapIn              = put("ssRawSwapIn", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 62}, "Counter", AccessMode.Read, "ssRawSwapIn");
     public static final Mib SsRawSwapOut             = put("ssRawSwapOut", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 63}, "Counter", AccessMode.Read, "ssRawSwapOut");
     public static final Mib LinkDown                 = put("linkDown", new int[] {1, 3, 6, 1, 6, 3, 1, 1, 5, 3}, "Integer", AccessMode.Read, "");
     public static final Mib LinkUp                   = put("linkUp", new int[] {1, 3, 6, 1, 6, 3, 1, 1, 5, 4}, "Integer", AccessMode.Read, "");
@@ -681,6 +686,7 @@ public class Mib2Library {
         maps.put(IpForwarding.getName(), new IpForwardingVF());
         maps.put(IpRouteType.getName(), new IpRouteTypeVF());
         maps.put(IpNetToMediaType.getName(), new IpNetToMediaTypeVF());
+        maps.put(TcpConnState.getName(), new TcpConnStateVF());
         maps.put(TcpRtoAlgorithm.getName(), new TcpRtoAlgorithmVF());
     }
 
