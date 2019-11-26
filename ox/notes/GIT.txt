@@ -116,14 +116,36 @@ git push --force origin master
 注：很重要的一点是，你最好保证在你强制push之前没有人提交代码，如果在你push之前有人提交了新的代码到远程仓库，然后你又强制push，那么会被你的强制更新覆盖！！！
 
 ================================================================================================================================
--- 本地git同步github --
+== Synchronize git 2 github -----------
 git init
-git add
-git commit -m
+git add .
+git commit -m "Initial commit"
 git remote add origin http://
 git push -u origin master
-
--- 如何删除github上的commit历史记录 --
+== Git global setup -------------------
+git config --global user.name "HymanLi"
+git config --global user.email "hyman.li@zenlayer.com"
+== Create a new repository --
+git clone git@gitlab.zenlayer.net:sh-dev/module/oss-basic-data.git
+cd oss-basic-data
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+== Push an existing folder ------------
+cd existing_folder
+git init
+git remote add origin git@gitlab.zenlayer.net:sh-dev/module/oss-basic-data.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+== Push an existing Git repository ----
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin git@gitlab.zenlayer.net:sh-dev/module/oss-basic-data.git
+git push -u origin --all
+git push -u origin --tags
+== Delete the commit log of github ----
 # Clone your git repo
 git clone https://github.com/someone/project.github.io.git;
 # Entre your local repo
