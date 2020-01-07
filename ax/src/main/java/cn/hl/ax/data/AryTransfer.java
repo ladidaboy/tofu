@@ -19,6 +19,9 @@ public class AryTransfer {
     };
 
     public static String toAry(long decimal, char[] tags) {
+        if (decimal <= 0) {
+            return String.valueOf(tags[0]);
+        }
         int residue, radix = tags.length;
         String ary = "";
         while (decimal > 0) {

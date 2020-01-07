@@ -30,7 +30,10 @@ public class Java_1_7 {
 		int[] phases2 = {
 				0x31, 0x62, 0xC4, 0x89, 0x13, 0x26, 0x4C, 0x98 };
 
-		new Java_1_5().newFeature5(a, b, c, phases1, phases2);
+		int[] phase3 = {
+				0b1, 0b10, 0b100, 0b1000};
+
+		new Java_1_5().newFeature5(a, b, c, phases1, phases2, phase3);
 	}
 
 	/**

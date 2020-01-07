@@ -24,6 +24,7 @@
       <module fileurl="file://$PROJECT_DIR$/ox/ox.iml" filepath="$PROJECT_DIR$/ox/ox.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-rpc/rpc-api/rpc-api.iml" filepath="$PROJECT_DIR$/spring-rpc/rpc-api/rpc-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/sc_snmp4j/sc_snmp4j.iml" filepath="$PROJECT_DIR$/sc_snmp4j/sc_snmp4j.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sc_thymeleaf/sc_thymeleaf.iml" filepath="$PROJECT_DIR$/sc_thymeleaf/sc_thymeleaf.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-rpc/spring-rpc.iml" filepath="$PROJECT_DIR$/spring-rpc/spring-rpc.iml" />
     </modules>
   </component>

@@ -3,6 +3,7 @@ package cn.hl.ox._feature;
 import javax.swing.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -87,7 +88,10 @@ public class Java_1_5 {
 	 */
 	public void newFeature5(Object... objs) {
 		for (Object obj : objs)
-			System.out.println(obj);
+			if (obj.getClass().isArray())
+				System.out.println(Arrays.toString((int[]) obj));
+			else
+				System.out.println(obj);
 
 		/*
 		 * 在引入可变参数以后，Java的反射包也更加方便使用了。

@@ -171,6 +171,15 @@ SELECT _t_.*, substring_index(group_concat(_t_.id ORDER BY _t_.operate_check), '
 FROM (SELECT * FROM tb_client_speed_limit ORDER BY operate_check, update_time DESC) _t_ GROUP BY client_id;
 
 ================================================================================================================================
+指令          已存在    不存在  举例
+insert        报错    插入    insert into names(name, age) values(“小明”, 23);
+insert ignore 忽略    插入    insert ignore into names(name, age) values(“小明”, 24);
+replace       替换    插入    replace into names(name, age) values(“小明”, 25);
+--------------------------------------------------------------------------------------------------------------------------------
+表要求: 有PrimaryKey,或者unique索引
+结　果: 表id都会自增
+
+================================================================================================================================
 Mysql开发人员团队宣布8.0版本将有Common Table Expressions in MySQL (CTEs)。
 --------------------------------------------------------------------------------------------------------------------------------
 所以可以写这样的查询：
@@ -196,4 +205,25 @@ SELECT * FROM my_cte;
 |   10 |
 +------+
 10 rows in set (0,00 sec)
+================================================================================================================================
+程序里报错：java.sql.BatchUpdateException: Lock wait timeout exceeded; try restarting transaction
+重启服务后也没有效果，然后查看mysql官方文档如下：
+
+Error: 1205 SQLSTATE: HY000 (ER_LOCK_WAIT_TIMEOUT)
+Message: Lock wait timeout exceeded; try restarting transaction
+InnoDB reports this error when lock wait timeout expires. The statement that waited too long was rolled back (not the entiretransaction). You can increase the value of the innodb_lock_wait_timeout configuration option if SQL statements should wait longer for other transactions to complete, or decrease it if too many long-running transactions are causing locking problems and reducing concurrency on a busy system.
+
+翻译如下：
+当锁等待超时后innodb引擎报此错误，等待时间过长的语句被回滚（不是整个事务）。如果想让SQL语句等待其他事务更长时间之后完成，你可以增加参数innodb_lock_wait_timeout配置的值。如果有太多长时间运行的有锁的事务，你可以减小这个innodb_lock_wait_timeout的值，在特别繁忙的系统，你可以减小并发。
+The length of time in seconds an InnoDB transaction waits for a row lock before giving up. The default value is 50 seconds. A transaction that tries to access a row that is locked by another InnoDB transaction waits at most this many seconds for write access to the row before issuing the following error:
+ERROR 1205 (HY000):Lock wait timeout exceeded; try restarting transaction
+InnoDB事务等待一个行级锁的时间最长时间（单位是秒），超过这个时间就会放弃。默认值是50秒。一个事务A试图访问一行数据，但是这行数据正在被另一个innodb事务B锁定，此时事务A就会等待事务B释放锁，等待超过innodb_lock_wait_timeout设置的值就会报错ERROR 1205 (HY000)：
+
+于是我尝试调大innodb_lock_wait_timeout参数：
+具体操作：如下可知innodb_lock_wait_timeout是动态参数,默认值50秒，最小值是1秒，最大值是1073741824；
+
+mysql> set GLOBAL innodb_lock_wait_timeout=1500；
+(题外话：关于set innodb_lock_wait_timeout=1500; 和 set global innodb_lock_wait_timeout=1500;的区别。前者等价于set session只影响当前session，后者作为全局的修改方式，只会影响修改之后打开的session；注意后者不能改变当前session；）
+
+问题解决！
 ================================================================================================================================
