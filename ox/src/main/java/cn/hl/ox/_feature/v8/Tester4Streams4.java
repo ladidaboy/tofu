@@ -421,5 +421,13 @@ public class Tester4Streams4 {
      12. 当一个 Stream 是并行化的，就不需要再写多线程代码，所有对它的操作会自动并行进行的。
      13. 可以是无限的
      14. 集合有固定大小，Stream 则不必。limit(n) 和 findFirst() 这类的 short-circuiting 操作可以对无限的 Stream 进行运算并很快完成。
+
+     流的操作
+     Intermediate
+        map(mapToInt,flatMap等), filter, distinct, sorted, peek, limit, skip, parallel, sequential, unordered
+     Terminal
+        forEach, forEachOrdered, toArray, reduce, collect, min, max, count, anyMatch, allMatch, noneMatch, findFirst, findAny, iterator
+     Short-cricuiting
+        anyMatch, allMatch, noneMatch, findFirst, findAny, limit
      */
 }
