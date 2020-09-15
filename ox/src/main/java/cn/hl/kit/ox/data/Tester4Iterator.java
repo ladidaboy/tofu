@@ -1,7 +1,7 @@
 package cn.hl.kit.ox.data;
 
 import cn.hl.kit.ax.data.AryTransfer;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.ArrayList;
 import java.util.HashMap;

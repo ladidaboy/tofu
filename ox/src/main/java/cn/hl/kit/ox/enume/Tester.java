@@ -1,7 +1,7 @@
 package cn.hl.kit.ox.enume;
 
 import cn.hl.kit.ax.enums.EnumUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

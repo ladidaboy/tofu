@@ -1,6 +1,6 @@
-package cn.hl.ox._feature.v8;
+package cn.hl.kit.ox._feature.v8;
 
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

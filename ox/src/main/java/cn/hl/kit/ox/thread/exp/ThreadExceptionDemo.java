@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.thread.exp;
 
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

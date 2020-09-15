@@ -1,7 +1,7 @@
 package cn.hl.kit.ox.cache;
 
 import cn.hl.kit.ax.time.UTCTimeUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.ArrayList;
 import java.util.Date;

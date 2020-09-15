@@ -1,4 +1,4 @@
-package cn.hl.ox.encrypt;
+package cn.hl.kit.ox.encrypt;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

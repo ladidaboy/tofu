@@ -2,7 +2,7 @@ package cn.hl.kit.ox.word;
 
 import cn.hl.kit.ax.data.DataUtils;
 import cn.hl.kit.ax.enums.EnumUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 import cn.hl.ox.file.FileUtil;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package cn.hl.ox.character;
+package cn.hl.kit.ox.character;
 
 import java.io.BufferedReader;
 import java.io.File;

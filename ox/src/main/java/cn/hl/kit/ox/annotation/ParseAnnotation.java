@@ -1,10 +1,10 @@
-package cn.hl.ox.annotation;
+package cn.hl.kit.ox.annotation;
 
-import cn.hl.ox.BuddhaBless;
-import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation.EnumType;
-import cn.hl.ox.annotation.MyAnnotation.MyClassAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyMethodAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation.EnumType;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyMethodAnnotation;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

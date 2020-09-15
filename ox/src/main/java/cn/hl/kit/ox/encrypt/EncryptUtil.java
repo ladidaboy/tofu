@@ -1,4 +1,4 @@
-package cn.hl.ox.encrypt;
+package cn.hl.kit.ox.encrypt;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;

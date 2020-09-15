@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.aop.book;
 
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.lang.reflect.Proxy;
 

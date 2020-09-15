@@ -1,7 +1,7 @@
 package cn.hl.kit.ox.regexp;
 
 import cn.hl.kit.ax.data.DataUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;

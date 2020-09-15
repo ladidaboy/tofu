@@ -1,11 +1,11 @@
-package cn.hl.ox.annotation;
+package cn.hl.kit.ox.annotation;
 
-import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation.EnumType;
-import cn.hl.ox.annotation.MyAnnotation.MyClassAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyConstructorAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyFieldAnnotation;
-import cn.hl.ox.annotation.MyAnnotation.MyMethodAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAndMethodAnnotation.EnumType;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyClassAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyConstructorAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyFieldAnnotation;
+import cn.hl.kit.ox.annotation.MyAnnotation.MyMethodAnnotation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

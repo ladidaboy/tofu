@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.jsnative;
 
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;

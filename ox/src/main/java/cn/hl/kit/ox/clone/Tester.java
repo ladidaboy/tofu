@@ -2,7 +2,7 @@ package cn.hl.kit.ox.clone;
 
 import cn.hl.kit.ax.clone.CloneBean;
 import cn.hl.kit.ax.clone.ReflectionUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 import cn.hl.ox.clone.bean.Alpaca;
 import cn.hl.ox.clone.bean.Animal;
 import cn.hl.ox.clone.bean.BP;

@@ -2,7 +2,7 @@ package cn.hl.kit.ox.fastjson;
 
 import cn.hl.kit.ax.data.AryTransfer;
 import cn.hl.kit.ax.data.DataUtils;
-import cn.hl.ox.BuddhaBless;
+import cn.hl.kit.ox.BuddhaBless;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.AfterFilter;
 import com.alibaba.fastjson.serializer.BeforeFilter;
