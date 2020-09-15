@@ -2,9 +2,9 @@
  * Zenlayer.com Inc.
  * Copyright (c) 2014-2020 All Rights Reserved.
  */
-package cn.hl.kit.ax.spring;
+package cn.hl.kit.spring;
 
-import cn.hl.kit.ax.spring.base.TransactionExecutor;
+import cn.hl.kit.spring.base.TransactionExecutor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

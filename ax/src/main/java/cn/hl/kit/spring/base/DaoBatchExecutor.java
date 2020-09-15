@@ -2,7 +2,7 @@
  * Zenlayer.com Inc.
  * Copyright (c) 2014-2019 All Rights Reserved.
  */
-package cn.hl.kit.ax.spring.base;
+package cn.hl.kit.spring.base;
 
 /**
  * <ul>

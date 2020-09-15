@@ -2,7 +2,7 @@
  * Zenlayer.com Inc.
  * Copyright (c) 2014-2020 All Rights Reserved.
  */
-package cn.hl.kit.ax.spring.base;
+package cn.hl.kit.spring.base;
 
 /**
  * 事务执行接口

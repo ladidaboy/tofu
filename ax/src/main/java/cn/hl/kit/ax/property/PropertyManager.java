@@ -28,8 +28,6 @@ public class PropertyManager {
 
     /**
      * 获取属性值
-     * @param key
-     * @return
      */
     public String getProperty(String key) {
         return properties.getProperty(key);
@@ -37,9 +35,6 @@ public class PropertyManager {
 
     /**
      * 设置属性值
-     * @param key
-     * @param value
-     * @throws Exception
      */
     public void setProperty(String key, String value) throws Exception {
         properties.setProperty(key, value);
@@ -50,8 +45,6 @@ public class PropertyManager {
 
     /**
      * 加载属性列表
-     * @param file
-     * @throws Exception
      */
     public void loadProperties(File file) throws Exception {
         propertyFile = file;

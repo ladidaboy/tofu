@@ -30,13 +30,6 @@ public class UTCTimeUtils {
     private static DateTimeFormatter DTF_DT = DateTimeFormatter.ofPattern(PATTERN_DATETIME);
     private static SimpleDateFormat  SDF_DT = new SimpleDateFormat(PATTERN_DATETIME);
 
-    public static Date random() {
-        Random rd = new Random();
-        LocalDateTime dateTime = LocalDateTime.of(2000 + rd.nextInt(20), 1 + rd.nextInt(12), 1 + rd.nextInt(27), //
-                rd.nextInt(24), rd.nextInt(60), rd.nextInt(60));
-        return Date.from(dateTime.toInstant(ZoneOffset.UTC));
-    }
-
     public static Date now() {
         LocalDateTime dateTime = LocalDateTime.now(Clock.systemUTC());
         String localTime = DTF_DT.format(dateTime);
@@ -101,4 +94,10 @@ public class UTCTimeUtils {
         }
     }
 
+    public static Date random() {
+        Random rd = new Random();
+        LocalDateTime dateTime = LocalDateTime.of(2000 + rd.nextInt(20), 1 + rd.nextInt(12), 1 + rd.nextInt(27), //
+                rd.nextInt(24), rd.nextInt(60), rd.nextInt(60));
+        return Date.from(dateTime.toInstant(ZoneOffset.UTC));
+    }
 }

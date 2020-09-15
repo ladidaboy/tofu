@@ -18,6 +18,7 @@ public class HPC implements Comparator {
         this.flag = asc ? 1 : -1;
     }
 
+    @Override
     public int compare(Object a0, Object a1) {
         int as0 = ((HPO) a0).getSortValue();
         int as1 = ((HPO) a1).getSortValue();

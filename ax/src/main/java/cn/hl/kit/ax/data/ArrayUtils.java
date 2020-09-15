@@ -1,6 +1,7 @@
 package cn.hl.kit.ax.data;
 
-import org.apache.commons.lang3.ArrayUtils;
+import cn.hl.kit.ax.CommonConst;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Set;
  * @author hyman
  * @date 2019-08-28 13:25:25
  */
-public class ArrayUtility extends ArrayUtils {
+public class ArrayUtils {
     /**
      * 数组去重
      */
@@ -31,10 +32,10 @@ public class ArrayUtility extends ArrayUtils {
      * @return 集合
      */
     public static String[] crossCollection(String[] arr1, String[] arr2, boolean isIntersectOrDiffer) {
-        if (isEmpty(arr1) || isEmpty(arr2)) {
+        if (DataUtils.isInvalid(arr1) || DataUtils.isInvalid(arr2)) {
             return new String[0];
         }
-        String[] arr = addAll(makeUnique(arr1), makeUnique(arr2));
+        String[] arr = DataUtils.add2Array(makeUnique(arr1), makeUnique(arr2));
         Map<String, Boolean> single = new HashMap<>();
         LinkedList<String> list = new LinkedList<>();
         for (String txt : arr) {
@@ -83,7 +84,6 @@ public class ArrayUtility extends ArrayUtils {
         }
         String sub = min;
         int begin = 0, end = min.length(), i = 1, counter = 0;
-        // for (; !max.contains(sub); ) {
         while (!max.contains(sub)) {
             if (end == min.length()) {
                 begin = 0;
@@ -102,25 +102,26 @@ public class ArrayUtility extends ArrayUtils {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void main(String[] args) {
-        String[] s2 = {"ac", "13", "de", "3C", "de", "Hi", "pq", "vv", "zZ", "TT", "po", "vs", "i8", "gt", "3C", "6p"};
-        String[] s1 = {"bd", "22", "i8", "Hi", "pq", "wx", "zZ", "po"};
+        String[] s2 = {"22", "ac", "13", "de", "3C", "de", "Hi", "pq", "vv", "zZ", "TT", "po", "vs", "i8", "gt", "3C", "6p"};
+        String[] s1 = {"11", "bd", "56", "i8", "Hi", "pq", "wx", "zZ", "po"};
 
         String[] intersect12 = intersect(s1, s2);
-        System.out.println("ⓘ 交集是：" + DataUtility.join(intersect12, ' '));
+        System.out.println("ⓘ 交集是：" + StrUtil.join(CommonConst.S_SPACE, intersect12));
 
         String[] differ12 = differ(s1, s2);
-        System.out.println("ⓘ 差集是：" + DataUtility.join(differ12, ' '));
+        System.out.println("ⓘ 差集是：" + StrUtil.join(CommonConst.S_SPACE, differ12));
 
         String[] union12 = union(s1, s2);
-        System.out.println("ⓘ 并集是：" + DataUtility.join(union12, ' '));
+        System.out.println("ⓘ 并集是：" + StrUtil.join(CommonConst.S_SPACE, union12));
 
-        String[] join12 = addAll(s1, s2);
-        System.out.println("ⓘ 原始集：" + DataUtility.join(join12, ' '));
+        String[] join12 = DataUtils.add2Array(s1, s2);
+        System.out.println("ⓘ 原始集：" + StrUtil.join(CommonConst.S_SPACE, join12));
 
         System.out.println();
         String t1 = "Apache Commons Logging is a thin adapter allowing configurable bridging to others, well known logging systems.";
         String t2 = "A SLF4J implementation which delegates to maven-plugin logging toolkit.";
         System.out.println("maxIntersect -> '" + maxIntersect(t1, t2) + "'");
-        System.out.println("intersect -> '" + DataUtility.join(intersect(t1.split(" "), t2.split(" ")), "','") + "'");
+        System.out.println(
+                "intersect -> '" + StrUtil.join("','", intersect(t1.split(CommonConst.S_SPACE), t2.split(CommonConst.S_SPACE))) + "'");
     }
 }

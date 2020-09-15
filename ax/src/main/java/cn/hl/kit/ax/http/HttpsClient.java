@@ -89,13 +89,11 @@ public class HttpsClient {
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
             @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                    throws java.security.cert.CertificateException {
+            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
             }
 
             @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                    throws java.security.cert.CertificateException {
+            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
             }
 
             @Override
@@ -117,12 +115,10 @@ public class HttpsClient {
 
     private static List<NameValuePair> map2NameValuePairList(Object params) {
         List<NameValuePair> list = new ArrayList<>();
-        if (params != null && params instanceof Map) {
+        if (params instanceof Map) {
             Map<String, Object> map = (Map<String, Object>) params;
             if (!map.isEmpty()) {
-                Iterator<String> it = map.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = it.next();
+                for (String key : map.keySet()) {
                     if (map.get(key) != null) {
                         String value = String.valueOf(map.get(key));
                         list.add(new BasicNameValuePair(key, value));
@@ -148,8 +144,7 @@ public class HttpsClient {
         message = "================================================================\n" + message;
         String body = null;
         try {
-            CloseableHttpResponse response = client.execute(request);
-            try {
+            try (CloseableHttpResponse response = client.execute(request)) {
                 // 处理请求结果
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
@@ -181,8 +176,6 @@ public class HttpsClient {
                     }
                 }
                 EntityUtils.consume(entity);
-            } finally {
-                response.close();
             }
         } finally {
             client.close();
@@ -235,17 +228,15 @@ public class HttpsClient {
         if (method == Method.POST && postJson) {
             header.put("Content-Type", "application/json; charset=" + CHARSET);
         }
-        for (Iterator<Entry<String, String>> it = header.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, String> entry = it.next();
+        for (Entry<String, String> entry : header.entrySet()) {
             request.setHeader(new BasicHeader(entry.getKey(), entry.getValue()));
         }
         msg += "➥ Header: " + JSONObject.toJSONString(header, true) + "\n";
         // 设置参数
         if (params != null) {
-            switch (method) {
-                case POST:
-                    StringEntity entity;
-                    if (postJson) {
+            if (method == Method.POST) {
+                StringEntity entity;
+                if (postJson) {
                         /*
                         fastjson.JSONObject.toJSONString(Object object, SerializerFeature... features)
                         SerializerFeature有用的一些枚举值
@@ -256,20 +247,19 @@ public class HttpsClient {
                         WriteNullStringAsEmpty  - 字符类型字段如果为null,输出为”“,而非null
                         WriteNullBooleanAsFalse - Boolean字段如果为null,输出为false,而非null
                          */
-                        entity = new StringEntity(JSONObject.toJSONString(params), ContentType.DEFAULT_TEXT.withCharset(CHARSET));
-                    } else {
-                        entity = new UrlEncodedFormEntity(map2NameValuePairList(params), CHARSET);
-                    }
-                    ((HttpPost) request).setEntity(entity);
-                    break;
-                default:
-                    String str = EntityUtils.toString(new UrlEncodedFormEntity(map2NameValuePairList(params), CHARSET));
-                    String uri = request.getURI().toString();
-                    if (uri.indexOf("?") >= 0) {
-                        request.setURI(new URI(uri + "&" + str));
-                    } else {
-                        request.setURI(new URI(uri + "?" + str));
-                    }
+                    entity = new StringEntity(JSONObject.toJSONString(params), ContentType.DEFAULT_TEXT.withCharset(CHARSET));
+                } else {
+                    entity = new UrlEncodedFormEntity(map2NameValuePairList(params), CHARSET);
+                }
+                ((HttpPost) request).setEntity(entity);
+            } else {
+                String str = EntityUtils.toString(new UrlEncodedFormEntity(map2NameValuePairList(params), CHARSET));
+                String uri = request.getURI().toString();
+                if (uri.contains("?")) {
+                    request.setURI(new URI(uri + "&" + str));
+                } else {
+                    request.setURI(new URI(uri + "?" + str));
+                }
             }
             msg += "➥ Params: " + JSONObject.toJSONString(params, true) + "\n";
         }
@@ -334,9 +324,7 @@ public class HttpsClient {
         entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         entityBuilder.setCharset(Charset.forName(CHARSET));
         if (params != null && !params.isEmpty()) {
-            Iterator<String> it = params.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
+            for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (value instanceof File) {
                     FileBody fileBody = new FileBody((File) value);
@@ -365,30 +353,20 @@ public class HttpsClient {
     }
 
     public static void doDownLoad(String url, String localFileName) throws IOException {
-        DefaultHttpClient client = new DefaultHttpClient();
-        CloseableHttpResponse response = null;
-        try {
-            response = client.execute(new HttpGet(url));
+        try (DefaultHttpClient client = new DefaultHttpClient(); CloseableHttpResponse response = client.execute(new HttpGet(url))) {
             HttpEntity entity = response.getEntity();
             InputStream in = entity.getContent();
             System.out.println("The response value of token: " + response.getFirstHeader("token"));
-            if (entity != null) {
-                long length = entity.getContentLength();
-                if (length <= 0) {
-                    throw new IOException("Download File not found!");
-                }
-                byte[] b = EntityUtils.toByteArray(entity);
-                OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(localFileName)));
-                out.write(b);
-                out.flush();
-                out.close();
-                EntityUtils.consume(entity);
+            long length = entity.getContentLength();
+            if (length <= 0) {
+                throw new IOException("Download File not found!");
             }
-        } finally {
-            if (response != null) {
-                response.close();
-            }
-            client.close();
+            byte[] b = EntityUtils.toByteArray(entity);
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(localFileName)));
+            out.write(b);
+            out.flush();
+            out.close();
+            EntityUtils.consume(entity);
         }
     }
 }

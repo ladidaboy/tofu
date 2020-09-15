@@ -133,7 +133,7 @@ public class HttpsConsumer {
             }
             message += "\r\n➤ 出参数:\r\n";
             // 读取响应
-            InputStream is = null;
+            InputStream is;
             int code = connection.getResponseCode();
             if (code > 300) {
                 is = connection.getErrorStream();
