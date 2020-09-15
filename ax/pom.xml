@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.hl.kit</groupId>
-    <artifactId>ax</artifactId>
+    <artifactId>hl-kit-ax</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <name>cn.hl.kit.ax</name>
-    <description>Some toolset</description>
+    <description>Some`AX`Kits</description>
 
     <dependencies>
         <!-- tool -->
@@ -92,16 +92,17 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+        <!-- page helper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
+        </dependency>
         <!-- sprint boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-parent</artifactId>
             <version>2.2.2.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.3</version>
         </dependency>
     </dependencies>
 

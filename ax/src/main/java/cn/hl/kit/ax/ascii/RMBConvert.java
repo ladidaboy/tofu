@@ -5,27 +5,30 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.regex.Pattern;
 
-
+/**
+ * @author hyman
+ */
 public class RMBConvert {
     /**
      * 阶值 {仟万亿......仟，佰，拾，元}
      */
-    private static final char[] units  = {'仟', '佰', '拾', '万', '仟', '佰', '拾', '亿', '仟', '佰', '拾', '万', '仟', '佰', '拾', '元'};
+    private static final char[] UNITS  = {'仟', '佰', '拾', '万', '仟', '佰', '拾', '亿', '仟', '佰', '拾', '万', '仟', '佰', '拾', '元'};
     /**
      * 大写数字
      */
-    private static final char[] digits = {'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'};
+    private static final char[] DIGITS = {'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'};
 
-    private static final DecimalFormat formatter = new DecimalFormat("0.00");
+    private static final DecimalFormat FORMATTER = new DecimalFormat("0.00");
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private static String getUpper(long amount) {
         StringBuilder result = new StringBuilder();
         String temp = String.valueOf(amount);
         char cc;
         for (int i = 0; i < temp.length(); i++) {
             cc = temp.charAt(i);
-            result.append(digits[(int) cc - 48]);
+            result.append(DIGITS[(int) cc - 48]);
         }
         return result.toString();
     }
@@ -41,7 +44,7 @@ public class RMBConvert {
     public static String parse(BigDecimal amount) {
         amount = amount.abs();
         StringBuilder result = new StringBuilder();
-        //= 整数部分 ===============================================================================================================
+        //= 整数部分 ======================================================================================================
         StringBuffer sbInteger = new StringBuffer();
         long integerVal = amount.longValue();
         // 转成大写
@@ -54,12 +57,12 @@ public class RMBConvert {
         char zero = '零';
 
         if (txtLen <= 16) {
-            //= 仟万亿内 ====================================================================================
+            //= 仟万亿内 ==============================================================================
             int index = 0;
             for (int i = 16 - txtLen; i < 16; i++) {
                 sbInteger.append(integerTxt.charAt(index++));
                 // 加权值
-                sbInteger.append(units[i]);
+                sbInteger.append(UNITS[i]);
             }
             // 加权后, 未合并连续零
             String tmpIntegerTxt = sbInteger.toString();
@@ -104,12 +107,12 @@ public class RMBConvert {
                 }
             }
         } else {
-            //= 超仟万亿 ====================================================================================
+            //= 超仟万亿 ==============================================================================
             sbInteger.append(integerTxt);
             sbInteger.append("元");
         }
 
-        // - 加入结果 ---------------------------------------------------------------------------------------
+        // - 加入结果 ---------------------------------------------------------------------------------
         if (txtLen <= 16) {
             // 处理连续零
             result.append(sbInteger.toString().replaceAll(regex_00, String.valueOf(zero)));
@@ -117,12 +120,12 @@ public class RMBConvert {
             result.append(sbInteger.toString());
         }
 
-        //= 小数部分 (保留二位小数) 0.01 ===========================================================================================
+        //= 小数部分 (保留二位小数) 0.01 ========================================================================================
         double decimal = amount.remainder(BigDecimal.ONE).doubleValue();
         if (decimal > 0d) {
             StringBuilder sbDecimal = new StringBuilder();
 
-            String decimalTxt = formatter.format(decimal);
+            String decimalTxt = FORMATTER.format(decimal);
             decimalTxt = decimalTxt.substring(2);
 
             long jiao = Long.parseLong(decimalTxt.substring(0, 1));
@@ -133,7 +136,7 @@ public class RMBConvert {
                 sbDecimal.append(getUpper(fen)).append("分");
             }
 
-            // - 加入结果 -----------------------------------------------------------------------------------
+            // - 加入结果 -----------------------------------------------------------------------------
             result.append(sbDecimal);
         } else {
             result.append("整");
@@ -141,7 +144,8 @@ public class RMBConvert {
         return result.toString();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private static double getLadder(double ladder) {
         double _ladder = 1;
         while ((ladder /= 10000) >= 1) {
@@ -160,8 +164,8 @@ public class RMBConvert {
             throw new Exception("Convert Error!");
         }
 
-        for (int i = 0; i < digits.length; i++) {
-            rmbUpperCase = rmbUpperCase.replace(digits[i], (char) (i + 48));
+        for (int i = 0; i < DIGITS.length; i++) {
+            rmbUpperCase = rmbUpperCase.replace(DIGITS[i], (char) (i + 48));
         }
 
         char[] rmbChars = rmbUpperCase.toCharArray();
@@ -204,17 +208,18 @@ public class RMBConvert {
         return value;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static void main(String[] args) {
         try {
-            StringBuilder _balance_ = new StringBuilder();
+            StringBuilder balance = new StringBuilder();
             for (int i = 0; i < 5; i++) {
                 if (i == 4) {
-                    _balance_.append(".");
+                    balance.append(".");
                 }
-                _balance_.append(Math.round(Math.random() * 10000));
+                balance.append(Math.round(Math.random() * 10000));
             }
-            BigDecimal amount = new BigDecimal(_balance_.toString());
+            BigDecimal amount = new BigDecimal(balance.toString());
             NumberFormat nf = NumberFormat.getInstance();
             System.out.println("Original : " + nf.format(amount));
 
