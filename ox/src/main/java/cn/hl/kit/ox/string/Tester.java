@@ -1,4 +1,4 @@
-package cn.hl.kit.ax.string;
+package cn.hl.kit.ox.string;
 
 import java.util.Calendar;
 

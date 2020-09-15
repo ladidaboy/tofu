@@ -1,4 +1,4 @@
-package cn.hl.kit.ax.string;
+package cn.hl.kit.ox.string;
 
 import cn.hl.kit.ax.data.DataUtils;
 import org.apache.commons.lang3.ArrayUtils;

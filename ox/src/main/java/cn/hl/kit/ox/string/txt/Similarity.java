@@ -1,4 +1,4 @@
-package cn.hl.kit.ax.string.txt;
+package cn.hl.kit.ox.string.txt;
 
 public class Similarity {
     /**

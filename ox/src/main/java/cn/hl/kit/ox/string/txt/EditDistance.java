@@ -1,4 +1,4 @@
-package cn.hl.kit.ax.string.txt;
+package cn.hl.kit.ox.string.txt;
 
 /**
  * 编辑距离（EditDistance）定义字符串的相似度
