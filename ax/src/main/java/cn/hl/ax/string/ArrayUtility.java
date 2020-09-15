@@ -85,7 +85,8 @@ public class ArrayUtility extends ArrayUtils {
         }
         String sub = min;
         int begin = 0, end = min.length(), i = 1, counter = 0;
-        while (!max.contains(sub)) { // for (; !max.contains(sub); )
+        // for (; !max.contains(sub); ) {
+        while (!max.contains(sub)) {
             if (end == min.length()) {
                 begin = 0;
                 end = (min.length()) - (i++);

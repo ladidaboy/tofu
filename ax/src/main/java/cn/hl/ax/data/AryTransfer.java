@@ -37,6 +37,7 @@ public class AryTransfer {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static void main(String[] args) {
         long decimal = 765488;
         System.out.println(decimal + " >> to26Ary() >> " + to26Ary(decimal));

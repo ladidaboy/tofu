@@ -1,11 +1,13 @@
 package cn.hl.ax.data;
 
 import cn.hl.ax.JavaBean;
+import cn.hl.ax.enums.BaseEnumInterface;
 import cn.hl.ax.exp.ParamException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -389,6 +391,58 @@ public class DataUtils extends StringUtils {
     StringUtils.wrap("\"ab\"", '\"') = "\"\"ab\"\""
      */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static final SimpleDateFormat SDF_ALL = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final SimpleDateFormat SDF_DTT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat SDF_DAT = new SimpleDateFormat("yyyy-MM-dd");
+
+    public enum FormatPrettify implements BaseEnumInterface {
+        NONE {
+            @Override
+            public int getValue() {
+                return 0;
+            }
+        },
+        DATE {
+            @Override
+            public int getValue() {
+                return 1;
+            }
+        },
+        ENUM {
+            @Override
+            public int getValue() {
+                return 2;
+            }
+        },
+        DATE_YMD {
+            @Override
+            public int getValue() {
+                return 4;
+            }
+        },
+    }
+
+    public enum CompareFeature implements BaseEnumInterface {
+        NONE {
+            @Override
+            public int getValue() {
+                return 0;
+            }
+        },
+        IGNORE_CASE {
+            @Override
+            public int getValue() {
+                return 1;
+            }
+        },
+        DATE_YMD {
+            @Override
+            public int getValue() {
+                return 2;
+            }
+        },
+    }
 
     /**
      * 检查字符是否在[a~z,A~Z,0~9,汉字]中

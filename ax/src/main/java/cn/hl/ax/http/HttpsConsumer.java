@@ -16,7 +16,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URL;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.zip.GZIPInputStream;
 
@@ -42,11 +41,11 @@ public class HttpsConsumer {
             }
 
             @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
             }
 
             @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
             }
         }};
 
@@ -65,7 +64,7 @@ public class HttpsConsumer {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset));
             StringWriter writer = new StringWriter();
             char[] chars = new char[256];
-            int count = 0;
+            int count;
             while ((count = reader.read(chars)) > 0) {
                 writer.write(chars, 0, count);
             }
@@ -92,7 +91,7 @@ public class HttpsConsumer {
             method = method == null ? "POST" : method.toUpperCase();
             String contentType = CONTENT_TYPE_TEXT;
             String accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-            if (params != null && params instanceof JSONObject) {
+            if (params instanceof JSONObject) {
                 contentType = CONTENT_TYPE_JSON;
             }
             logger.debug("发起请求:\r\n" + method + " : " + uri);
@@ -142,7 +141,7 @@ public class HttpsConsumer {
                 is = connection.getInputStream();
             }
             String encode = connection.getContentEncoding();
-            if (encode != null && encode.indexOf("gzip") >= 0) {
+            if (encode != null && encode.contains("gzip")) {
                 is = new GZIPInputStream(is);
             }
             String responseText = getStreamAsString(is, "UTF-8");

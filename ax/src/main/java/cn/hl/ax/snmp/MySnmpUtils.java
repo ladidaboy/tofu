@@ -659,7 +659,7 @@ public class MySnmpUtils {
 
     public static void main(String[] args) {
         // 107.155.19.82
-        String ip = "192.254.82.44";
+        String ip = "109.244.46.18";
         int port = 161;
         // public C#Edge123
         String community = "C#EDGE123";

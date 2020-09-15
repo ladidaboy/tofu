@@ -1,4 +1,4 @@
-package cn.hl.ax.enume;
+package cn.hl.ax.enums;
 
 import cn.hl.ax.clone.ReflectionUtils;
 

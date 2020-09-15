@@ -1,5 +1,8 @@
 package cn.hl.ax.clone;
 
+import cn.hl.ax.log.LogUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,8 +17,13 @@ import java.util.regex.Pattern;
 
 /**
  * Reflection 方法类
+ * @author Hyman.Li
  */
+@Slf4j
 public class ReflectionUtils {
+    private static final Pattern P_ALPHABET_STR = Pattern.compile("([a-zA-Z]+)\\[(.*?)]");
+    private static final Pattern P_ALPHABET     = Pattern.compile("[a-zA-Z]");
+
     /**
      * 循环向上转型, 获取对象的 DeclaredField
      *
@@ -24,14 +32,12 @@ public class ReflectionUtils {
      * @return 父类中的属性对象
      */
     public static Field getDeclaredField(Object object, String fieldName) {
-        Field field = null;
         Class<?> clazz = object.getClass();
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {
-                field = clazz.getDeclaredField(fieldName);
-                return field;
+                return clazz.getDeclaredField(fieldName);
             } catch (Exception e) {
-                // DO NOTHING
+                log.error(LogUtils.getSimpleMessages(e));
             }
         }
         return null;
@@ -46,14 +52,12 @@ public class ReflectionUtils {
      * @return 父类中的方法对象
      */
     public static Method getDeclaredMethod(Object object, String methodName, Class<?>... parameterTypes) {
-        Method method = null;
         Class<?> clazz = object.getClass();
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {
-                method = clazz.getDeclaredMethod(methodName, parameterTypes);
-                return method;
+                return clazz.getDeclaredMethod(methodName, parameterTypes);
             } catch (Exception e) {
-                // DO NOTHING
+                log.error(LogUtils.getSimpleMessages(e));
             }
         }
         return null;
@@ -79,7 +83,7 @@ public class ReflectionUtils {
                 return method.invoke(object, parameters);
             }
         } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            log.error(LogUtils.getSimpleMessages(e));
         }
         return null;
     }
@@ -124,11 +128,20 @@ public class ReflectionUtils {
                 case "boolean":
                     field.setBoolean(object, (Boolean) value);
                     break;
+                case "String":
+                    //field.set(object, ZenUtil.formatString(value));
+                    break;
+                case "Integer":
+                    //field.set(object, ZenUtil.formatInteger(value));
+                    break;
+                case "Date":
+                    //field.set(object, ZenUtil.formatDate(value));
+                    break;
                 default:
                     field.set(object, value);
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            log.error(LogUtils.getSimpleMessages(e));
         }
     }
 
@@ -151,7 +164,7 @@ public class ReflectionUtils {
             // 获取 object 中 field 所代表的属性值
             return field.get(object);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(LogUtils.getSimpleMessages(e));
         }
         return null;
     }
@@ -170,8 +183,8 @@ public class ReflectionUtils {
             String subField = fieldName.substring(fieldName.indexOf(".") + 1);
             return getFieldValueEx(object, subField);
         }
-        Pattern pattern = Pattern.compile("([a-zA-Z]+)\\[(.*?)]");
-        Matcher matcher = pattern.matcher(fieldName);
+
+        Matcher matcher = P_ALPHABET_STR.matcher(fieldName);
         if (matcher.find()) {
             //group #0 - all; #1 - (name); #2 - (index/key)
             String name = matcher.group(1);
@@ -196,27 +209,26 @@ public class ReflectionUtils {
      * @return 方法名称
      */
     public static String convertToMethodName(Object object, String fieldName, boolean isSet) {
-        Pattern p = Pattern.compile("[a-zA-Z]");
-        Matcher m = p.matcher(fieldName);
+        Matcher m = P_ALPHABET.matcher(fieldName);
         StringBuilder sb = new StringBuilder();
-        /** 如果是set方法名称 **/
+        // 如果是set方法名称
         if (isSet) {
             sb.append("set");
         } else {
-            /** get方法名称 **/
+            // get方法名称
             try {
                 Field field = getDeclaredField(object, fieldName);
-                /** 如果类型为boolean **/
+                // 如果类型为boolean
                 if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                     sb.append("is");
                 } else {
                     sb.append("get");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(LogUtils.getSimpleMessages(e));
             }
         }
-        /** 针对以下划线开头的属性 **/
+        // 针对以下划线开头的属性
         boolean flag = true;
         if (fieldName.length() > 1) {
             char sc = fieldName.charAt(1);
@@ -236,32 +248,32 @@ public class ReflectionUtils {
      * @param attribute 属性值
      * @param value 属性
      */
-    public static void setAttrributeValue(Object object, String attribute, Object value) {
-        String method_name = convertToMethodName(object, attribute, true);
+    public static void setAttributeValue(Object object, String attribute, Object value) {
+        String methodName = convertToMethodName(object, attribute, true);
         Method[] methods = object.getClass().getMethods();
         for (Method method : methods) {
-            if (method.getName().equals(method_name)) {
+            if (method.getName().equals(methodName)) {
                 Class<?>[] parameterC = method.getParameterTypes();
                 try {
                     if (parameterC[0] == int.class) {
-                        method.invoke(object, ((Integer) value).intValue());
+                        method.invoke(object, (Integer) value);
                     } else if (parameterC[0] == float.class) {
-                        method.invoke(object, ((Float) value).floatValue());
+                        method.invoke(object, (Float) value);
                     } else if (parameterC[0] == double.class) {
-                        method.invoke(object, ((Double) value).doubleValue());
+                        method.invoke(object, (Double) value);
                     } else if (parameterC[0] == long.class) {
-                        method.invoke(object, ((Long) value).longValue());
+                        method.invoke(object, (Long) value);
                     } else if (parameterC[0] == byte.class) {
-                        method.invoke(object, ((Byte) value).byteValue());
+                        method.invoke(object, (Byte) value);
                     } else if (parameterC[0] == char.class) {
-                        method.invoke(object, ((Character) value).charValue());
+                        method.invoke(object, (Character) value);
                     } else if (parameterC[0] == boolean.class) {
-                        method.invoke(object, ((Boolean) value).booleanValue());
+                        method.invoke(object, (Boolean) value);
                     } else {
                         method.invoke(object, parameterC[0].cast(value));
                     }
                 } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | SecurityException e) {
-                    e.printStackTrace();
+                    log.error(LogUtils.getSimpleMessages(e));
                 }
             }
         }
@@ -271,25 +283,28 @@ public class ReflectionUtils {
      * 判定是否是常用的数据类型
      * <br>byte、char、short、int、long、float、double、boolean
      * <br>Date、String、BigDecimal、BigInteger、LocalDateTime
-     * @param obj
-     * @return
+     * @param obj 待判定对象
+     * @return 是否常用数据类型
      */
     public static boolean isBasicDataType(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         Class clazz = obj.getClass();
         return (clazz.isPrimitive() ||//是否是原始基础数据类型(byte、char、short、int、long、float、double、boolean)
-                clazz.equals(Byte.class) ||       //byte
-                clazz.equals(Character.class) ||  //char
-                clazz.equals(Short.class) ||      //short
-                clazz.equals(Integer.class) ||    //int
-                clazz.equals(Long.class) ||       //long
-                clazz.equals(Float.class) ||      //float
-                clazz.equals(Double.class) ||     //double
-                clazz.equals(Boolean.class) ||    //boolean
-                clazz.equals(Date.class) ||       //
-                clazz.equals(String.class) ||     //
-                clazz.equals(BigDecimal.class) || //
-                clazz.equals(BigInteger.class) || //
-                clazz.equals(LocalDateTime.class) //
+                clazz.equals(Byte.class) ||       // - byte
+                clazz.equals(Character.class) ||  // - char
+                clazz.equals(Short.class) ||      // - short
+                clazz.equals(Integer.class) ||    // - int
+                clazz.equals(Long.class) ||       // - long
+                clazz.equals(Float.class) ||      // - float
+                clazz.equals(Double.class) ||     // - double
+                clazz.equals(Boolean.class) ||    // - boolean
+                clazz.equals(Date.class) ||       // ~ Date
+                clazz.equals(String.class) ||     // ~ String
+                clazz.equals(BigDecimal.class) || // ~ BigDecimal
+                clazz.equals(BigInteger.class) || // ~ BigInteger
+                clazz.equals(LocalDateTime.class) // ~ LocalDateTime
         );
     }
 
@@ -297,8 +312,8 @@ public class ReflectionUtils {
      * 判定是否是原始数据类型
      * <br>byte、char、short、int、long、float、double、boolean
      * <br>byte < short < char < int < long < float < double
-     * @param clazz
-     * @return
+     * @param clazz 类
+     * @return 是否原始类型
      */
     public static boolean isPrimitiveType(Class clazz) {
         return clazz.isPrimitive();

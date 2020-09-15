@@ -58,22 +58,19 @@ import java.util.Map.Entry;
  * @date 2019-09-02 16:05:36
  * @version $ Id: MyClient.java, v 0.1  hyman Exp $
  */
-public class MyHttpsClient {
-    private static String               TAG       = "ⓘMyHttpsClient";
+public class HttpsClient {
+    private static String               TAG       = "ⓘHttpsClient";
     private static String               CHARSET   = "UTF-8";
-    private static int                  TIMEOUT   = 1000 * 20;//20秒
-    private static ThreadLocal<Integer> LOG_LEVEL = new ThreadLocal<Integer>() {
-        @Override
-        protected Integer initialValue() {
-            return 1;
-        }
-    };
+    private static int                  TIMEOUT   = 1000 * 30;
+    private static ThreadLocal<Integer> LOG_LEVEL = ThreadLocal.withInitial(() -> 1);
 
-    //HTTP请求枚举取值范围为：GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS,TRACE, 常用的是GET和POST请求。
-    public static enum Method {
-        GET,
-        POST,
-        DELETE
+    /**
+     * HTTP请求枚举取值范围为: GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS,TRACE, 常用的是GET和POST请求.
+     */
+    public enum Method {
+        /**获取*/ GET,
+        /**推送*/ POST,
+        /**删除*/ DELETE
     }
 
     public static void detailLog() {

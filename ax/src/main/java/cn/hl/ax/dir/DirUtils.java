@@ -52,8 +52,6 @@ import java.io.File;
       ResourceBundle localResource = ResourceBundle.getBundle("test/propertiesTest", locale);
       String value = localResource.getString("test");System.out.println("ResourceBundle: " + value);
       工程src目录下propertiesTest.properties(名字后缀必须为properties)文件内容如下: test=hello word
-
-
  */
 
 /**
@@ -61,16 +59,19 @@ import java.io.File;
  * @author Hyman
  */
 public class DirUtils {
-    public static String getCurrentClassPath() {
-        StackTraceElement[] stes = new Throwable().getStackTrace();
-        String className = stes[1].getClassName();
-        String classPath = className.substring(0, className.lastIndexOf('.'));
-        for (int idx = 0; idx < classPath.length(); idx++) {
-            if (className.charAt(idx) == '.') {
-                classPath = classPath.substring(0, idx) + "/" + classPath.substring(idx + 1);
-            }
+    public static Class getCurrentClass() {
+        String className = Thread.currentThread().getStackTrace()[1].getClassName();
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            return null;
         }
-        return "./src/" + classPath + "/";
+    }
+
+    public static String getCurrentClassPath() {
+        String className = Thread.currentThread().getStackTrace()[1].getClassName();
+        String classPath = className.substring(0, className.lastIndexOf('.'));
+        return "./src/" + classPath.replaceAll("\\.", "/") + "/";
     }
 
     public static String getRootPath() {
@@ -84,6 +85,7 @@ public class DirUtils {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main(String[] args) {
         System.out.println(Thread.currentThread().getContextClassLoader().getResource("").getPath());
+        System.out.println(DirUtils.getCurrentClass());
         System.out.println(DirUtils.getCurrentClassPath());
         System.out.println(DirUtils.getRootPath());
         System.out.println(DirUtils.getUserDir());
