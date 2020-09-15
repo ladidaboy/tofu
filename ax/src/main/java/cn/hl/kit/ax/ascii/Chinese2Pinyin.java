@@ -1,5 +1,6 @@
 package cn.hl.kit.ax.ascii;
 
+import cn.hl.kit.ax.CommonConst;
 import cn.hl.kit.ax.log.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,13 +9,12 @@ import java.util.LinkedHashMap;
 
 @Slf4j
 public class Chinese2Pinyin {
-    private static LinkedHashMap<String, Integer> spellMap     = new LinkedHashMap<>();// 400
+    private static LinkedHashMap<String, Integer> spellMap     = new LinkedHashMap<>();
     private static int                            spellMapSize = 0;
 
     static {
         initialize();
-        log.info("ⓘ Chinese Transfer Spell Done!");
-        log.info("ⓘ Initialize {} Mappings!", spellMapSize);
+        log.info("ⓘ Chinese Transfer Spell Done! Initialize {} Mappings!", spellMapSize);
     }
 
     private static void putMap(String spell, int ascii) {
@@ -119,7 +119,7 @@ public class Chinese2Pinyin {
         try {
             bytes = (String.valueOf(cn)).getBytes("GBK");
         } catch (Exception e) {
-            log.error("Chinese2Pinyin.getCnAscii.getBytes error!\n{}", LogUtils.getSimpleMessages(e));
+            log.error(LogUtils.getSimpleMessages(e));
         }
         if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
             // 错误
@@ -206,12 +206,12 @@ public class Chinese2Pinyin {
 
     /**
      * 返回字符串的全拼,是汉字转化为全拼,其它字符不进行转换
-     * @param cnStr -- String 字符串
-     * @param blank --  boolean 是否分词
+     * @param cnStr 字符串
+     * @param blank 是否分词
      * @return 转换成全拼后的字符串
      */
     public static String getFullSpell(String cnStr, boolean blank) {
-        if (cnStr == null || cnStr.trim().equals("")) {
+        if (cnStr == null || CommonConst.S_EMPTY.equals(cnStr.trim())) {
             return cnStr;
         }
         cnStr = chineseSymbol2Ascii(cnStr);
@@ -219,7 +219,8 @@ public class Chinese2Pinyin {
         StringBuilder sb = new StringBuilder();
         for (char ch : chars) {
             int ascii = getCnAscii(ch);
-            if (ascii == 0) { // 取ASCII时出错
+            if (ascii == 0) {
+                // 取ASCII时出错
                 sb.append(ch);
             } else {
                 String spell = getSpellByAscii(ascii, blank);
@@ -234,6 +235,7 @@ public class Chinese2Pinyin {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static void main(String[] args) {
         String str;
         boolean blank = true;
