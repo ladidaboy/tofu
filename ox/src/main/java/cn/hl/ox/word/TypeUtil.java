@@ -1,6 +1,6 @@
 package cn.hl.ox.word;
 
-import cn.hl.ax.enume.EnumUtils;
+import cn.hl.ax.enums.EnumUtils;
 
 /**
  * 对读取字符分类相关操作

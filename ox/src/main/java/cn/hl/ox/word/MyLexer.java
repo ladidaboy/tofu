@@ -1,7 +1,7 @@
 package cn.hl.ox.word;
 
 import cn.hl.ax.data.DataUtils;
-import cn.hl.ax.enume.EnumUtils;
+import cn.hl.ax.enums.EnumUtils;
 import cn.hl.ox.BuddhaBless;
 import cn.hl.ox.file.FileUtil;
 

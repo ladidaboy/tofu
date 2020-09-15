@@ -175,7 +175,7 @@ public class Tester {
         System.out.println("convertToMethodName : " + ReflectionUtils.convertToMethodName(s, "sId", true));
         System.out.println("getDeclaredField : " + ReflectionUtils.getDeclaredField(s, "pId"));
         System.out.println("getDeclaredMethod : " + ReflectionUtils.getDeclaredMethod(s, "getpId"));
-        ReflectionUtils.setAttrributeValue(s, "height", 1.87);
+        ReflectionUtils.setAttributeValue(s, "height", 1.87);
         System.out.println("invokeMethod : " + ReflectionUtils.invokeMethod(s, "getHeight", new Class[0], new Integer[0]));
         ReflectionUtils.setFieldValue(s, "name", "Jerry");
         System.out.println("getFieldValue : " + ReflectionUtils.getFieldValue(s, "name"));

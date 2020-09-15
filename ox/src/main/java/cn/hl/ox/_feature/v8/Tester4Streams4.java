@@ -1,6 +1,6 @@
 package cn.hl.ox._feature.v8;
 
-import cn.hl.ax.enume.EnumUtils;
+import cn.hl.ax.enums.EnumUtils;
 import cn.hl.ox.BuddhaBless;
 import cn.hl.ox._feature.v8.Tester4Streams4.Transaction.Type;
 

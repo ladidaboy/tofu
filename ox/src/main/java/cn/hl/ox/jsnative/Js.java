@@ -1,11 +1,11 @@
 package cn.hl.ox.jsnative;
 
 import cn.hl.ox.BuddhaBless;
-import cn.hl.ox.log.MyLogger;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
@@ -45,69 +45,58 @@ JDK1.6加入了对Script(JSR223)的支持。这是一个脚本框架，提供了
  */
 public class Js {
 
-	private static void simple() {
-		long time = System.currentTimeMillis();
-		try {
-			// 获得一个JavaScript脚本引擎
-			ScriptEngineManager mgr = new ScriptEngineManager();
-			ScriptEngine engine = mgr.getEngineByName("JavaScript");
-			// 执行脚本 println('Hello ScriptEngine!');
-			engine.eval("function test(p){return 'This is test js in java, '+eval(p)}");
-			// 转化成父类(Invocable),因为ScriptEngine中没有调用js的方法
-			Invocable inv = (Invocable) engine;
+    private static void simple() {
+        execute("function someFunction(p){ return 'This is test js in java, ' + eval(p) }");
+    }
 
-			System.out.println("Init Cost: " + (System.currentTimeMillis() - time) + "ms.");
+    private static void advance() {
+        InputStream is = Js.class.getResourceAsStream("user.js");
+        execute(new InputStreamReader(is));
+    }
 
-			// 调用脚本得到返回值
-			String value;
-			long st;
-			for (int i = 0; i < 10; i++) {
-				st = System.currentTimeMillis();
-				value = (String) inv.invokeFunction("test", "(function(){return 'Inner Function Call " + i + "';})();");
-				System.out.println(value + " - Cost: " + (System.currentTimeMillis() - st) + "ms.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			System.out.println("Total Cost: " + (System.currentTimeMillis() - time) + "ms.");
-		}
-	}
+    private static void execute(Object script) {
+        long time = System.currentTimeMillis();
+        try {
+            if (!(script instanceof String) && !(script instanceof Reader)) {
+                throw new RuntimeException("Bad parameter(script)");
+            }
 
-	private static void advance() {
-		long time = System.currentTimeMillis();
-		try {
-			// 获得一个JavaScript脚本引擎
-			ScriptEngineManager mgr = new ScriptEngineManager();
-			ScriptEngine engine = mgr.getEngineByName("JavaScript");
-			// 执行脚本
-			Reader reader = new InputStreamReader(Js.class.getResourceAsStream("user.js"));
-			engine.eval(reader);
-			// 转化成父类(Invocable),因为ScriptEngine中没有调用js的方法
-			Invocable inv = (Invocable) engine;
+            // 获得一个JavaScript脚本引擎
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
+            // 执行脚本
+            if (script instanceof String) {
+                engine.eval((String) script);
+            }
+            if (script instanceof Reader) {
+                engine.eval((Reader) script);
+            }
+            // 转化成父类(Invocable),因为ScriptEngine中没有调用js的方法
+            Invocable inv = (Invocable) engine;
 
-			System.out.println("Init Cost: " + (System.currentTimeMillis() - time) + "ms.");
+            System.out.println("Init Cost: " + (System.currentTimeMillis() - time) + "ms.");
 
-			// 调用脚本得到返回值
-			String value;
-			long st;
-			for (int i = 0; i < 10; i++) {
-				st = System.currentTimeMillis();
-				value = (String) inv.invokeFunction("test", "(function(){return 'Inner Function Call " + i + "';})();");
-				System.out.println(value + " - Cost: " + (System.currentTimeMillis() - st) + "ms.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			System.out.println("Total Cost: " + (System.currentTimeMillis() - time) + "ms.");
-		}
-	}
+            // 调用脚本得到返回值
+            String value;
+            long st;
+            for (int i = 0; i < 10; i++) {
+                st = System.currentTimeMillis();
+                value = (String) inv.invokeFunction("someFunction", "( function(){ return 'Inner Function Call " + i + "' } )()");
+                System.out.println(value + " - Cost: " + (System.currentTimeMillis() - st) + "ms.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Total Cost: " + (System.currentTimeMillis() - time) + "ms.");
+        }
+    }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		simple();
-		BuddhaBless.printSplitLine();
-		advance();
-	}
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        simple();
+        BuddhaBless.printSplitLine();
+        advance();
+    }
 }

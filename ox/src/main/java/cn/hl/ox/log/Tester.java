@@ -1,5 +1,7 @@
 package cn.hl.ox.log;
 
+import cn.hl.ax.log.LogUtils;
+
 import java.io.File;
 import java.io.PrintStream;
 
@@ -99,9 +101,14 @@ public class Tester {
         //
         OUT.println("cn.hl.ox.log.Tester.main(Tester.java:101)");
 
+        LogUtils.debug("窗前明月光");
+        LogUtils.info("疑是地上霜");
+        LogUtils.warn("举头望明月");
+        LogUtils.error("低头思故乡");
+
         //test::LogUtils
-        MyLogger log = new MyLogger("test::LogUtils:中文测试");
+        /*MyLogger log = new MyLogger("test::LogUtils:中文测试");
         MyLogger log1 = new MyLogger("日志消息", log);
-        log1.printStackTrace(System.err);
+        log1.printStackTrace(System.err);*/
     }
 }

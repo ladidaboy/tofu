@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 
 public class TestObject extends MemUsed {
-	private String content = "测试用的数据对象哈!!!!";
+	private String content = "　测试用的数据对象哈 (16) ";
 	private HashMap<String, String> map = new HashMap<>();
 	
 	public TestObject() {
