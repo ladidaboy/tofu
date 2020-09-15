@@ -1,6 +1,6 @@
 package cn.hl.kit.ax.period;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 
 import java.util.regex.Pattern;
 
@@ -176,6 +176,6 @@ public class HPO {
 
     @Override
     public String toString() {
-        return "{ ⓘPERIOD: " + DataUtils.rightPadEx(period, 18) + " ⓥSortValue: " + sortValue + " }";
+        return "{ ⓘPERIOD: " + DataUtility.rightPadEx(period, 18) + " ⓥSortValue: " + sortValue + " }";
     }
 }

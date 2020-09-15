@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.string.txt;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 
 public class Tester {
     public static void display(int[][] dis, int rows, int cols, boolean flag) {
@@ -35,8 +35,8 @@ public class Tester {
     public static void main(String[] args) {
         String word2 = "我我我我我我违法3 放332 放费23 放\r\n请欺负求粉2我我我我我我我我我我";
         String word1 = "我的我付钱费2的我的我发请的我的钱费2的我的\t放前放去2求粉3放我的我的的我的发前2我的我的我放前2前的我我的发前2我的我的我的";
-        word1 = DataUtils.removeSign(word1);
-        word2 = DataUtils.removeSign(word2);
+        word1 = DataUtility.removeSign(word1);
+        word2 = DataUtility.removeSign(word2);
 
         // EditDistance 字符距离值
         int dis = EditDistance.process(word1, word2);

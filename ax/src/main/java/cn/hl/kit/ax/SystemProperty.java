@@ -6,7 +6,7 @@ public class SystemProperty {
     private static boolean even = false;
 
     private static void pln(String msg, String val) {
-        //msg = DataUtils.rightPadEx(msg, 32, ' ');
+        //msg = DataUtility.rightPadEx(msg, 32, ' ');
         msg += "\t " + val;
         if (even) {
             System.out.println("➢ " + msg);

@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.regexp;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 import cn.hl.kit.ox.BuddhaBless;
 
 import java.util.regex.MatchResult;
@@ -160,7 +160,7 @@ public class Test {
         Matcher m = p.matcher(str);
         while (m.find()) {
             String data = m.group(1).trim();
-            if (DataUtils.isNotBlank(data)) {
+            if (DataUtility.isNotBlank(data)) {
                 System.out.println(data);
             }
         }

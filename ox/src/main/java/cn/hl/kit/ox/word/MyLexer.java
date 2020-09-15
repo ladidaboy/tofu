@@ -1,6 +1,6 @@
 package cn.hl.kit.ox.word;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 import cn.hl.kit.ax.enums.EnumUtils;
 import cn.hl.kit.ox.BuddhaBless;
 import cn.hl.ox.file.FileUtil;
@@ -30,7 +30,7 @@ public class MyLexer extends TypeUtil {
         @Override
         public String toString() {
             String msg = "#" + (type.ordinal() < 10 ? "0" : "") + type.ordinal();
-            msg += " [" + DataUtils.rightPad(type.name(), 12) + "]";
+            msg += " [" + DataUtility.rightPad(type.name(), 12) + "]";
             msg += " ➢ " + (type == KeyType.WRAP ? "\\n" : chars);
             return msg;
         }

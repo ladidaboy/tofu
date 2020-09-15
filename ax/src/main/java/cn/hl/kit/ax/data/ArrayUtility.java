@@ -1,6 +1,5 @@
-package cn.hl.kit.ox.string;
+package cn.hl.kit.ax.data;
 
-import cn.hl.kit.ax.data.DataUtility;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
@@ -14,7 +13,6 @@ import java.util.Set;
 /**
  * @author hyman
  * @date 2019-08-28 13:25:25
- * @version $ Id: Arrays.java, v 0.1  hyman Exp $
  */
 public class ArrayUtility extends ArrayUtils {
     /**

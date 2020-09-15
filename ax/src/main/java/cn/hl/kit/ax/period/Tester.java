@@ -1,6 +1,6 @@
 package cn.hl.kit.ax.period;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class Tester {
         //
         StringBuilder sb = new StringBuilder("\r\n+---- RESULTS ----+\r\n");
         for (String ppp : ppps) {
-            sb.append("| " + DataUtils.rightPadEx(ppp, 16) + "|\r\n");
+            sb.append("| " + DataUtility.rightPadEx(ppp, 16) + "|\r\n");
         }
         sb.append("+-----------------+");
         System.out.println(sb);

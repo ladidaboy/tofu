@@ -1,6 +1,6 @@
 package cn.hl.kit.ax.http;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,60 +31,60 @@ public class HttpUtils {
         int maxLen = 33;
 
         // >> Request Information
-        if (DataUtils.statusHasFlag(type, DETAIL_REQUEST)) {
+        if (DataUtility.statusHasFlag(type, DETAIL_REQUEST)) {
             sb.append("\r\n\t[ Request information ]");
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("AuthType", maxLen)).append("\t: ").append(request.getAuthType());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("CharacterEncoding", maxLen)).append("\t: ").append(request.getCharacterEncoding());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContentLength", maxLen)).append("\t: ").append(request.getContentLength());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContentType", maxLen)).append("\t: ").append(request.getContentType());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContextPath", maxLen)).append("\t: ").append(request.getContextPath());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalAddr", maxLen)).append("\t: ").append(request.getLocalAddr());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalName", maxLen)).append("\t: ").append(request.getLocalName());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalPort", maxLen)).append("\t: ").append(request.getLocalPort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Method", maxLen)).append("\t: ").append(request.getMethod());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("PathInfo", maxLen)).append("\t: ").append(request.getPathInfo());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("PathTranslated", maxLen)).append("\t: ").append(request.getPathTranslated());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Protocol", maxLen)).append("\t: ").append(request.getProtocol());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("QueryString", maxLen)).append("\t: ").append(request.getQueryString());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteAddr", maxLen)).append("\t: ").append(request.getRemoteAddr());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteHost", maxLen)).append("\t: ").append(request.getRemoteHost());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemotePort", maxLen)).append("\t: ").append(request.getRemotePort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteUser", maxLen)).append("\t: ").append(request.getRemoteUser());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RequestedSessionId", maxLen)).append("\t: ").append(request.getRequestedSessionId());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RequestURI", maxLen)).append("\t: ").append(request.getRequestURI());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Scheme", maxLen)).append("\t: ").append(request.getScheme());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServerName", maxLen)).append("\t: ").append(request.getServerName());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServerPort", maxLen)).append("\t: ").append(request.getServerPort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServletPath", maxLen)).append("\t: ").append(request.getServletPath());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromCookie", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromCookie());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromUrl", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromUrl());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromURL", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromURL());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdValid", maxLen)).append("\t: ").append(request.isRequestedSessionIdValid());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isSecure", maxLen)).append("\t: ").append(request.isSecure());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("AuthType", maxLen)).append("\t: ").append(request.getAuthType());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("CharacterEncoding", maxLen)).append("\t: ").append(request.getCharacterEncoding());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ContentLength", maxLen)).append("\t: ").append(request.getContentLength());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ContentType", maxLen)).append("\t: ").append(request.getContentType());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ContextPath", maxLen)).append("\t: ").append(request.getContextPath());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("LocalAddr", maxLen)).append("\t: ").append(request.getLocalAddr());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("LocalName", maxLen)).append("\t: ").append(request.getLocalName());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("LocalPort", maxLen)).append("\t: ").append(request.getLocalPort());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("Method", maxLen)).append("\t: ").append(request.getMethod());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("PathInfo", maxLen)).append("\t: ").append(request.getPathInfo());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("PathTranslated", maxLen)).append("\t: ").append(request.getPathTranslated());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("Protocol", maxLen)).append("\t: ").append(request.getProtocol());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("QueryString", maxLen)).append("\t: ").append(request.getQueryString());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RemoteAddr", maxLen)).append("\t: ").append(request.getRemoteAddr());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RemoteHost", maxLen)).append("\t: ").append(request.getRemoteHost());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RemotePort", maxLen)).append("\t: ").append(request.getRemotePort());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RemoteUser", maxLen)).append("\t: ").append(request.getRemoteUser());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RequestedSessionId", maxLen)).append("\t: ").append(request.getRequestedSessionId());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("RequestURI", maxLen)).append("\t: ").append(request.getRequestURI());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("Scheme", maxLen)).append("\t: ").append(request.getScheme());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ServerName", maxLen)).append("\t: ").append(request.getServerName());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ServerPort", maxLen)).append("\t: ").append(request.getServerPort());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("ServletPath", maxLen)).append("\t: ").append(request.getServletPath());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("isRequestedSessionIdFromCookie", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromCookie());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("isRequestedSessionIdFromUrl", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromUrl());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("isRequestedSessionIdFromURL", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromURL());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("isRequestedSessionIdValid", maxLen)).append("\t: ").append(request.isRequestedSessionIdValid());
+            sb.append("\r\n\t - ").append(DataUtility.rightPadEx("isSecure", maxLen)).append("\t: ").append(request.isSecure());
         }
 
         String name;
         Object value;
         // >> Session Information
-        if (DataUtils.statusHasFlag(type, DETAIL_SESSION)) {
+        if (DataUtility.statusHasFlag(type, DETAIL_SESSION)) {
             sb.append("\r\n\t[ Session information ]");
             HttpSession session = request.getSession();
             Enumeration sessionNames = session.getAttributeNames();
             while (sessionNames.hasMoreElements()) {
                 name = (String) sessionNames.nextElement();
                 value = session.getAttribute(name);
-                sb.append("\r\n\t - ").append(DataUtils.rightPadEx(name, maxLen)).append("\t: ").append(value);
+                sb.append("\r\n\t - ").append(DataUtility.rightPadEx(name, maxLen)).append("\t: ").append(value);
             }
         }
 
         // >> Header Information
-        if (DataUtils.statusHasFlag(type, DETAIL_HEADER)) {
+        if (DataUtility.statusHasFlag(type, DETAIL_HEADER)) {
             sb.append("\r\n\t[ Header information ]");
             Enumeration headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 name = (String) headerNames.nextElement();
                 value = request.getHeader(name);
-                sb.append("\r\n\t - ").append(DataUtils.rightPadEx(name, maxLen)).append("\t: ").append(value);
+                sb.append("\r\n\t - ").append(DataUtility.rightPadEx(name, maxLen)).append("\t: ").append(value);
             }
         }
 
@@ -128,7 +128,7 @@ public class HttpUtils {
      */
     @SuppressWarnings("deprecation")
     public static boolean setCookie(HttpServletRequest request, HttpServletResponse response, String name, String value, int expiry) {
-        if (request == null && response == null && DataUtils.isBlank(name)) return false;
+        if (request == null && response == null && DataUtility.isBlank(name)) return false;
 
         try {
             value = URLEncoder.encode(value, "UTF-8");
@@ -154,7 +154,7 @@ public class HttpUtils {
      */
     @SuppressWarnings("deprecation")
     public static String readCookie(HttpServletRequest request, String name) {
-        if (request == null && DataUtils.isBlank(name)) return null;
+        if (request == null && DataUtility.isBlank(name)) return null;
         //
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
@@ -179,7 +179,7 @@ public class HttpUtils {
      * @return
      */
     public static boolean delCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        if (request == null && response == null && DataUtils.isBlank(name)) return false;
+        if (request == null && response == null && DataUtility.isBlank(name)) return false;
         //
         Cookie cookie = new Cookie(name, null);
         cookie.setDomain(getDomain(request));
@@ -197,7 +197,7 @@ public class HttpUtils {
      * @return
      */
     public static String htmlSpecialChars(String text) {
-        if (DataUtils.isBlank(text)) return text;
+        if (DataUtility.isBlank(text)) return text;
         text = text.replaceAll("&", "&amp;");
         text = text.replaceAll("<", "&lt;");
         text = text.replaceAll(">", "&gt;");

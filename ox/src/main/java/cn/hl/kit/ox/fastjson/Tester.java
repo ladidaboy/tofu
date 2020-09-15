@@ -1,7 +1,7 @@
 package cn.hl.kit.ox.fastjson;
 
 import cn.hl.kit.ax.data.AryTransfer;
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 import cn.hl.kit.ox.BuddhaBless;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.AfterFilter;
@@ -32,8 +32,8 @@ public class Tester {
     }
 
     private static UserBO createUser(UserBO user) {
-        long uid = DataUtils.randomInt(100, 999);
-        String name = "Nº " + AryTransfer.to26Ary(DataUtils.randomInt(1000, 9999));
+        long uid = DataUtility.randomInt(100, 999);
+        String name = "Nº " + AryTransfer.to26Ary(DataUtility.randomInt(1000, 9999));
 
         if (user == null) {
             user = new UserBO();

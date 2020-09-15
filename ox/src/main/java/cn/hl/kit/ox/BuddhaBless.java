@@ -1,6 +1,6 @@
 package cn.hl.kit.ox;
 
-import cn.hl.kit.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtility;
 
 public class BuddhaBless {
     private static final int MIN_LEN = 48;
@@ -14,8 +14,8 @@ public class BuddhaBless {
         tag = " " + tag + " ";
         len = Math.max(len, MIN_LEN) - 16;
         int lmin = tag.length(), lmax = (int) (Math.ceil(lmin / 2.0) * 2), smax = Math.max(len, lmax);
-        tag = DataUtils.leftPad(tag, lmax + (smax - lmax) / 2, "/");
-        tag = DataUtils.rightPad(tag, smax, "\\");
+        tag = DataUtility.leftPad(tag, lmax + (smax - lmax) / 2, "/");
+        tag = DataUtility.rightPad(tag, smax, "\\");
         tag = "____////" + tag + "\\\\\\\\____";
         try {
             Thread.sleep(5);
@@ -40,8 +40,8 @@ public class BuddhaBless {
         tag = tag == null ? "!" : tag.trim();
         len = Math.max(len, MIN_LEN);
         int lmin = tag.length(), lmax = Math.max(lmin + 18, len);
-        tag = DataUtils.rightPad("\\" + tag + "/", lmin + 10, "^");
-        tag = DataUtils.leftPad(tag, lmax, "^");
+        tag = DataUtility.rightPad("\\" + tag + "/", lmin + 10, "^");
+        tag = DataUtility.leftPad(tag, lmax, "^");
         try {
             Thread.sleep(5);
             if (msg.length > 0) {
@@ -63,7 +63,7 @@ public class BuddhaBless {
 
     public static void printSplitLine(int len) {
         len = Math.max(len, MIN_LEN) / 2 - 12;
-        String ss = DataUtils.rightPadEx("", len, '-');
+        String ss = DataUtility.rightPadEx("", len, '-');
         String ll = "( S P L I T ~ L I N E )-";
         //ll = "( Ⓢ ⓟ Ⓛ Ⓘ Ⓣ - Ⓛ Ⓘ Ⓝ Ⓔ )-";
         //ll = "( ⓢ Ⓟ ⓛ ⓘ ⓣ - ⓛ ⓘ ⓝ ⓔ )-";
@@ -83,7 +83,7 @@ public class BuddhaBless {
 
     public static void printSplitWave(int len) {
         len = Math.max(len, MIN_LEN) / 2 - 12;
-        String ss = DataUtils.rightPadEx("", len, '~');
+        String ss = DataUtility.rightPadEx("", len, '~');
         String ll = "( S P L I T - L I N E )~";
         try {
             Thread.sleep(16);
@@ -94,11 +94,11 @@ public class BuddhaBless {
     }
 
     public static void printLine(int len) {
-        System.out.println(DataUtils.rightPad("", len, '='));
+        System.out.println(DataUtility.rightPad("", len, '='));
     }
 
     public static void printWave(int len) {
-        System.out.println(DataUtils.rightPad("", len, '~'));
+        System.out.println(DataUtility.rightPad("", len, '~'));
     }
 
     public static void pray2theBuddha() {
