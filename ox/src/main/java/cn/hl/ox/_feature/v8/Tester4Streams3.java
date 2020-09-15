@@ -1,6 +1,6 @@
 package cn.hl.ox._feature.v8;
 
-import cn.hl.ax.data.AryTransfer;
+import cn.hl.kit.ax.data.AryTransfer;
 import cn.hl.ox.BuddhaBless;
 
 import java.util.ArrayList;

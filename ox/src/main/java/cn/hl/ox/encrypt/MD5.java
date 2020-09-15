@@ -1,6 +1,6 @@
 package cn.hl.ox.encrypt;
 
-import cn.hl.ax.ascii.Chinese2Pinyin;
+import cn.hl.kit.ax.ascii.Chinese2Pinyin;
 
 public class MD5 {
 	//下面这些S11-S44实际上是一个4*4的矩阵，在原始的C实现中是用#define 实现的， 

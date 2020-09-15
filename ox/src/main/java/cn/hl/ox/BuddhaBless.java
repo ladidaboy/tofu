@@ -1,6 +1,6 @@
 package cn.hl.ox;
 
-import cn.hl.ax.data.DataUtils;
+import cn.hl.kit.ax.data.DataUtils;
 
 public class BuddhaBless {
     private static final int MIN_LEN = 48;
