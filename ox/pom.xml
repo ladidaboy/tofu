@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.hl.kit</groupId>
-    <artifactId>hl-kit-ox</artifactId>
+    <groupId>cn.hl</groupId>
+    <artifactId>ox</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>cn.hl.kit.ox</name>
+    <name>cn.hl.ox</name>
     <description>Learning Materials</description>
 
     <dependencies>
         <dependency>
-            <groupId>cn.hl.kit</groupId>
-            <artifactId>hl-kit-ax</artifactId>
+            <groupId>cn.hl</groupId>
+            <artifactId>ax</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
