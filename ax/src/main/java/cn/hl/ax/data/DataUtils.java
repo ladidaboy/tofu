@@ -657,12 +657,12 @@ public class DataUtils {
     }
 
     /**
-     * 压缩文本(去除无效空行、空格等特殊字符)
+     * 压缩文本(去除无效空行等特殊字符,多个空格压缩成一个)
      * @param text 待处理文本
      * @return 压缩后文本
      */
     public static String compressText(String text) {
-        if (isInvalid(text)) {
+        if (isValid(text)) {
             // 移除 空行
             text = text.replaceAll("(?m)^\\s*$(\\n|\\r\\n)", "");
             // 换行 转成 空格
@@ -671,8 +671,20 @@ public class DataUtils {
             text = text.replaceAll("[\\s 　]", " ");
             // 多个空格(\t\n) 转成 一个空格
             text = text.replaceAll("\\p{Blank}{2,}", " ").trim();
+        }
+        return text;
+    }
+
+    /**
+     * 压缩文本(去除无效空行、空格等特殊字符)
+     * @param text 待处理文本
+     * @return 压缩后文本
+     */
+    public static String compressTextEx(String text) {
+        if (isValid(text)) {
+            text = compressText(text);
             // 移除 所有空格
-            //text = text.replaceAll(" ", "");
+            text = text.replaceAll(" ", "");
         }
         return text;
     }

@@ -13,11 +13,11 @@ import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -66,7 +66,7 @@ public class AssemblyReflection {
     private static final Pattern COMMON_FIELD_KEY     = Pattern.compile("([a-zA-Z]+)\\[(.*?)]");
     private static final Pattern EXTEND_FIELD_KEY     = Pattern.compile("([a-zA-Z]+)\\[\\*]\\{(.*?)}");
     private static final Pattern ACTUAL_GENERIC_CLASS = Pattern.compile("\\<(.*?)>");
-    private static final String  HASH_MAP_INIT_KEY    = "^HASH*MAP#INIT&KEY$";
+    private static final String  HASHMAP_INIT_KEY     = "^HASH*MAP#INIT&KEY$";
 
     public static class FieldValue {
         private Object   value;
@@ -111,7 +111,7 @@ public class AssemblyReflection {
             return fieldValue;
         }
 
-        sourceField = DataUtils.compressText(sourceField);
+        sourceField = DataUtils.compressTextEx(sourceField);
         Matcher matcher = EXTEND_FIELD_KEY.matcher(sourceField);
         if (matcher.find()) {
             if (matcher.end() < sourceField.length()) {
@@ -122,8 +122,8 @@ public class AssemblyReflection {
             // >> 获取列表属性key以及属性值
             sourceField = sourceField.substring(0, matcher.start()) + name;
             Object value = getObjectFieldValue(source, sourceField, false);
-            // >> 获取列表内对象的字段列表
-            String[] attributes = keys.split(",");
+            // >> 获取列表内对象的字段列表 keys.split(,)
+            String[] attributes = splitField(keys);
             //
             fieldValue.setValue(value);
             fieldValue.setNeedMap(true);
@@ -144,7 +144,7 @@ public class AssemblyReflection {
             return;
         }
 
-        targetField = DataUtils.compressText(targetField);
+        targetField = DataUtils.compressTextEx(targetField);
         Object value = sourceValue.getValue();
         if (value == null && filterNull) {
             return;
@@ -205,8 +205,8 @@ public class AssemblyReflection {
         String name = matcher.group(1), keys = matcher.group(2);
         // >> 获取列表属性key以及属性值
         String parentFieldName = targetField.substring(0, matcher.start()) + name;
-        // >> 获取列表内对象的字段列表
-        String[] targetAttributes = DataUtils.isValid(keys) ? keys.split(",") : new String[0];
+        // >> 获取列表内对象的字段列表 keys.split(,)
+        String[] targetAttributes = splitField(keys);
 
         int maxLength = Math.min(sourceAttributes.length, targetAttributes.length);
 
@@ -220,39 +220,33 @@ public class AssemblyReflection {
         Class<?> clz = parentList.get(0).getClass();
         parentList.clear();
 
+        Iterator<Object> iterator = null;
         if (sourceValue instanceof JSONArray) {
             JSONArray sourceArray = ((JSONArray) sourceValue);
-            for (int row = 0; row < sourceArray.size(); row++) {
-                if (maxLength == 0) {
-                    // anchorKey = tt[*]{} <-- sourceKey = ss[*]{fd}
-                    parentList.add(getObjectFieldValue(sourceArray.getJSONObject(row), sourceAttributes[0], false));
-                } else {
-                    // anchorKey = tt[*]{aa, b, c} <-- sourceKey = ss[*]{x, y, zz}
-                    Object element = ReflectUtil.newInstanceIfPossible(clz);
-                    parentList.add(element);
-                    for (int col = 0; col < maxLength; col++) {
-                        copyData(sourceArray.getJSONObject(row), sourceAttributes[col], element, targetAttributes[col], filterNull);
-                    }
-                }
-            }
+            iterator = sourceArray.iterator();
         } else if (sourceValue instanceof List) {
             List sourceList = (List) sourceValue;
-            for (int row = 0; row < sourceList.size(); row++) {
-                if (maxLength == 0) {
-                    // anchorKey = tt[*]{} <-- sourceKey = ss[*]{fd}
-                    parentList.add(getObjectFieldValue(sourceList.get(row), sourceAttributes[0], false));
-                } else {
-                    // anchorKey = tt[*]{aa, b, c} <-- sourceKey = ss[*]{x, y, zz}
-                    Object element = ReflectUtil.newInstanceIfPossible(clz);
-                    parentList.add(element);
-                    for (int col = 0; col < maxLength; col++) {
-                        copyData(sourceList.get(row), sourceAttributes[col], element, targetAttributes[col], filterNull);
-                    }
-                }
-            }
+            iterator = sourceList.iterator();
         } else {
             if (!filterNull) {
                 throw new AssemblyException("INVALID_SOURCE_TYPE(Support for ClassType: List/FastJSON.JSONArray)");
+            }
+        }
+        if (iterator != null) {
+            int index = 0;
+            while (iterator.hasNext()) {
+                Object elementSource = iterator.next();
+                if (maxLength == 0) {
+                    // anchorKey = tt[*]{} <-- sourceKey = ss[*]{fd}
+                    parentList.add(getObjectFieldValue(elementSource, sourceAttributes[0], false));
+                } else {
+                    // anchorKey = tt[*]{aa, b, c} <-- sourceKey = ss[*]{x, y, zz}
+                    Object elementTarget = ReflectUtil.newInstanceIfPossible(clz);
+                    FieldValue elementSourceValue = getFieldValue(elementSource, sourceAttributes[index]);
+                    setFieldValue(elementTarget, targetAttributes[index], elementSourceValue, filterNull);
+                    parentList.add(elementTarget);
+                }
+                index++;
             }
         }
     }
@@ -379,6 +373,7 @@ public class AssemblyReflection {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static Object getObject4NormalField(Object parentObject, String selfFieldName, boolean newInstanceWhenNull) {
         Object value = null;
         // 处理 FastJSON 数据类型
@@ -419,6 +414,7 @@ public class AssemblyReflection {
                 //fieldActualGenericClass = fieldActualGenericClass.substring(pos + 1).trim();
                 //Object ele = ReflectUtil.newInstance(fieldActualGenericClass);
                 value = new HashMap<>();
+                //((Map) value).put(HASHMAP_INIT_KEY, ele);
                 //((Map) value).put(null, ele);
             } else if (!ReflectionUtils.isBasicDataType(fieldClass)) {
                 value = ReflectUtil.newInstanceIfPossible(fieldClass);
@@ -432,23 +428,33 @@ public class AssemblyReflection {
         return value;
     }
 
-    public static void copyData(Object source, String sourceField, Object target, String targetField, boolean filterNull) {
-        if (source == null || target == null || DataUtils.isInvalid(sourceField) || DataUtils.isInvalid(targetField)) {
-            return;
+    private static String[] splitField(String fieldChars) {
+        if (DataUtils.isInvalid(fieldChars)) {
+            return new String[0];
         }
 
-        Object value = getObjectFieldValue(source, sourceField, false);
-        /*if (source instanceof JSONObject) {
-            value = ((JSONObject) source).get(sourceField);
-        } else if (source instanceof Map) {
-            value = ((Map) source).get(sourceField);
-        } else {
-            value = ReflectUtil.getFieldValue(source, sourceField);
-        }*/
-        if (filterNull && value == null) {
-            return;
+        fieldChars = DataUtils.compressTextEx(fieldChars);
+        List<String> fields = new ArrayList<>();
+        char[] chars = fieldChars.toCharArray();
+        String word = "";
+        int brackets = 0;
+        for (char ch : chars) {
+            if (ch == ',' && brackets == 0) {
+                // 切词
+                fields.add(word.trim());
+                word = "";
+            } else {
+                // 拼词
+                if (ch == '{') {
+                    brackets++;
+                } else if (ch == '}') {
+                    brackets--;
+                }
+                word += ch;
+            }
         }
-        ReflectUtil.setFieldValue(target, targetField, value);
+        fields.add(word.trim());
+        return fields.toArray(new String[0]);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -662,46 +668,26 @@ public class AssemblyReflection {
                 + "\"Remark\":\"1\"}},\"biz_pw_cx_assignPort\":{\"assignPort\":{\"DataCenter\":{\"label\":\"US-Los Angeles (Coresite)\","
                 + "\"key\":\"6\"},\"Device\":\"1\",\"remark\":\"1\"}}}\n";
 
-        /*String sourceKey = "biz_pw_cx_SAN.SAN_form2.tableList[*] { ContactPhone, ContactMail, EscalationLevel, ContactPerson }";
-        //String sourceKey = "biz_pw_cx_QA.qaForm0.OperateRecord";
-        String targetKey = "parent.children[*]{ remark, email, classNumber, name }";
-        //String targetKey = "parent.family[record].remark";
-
-        JSONObject source = JSON.parseObject(jsonChar);
-        FieldValue fieldValue = getFieldValue(source, sourceKey);
-        System.out.println(fieldValue);
-
-        Example target = new Example();
-        setFieldValue(target, targetKey, fieldValue, true);
-        System.out.println(target);*/
-
-        FlowRefectionMapper mapper;
         List<FlowRefectionMapper> mappers = new ArrayList<>();
         // 1
-        mapper = new FlowRefectionMapper();
-        mapper.setTargetKey("parent.children[*]{ remark, email, classNumber, name }");
-        mapper.setSourceKeys(
-                new String[] {"biz_pw_cx_SAN.SAN_form2.tableList[*] { ContactPhone, ContactMail, EscalationLevel, ContactPerson }"});
-        mapper.setFilterNull(false);
-        mappers.add(mapper);
+        FlowRefectionMapper.addIn(mappers, true, "parent.children[*]{ remark, email, classNumber, name }",
+                "biz_pw_cx_SAN.SAN_form2.tableList[*] { ContactPhone, ContactMail, EscalationLevel, ContactPerson }");
         // 2
-        mapper = new FlowRefectionMapper();
-        mapper.setTargetKey("parent.family[record].remark");
-        mapper.setSourceKeys(new String[] {"biz_pw_cx_QA.qaForm0.OperateRecord", "biz_pw_cx_monitor.cxMonitor.OperateRecord",
-                "biz_pw_cx_acceptance.acceptance1.OperateRecord"});
-        mapper.setFilterNull(true);
-        mappers.add(mapper);
+        FlowRefectionMapper.addIn(mappers, "parent.family[record].remark", "biz_pw_cx_QA.qaForm0.OperateRecord",
+                "biz_pw_cx_monitor.cxMonitor.OperateRecord", "biz_pw_cx_acceptance.acceptance1.OperateRecord");
         // 3
-        mapper = new FlowRefectionMapper();
-        mapper.setTargetKey("parent.family[record].name");
-        mapper.setSourceKeys(new String[] {"biz_pw_cx_inputResourceData.resourceForm1.device.label"});
-        mapper.setFilterNull(false);
-        mappers.add(mapper);
+        FlowRefectionMapper.addIn(mappers, true, "parent.family[record].name", "biz_pw_cx_inputResourceData.resourceForm1.device.label");
 
         JSONObject source = JSON.parseObject(jsonChar);
         Example target = new Example();
         doProcess(source, target, mappers);
-        System.out.println("➣ source \n" + JSON.toJSONString(source));
-        System.out.println("➢ target \n" + JSON.toJSONString(target, SerializerFeature.PrettyFormat));
+        System.out.println(target);
+
+        //
+        String json = "abc, some, multi[   *] {inner,     children     [*] { name, age}}";
+        String[] fields = splitField(json);
+        for (String field : fields) {
+            System.err.println("-> " + field);
+        }
     }
 }

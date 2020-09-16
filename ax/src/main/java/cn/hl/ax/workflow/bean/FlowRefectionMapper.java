@@ -77,10 +77,14 @@ public class FlowRefectionMapper {
     }
 
     public static void addIn(List<FlowRefectionMapper> mappers, String targetKey, String... sourceKeys) {
+        addIn(mappers, true, targetKey, sourceKeys);
+    }
+
+    public static void addIn(List<FlowRefectionMapper> mappers, boolean filterNull, String targetKey, String... sourceKeys) {
         if (mappers == null || DataUtils.isInvalid(targetKey) || DataUtils.isInvalid(sourceKeys)) {
             return;
         }
 
-        mappers.add(new FlowRefectionMapper(targetKey, sourceKeys, true));
+        mappers.add(new FlowRefectionMapper(targetKey, sourceKeys, filterNull));
     }
 }
