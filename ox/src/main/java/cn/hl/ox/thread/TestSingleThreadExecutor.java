@@ -20,8 +20,7 @@ public class TestSingleThreadExecutor {
     public static void main(String[] args) {
         // 创建一个单线程的线程池
         ExecutorService pool = Executors.newSingleThreadExecutor();
-        // new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new
-        // LinkedBlockingQueue<Runnable>()));
+        // new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()));
         for (int i = 0; i < 10; i++) {
             // 创建实现了Runnable接口对象，Thread对象当然也实现了Runnable接口
             Thread th = new Worker("User" + (i + 1));

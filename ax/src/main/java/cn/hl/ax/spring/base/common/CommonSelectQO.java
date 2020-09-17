@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ax.spring.base.common;
 
 import cn.hl.ax.spring.base.select.SelectKeywordQO;

@@ -1,4 +1,4 @@
-package cn.hl.ox.enume;
+package cn.hl.ox.enums;
 
 import cn.hl.ax.enums.EnumUtils;
 import cn.hl.ax.log.LogUtils;

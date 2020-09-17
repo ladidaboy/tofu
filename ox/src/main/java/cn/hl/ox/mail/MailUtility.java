@@ -1,4 +1,4 @@
-package cn.hl.ax.mail;
+package cn.hl.ox.mail;
 
 import sun.misc.BASE64Encoder;
 

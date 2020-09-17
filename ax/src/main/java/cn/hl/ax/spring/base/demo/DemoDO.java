@@ -1,10 +1,7 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ax.spring.base.demo;
 
 import cn.hl.ax.spring.base.bean.DO;
+import cn.hl.ax.spring.base.common.CommonTypicalDO;
 import cn.hl.ax.spring.base.select.Keyword;
 import cn.hl.ax.spring.base.typical.TypicalBaseDO;
 import lombok.Data;
@@ -16,7 +13,7 @@ import java.util.Date;
  * @date 2019-12-05 13:31:03
  */
 @Data
-public class DemoDO implements DO, TypicalBaseDO {
+public class DemoDO extends CommonTypicalDO implements DO, TypicalBaseDO {
     /**
      * 编号
      */

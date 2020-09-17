@@ -232,7 +232,7 @@ public class MySnmpWalk {
         String ip = "192.254.82.44";
         String community = "C#EDGE123";
         // 异步采集数据
-        //walkAsyn(ip, port, community, Mib2Library.Interfaces.getOID());
+        walkAsyn(ip, port, community, Mib2Library.Interfaces.getOID());
         // 同步采集数据
         walkSync(ip, port, community, Mib2Library.IfMIB.getOID());
     }

@@ -129,7 +129,7 @@ public class Tester {
 		 * 根据位置引用参数的另一种方法是使用 '<' ('\u003c') 标志，这将会重用以前格式说明符的参数。例如，以下两条语句产生的字符相同：
 		 */
 		System.out.println(String.format("%1$tm %1$te,%1$tY", Calendar.getInstance()));
-		//System.out.println(String.format("%<$tm %<$te,%<$tY", Calendar.getInstance()));
+		System.out.println(String.format("%<$tm %<$te,%<$tY", Calendar.getInstance()));
 		System.out.println("........................");
 
 	}

@@ -1,11 +1,7 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ax.spring.base.demo;
 
-import cn.hl.ax.spring.base.task.ThreadExecutorConfiguration;
 import cn.hl.ax.spring.base.demo.DemoTaskService.Param;
+import cn.hl.ax.spring.base.task.ThreadExecutorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

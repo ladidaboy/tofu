@@ -1,13 +1,7 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ax.spring.base.typical;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-
-import java.util.UUID;
 
 //import com.zenlayer.sso.util.SubjectUtil;
 
@@ -16,6 +10,7 @@ import java.util.UUID;
  * <ol>
  * <li>拥有默认操作行为的业务模型</li>
  * <li>可覆写相关方法以达到定制化操作数据</li>
+ * <li>必须复写</li>
  * </ol>
  * @author hyman
  * @date 2019-12-01 01:49:25
@@ -56,14 +51,9 @@ public interface TypicalBaseDO {
 
     /**
      * 获取当前用户编号
-     * @return
+     * <i>UUID.randomUUID().toString();</i>
+     * <i>SubjectUtil.getContextSubjectUserId();</i>
+     * @return UID
      */
-    default String getCurrentUserId() {
-        try {
-            //return SubjectUtil.getContextSubjectUserId();
-            return UUID.randomUUID().toString();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+    String getCurrentUserId();
 }

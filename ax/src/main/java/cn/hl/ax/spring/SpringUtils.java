@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2020 All Rights Reserved.
- */
 package cn.hl.ax.spring;
 
 import cn.hl.ax.spring.base.TransactionExecutor;

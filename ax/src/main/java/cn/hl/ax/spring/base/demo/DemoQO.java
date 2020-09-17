@@ -1,13 +1,9 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2019 All Rights Reserved.
- */
 package cn.hl.ax.spring.base.demo;
 
+import cn.hl.ax.spring.base.bean.QO;
 import cn.hl.ax.spring.base.select.SelectKeywordQO;
 import cn.hl.ax.spring.base.select.SelectOrderByQO;
 import cn.hl.ax.spring.base.select.SelectPageQO;
-import cn.hl.ax.spring.base.bean.QO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

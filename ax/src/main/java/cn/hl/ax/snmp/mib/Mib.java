@@ -1,5 +1,6 @@
 package cn.hl.ax.snmp.mib;
 
+import cn.hl.ax.CommonConst;
 import org.snmp4j.smi.OID;
 
 /**
@@ -96,7 +97,7 @@ public class Mib {
 
     private String formatOid() {
         if (oid == null) {
-            return "null";
+            return CommonConst.S_NIL;
         }
         int iMax = oid.length - 1;
         if (iMax == -1) {

@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2020 All Rights Reserved.
- */
 package cn.hl.ax.workflow;
 
 import cn.hl.ax.clone.ReflectionUtils;
@@ -13,6 +9,7 @@ import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -122,7 +119,7 @@ public class AssemblyReflection {
             // >> 获取列表属性key以及属性值
             sourceField = sourceField.substring(0, matcher.start()) + name;
             Object value = getObjectFieldValue(source, sourceField, false);
-            // >> 获取列表内对象的字段列表 keys.split(,)
+            // >> 获取列表内对象的字段列表 keys.split(,) [[!]]
             String[] attributes = splitField(keys);
             //
             fieldValue.setValue(value);
@@ -205,7 +202,7 @@ public class AssemblyReflection {
         String name = matcher.group(1), keys = matcher.group(2);
         // >> 获取列表属性key以及属性值
         String parentFieldName = targetField.substring(0, matcher.start()) + name;
-        // >> 获取列表内对象的字段列表 keys.split(,)
+        // >> 获取列表内对象的字段列表 keys.split(,) [[!]]
         String[] targetAttributes = splitField(keys);
 
         int maxLength = Math.min(sourceAttributes.length, targetAttributes.length);
@@ -233,7 +230,6 @@ public class AssemblyReflection {
             }
         }
         if (iterator != null) {
-            int index = 0;
             while (iterator.hasNext()) {
                 Object elementSource = iterator.next();
                 if (maxLength == 0) {
@@ -242,11 +238,12 @@ public class AssemblyReflection {
                 } else {
                     // anchorKey = tt[*]{aa, b, c} <-- sourceKey = ss[*]{x, y, zz}
                     Object elementTarget = ReflectUtil.newInstanceIfPossible(clz);
-                    FieldValue elementSourceValue = getFieldValue(elementSource, sourceAttributes[index]);
-                    setFieldValue(elementTarget, targetAttributes[index], elementSourceValue, filterNull);
+                    for (int idx = 0; idx < maxLength; idx++) {
+                        FieldValue elementSourceValue = getFieldValue(elementSource, sourceAttributes[idx]);
+                        setFieldValue(elementTarget, targetAttributes[idx], elementSourceValue, filterNull);
+                    }
                     parentList.add(elementTarget);
                 }
-                index++;
             }
         }
     }
@@ -375,7 +372,7 @@ public class AssemblyReflection {
 
     @SuppressWarnings("unchecked")
     private static Object getObject4NormalField(Object parentObject, String selfFieldName, boolean newInstanceWhenNull) {
-        Object value = null;
+        Object value;
         // 处理 FastJSON 数据类型
         if (parentObject instanceof JSONObject) {
             try {
@@ -670,10 +667,10 @@ public class AssemblyReflection {
 
         List<FlowRefectionMapper> mappers = new ArrayList<>();
         // 1
-        FlowRefectionMapper.addIn(mappers, true, "parent.children[*]{ remark, email, classNumber, name }",
+        FlowRefectionMapper.addIn(mappers, true, "children[*]{ remark, email, classNumber, name }",
                 "biz_pw_cx_SAN.SAN_form2.tableList[*] { ContactPhone, ContactMail, EscalationLevel, ContactPerson }");
         // 2
-        FlowRefectionMapper.addIn(mappers, "parent.family[record].remark", "biz_pw_cx_QA.qaForm0.OperateRecord",
+        FlowRefectionMapper.addIn(mappers, "letter", "biz_pw_cx_QA.qaForm0.OperateRecord",
                 "biz_pw_cx_monitor.cxMonitor.OperateRecord", "biz_pw_cx_acceptance.acceptance1.OperateRecord");
         // 3
         FlowRefectionMapper.addIn(mappers, true, "parent.family[record].name", "biz_pw_cx_inputResourceData.resourceForm1.device.label");
@@ -681,7 +678,7 @@ public class AssemblyReflection {
         JSONObject source = JSON.parseObject(jsonChar);
         Example target = new Example();
         doProcess(source, target, mappers);
-        System.out.println(target);
+        System.out.println(JSON.toJSONString(target, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue));
 
         //
         String json = "abc, some, multi[   *] {inner,     children     [*] { name, age}}";

@@ -1,5 +1,6 @@
 package cn.hl.ax.log;
 
+import cn.hl.ax.CommonConst;
 import cn.hutool.core.util.ArrayUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
  */
 public class LogUtils {
     private static final String SP = "\r\n  ";
-    private static final String NL = "null";
 
     /**
      * 获取简单错误日志
@@ -34,7 +34,7 @@ public class LogUtils {
         }
 
         String m = th.getMessage(), c = th.getClass().getSimpleName();
-        if (m == null || "".equals(m) || NL.equals(m)) {
+        if (m == null || "".equals(m) || CommonConst.S_NIL.equals(m)) {
             return generateSimpleMessages(th.getCause());
         }
 

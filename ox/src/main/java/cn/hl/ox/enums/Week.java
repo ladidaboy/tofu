@@ -1,4 +1,4 @@
-package cn.hl.ox.enume;
+package cn.hl.ox.enums;
 
 /**
  * @author hyman

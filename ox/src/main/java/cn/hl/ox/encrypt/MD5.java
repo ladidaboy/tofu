@@ -21,7 +21,8 @@ public class MD5 {
 	static final int S42 = 10;
 	static final int S43 = 15;
 	static final int S44 = 21;
-	static final byte[] PADDING = { -128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	static final byte[] PADDING = {
+			-128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0 };
@@ -87,7 +88,7 @@ public class MD5 {
 	/**
 	 * 类MD5最主要的公共方法，入口参数是你想要进行MD5变换的字符串
 	 * 返回的是变换完的结果，这个结果是从公共成员digestHexStr取得的．
-	 * @param String inbuf
+	 * @param input
 	 * @return  String
 	 **/
 	public static String getMD5String(String input) {

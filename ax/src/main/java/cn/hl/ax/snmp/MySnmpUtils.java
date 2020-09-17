@@ -1,5 +1,6 @@
 package cn.hl.ax.snmp;
 
+import cn.hl.ax.CommonConst;
 import cn.hl.ax.log.LogUtils;
 import cn.hl.ax.snmp.mib.Mib;
 import cn.hl.ax.snmp.mib.Mib2Library;
@@ -257,7 +258,7 @@ public class MySnmpUtils {
             list = tableUtils.getTable(target, columns, null, null);
             if (list.size() == 0 || (list.size() == 1 && list.get(0).getColumns() == null)) {
                 TableEvent ee = list.size() == 0 ? null : list.get(0);
-                String result = "NULL";
+                String result = CommonConst.S_NIL;
                 String oids = "[";
                 for (OID oid : columns) {
                     Mib mib = Mib2Library.getMib(oid);

@@ -23,71 +23,71 @@ import org.junit.Test;
  *
  */
 public class JUnit4Test {
-	private MyNumber myNumber;
+    private MyNumber myNumber;
 
-	@BeforeClass
-	// 在所有方法执行之前执行
-	public static void globalInit() {
-		System.out.println(">>>> init all method...");
-	}
+    @BeforeClass
+    // 在所有方法执行之前执行
+    public static void globalInit() {
+        System.out.println(">>>> init all method...");
+    }
 
-	@AfterClass
-	// 在所有方法执行之后执行
-	public static void globalDestory() {
-		System.out.println("<<<< destory all method...");
-	}
+    @AfterClass
+    // 在所有方法执行之后执行
+    public static void globalDestory() {
+        System.out.println("<<<< destory all method...");
+    }
 
-	@Before
-	// 在每个测试方法之前执行
-	public void setUp() {
-		System.out.println(">> start setUp method");
-		myNumber = new MyNumber();
-	}
+    @Before
+    // 在每个测试方法之前执行
+    public void setUp() {
+        System.out.println(">> start setUp method");
+        myNumber = new MyNumber();
+    }
 
-	@After
-	// 在每个测试方法之后执行
-	public void tearDown() {
-		System.out.println("<< end tearDown method");
-	}
+    @After
+    // 在每个测试方法之后执行
+    public void tearDown() {
+        System.out.println("<< end tearDown method");
+    }
 
-	@Test
-	// 设置限定测试方法的运行时间 如果超出则返回错误
-	public void testAdd() {
-		System.out.println("testAdd method");
-		int result = myNumber.add(2, 3);
-		Assert.assertEquals(5, result);
-	}
+    @Test
+    // 设置限定测试方法的运行时间 如果超出则返回错误
+    public void testAdd() {
+        System.out.println("testAdd method");
+        int result = myNumber.add(2, 3);
+        Assert.assertEquals(5, result);
+    }
 
-	@Test
-	public void testSubtract() {
-		System.out.println("testSubtract method");
-		int result = myNumber.subtract(1, 2);
-		Assert.assertEquals(-1, result);
-	}
+    @Test
+    public void testSubtract() {
+        System.out.println("testSubtract method");
+        int result = myNumber.subtract(1, 2);
+        Assert.assertEquals(-1, result);
+    }
 
-	@Test(timeout = 1)
-	public void testMultiply() {
-		System.out.println("testMultiply method");
-		int result = myNumber.multiply(2, 3);
-		Assert.assertEquals(6, result);
-	}
+    @Test(timeout = 1)
+    public void testMultiply() {
+        System.out.println("testMultiply method");
+        int result = myNumber.multiply(2, 3);
+        Assert.assertEquals(6, result);
+    }
 
-	@Test
-	public void testDivide() {
-		System.out.println("testDivide method");
-		int result = 0;
-		try {
-			result = myNumber.divide(6, 2);
-		} catch (Exception e) {
-			Assert.fail();
-		}
-		Assert.assertEquals(3, result);
-	}
+    @Test
+    public void testDivide() {
+        System.out.println("testDivide method");
+        int result = 0;
+        try {
+            result = myNumber.divide(6, 2);
+        } catch (Exception e) {
+            Assert.fail();
+        }
+        Assert.assertEquals(3, result);
+    }
 
-	@Test(expected = Exception.class)
-	public void testDivide2() throws Exception {
-		System.out.println("testDivide2 method");
-		myNumber.divide(6, 0);
-		Assert.fail("test Error");
-	}
+    @Test(expected = Exception.class)
+    public void testDivide2() throws Exception {
+        System.out.println("testDivide2 method");
+        myNumber.divide(6, 0);
+        Assert.fail("test Error");
+    }
 }

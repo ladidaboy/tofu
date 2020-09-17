@@ -6,7 +6,7 @@ import org.junit.Assert;
 /**
  * <style>i{color:red;padding-left:24px;}</style>
  * 我们通常使用junit 3.8
- * 
+ *
  * <br>(1)、使用junit3.x版本进行单元测试时，测试类必须要继承于TestCase父类；
  * <br>(2)、测试方法需要遵循的原则：
  * <br><i>A、public的</i>
@@ -19,35 +19,35 @@ import org.junit.Assert;
  *
  */
 public class JUnit3Test extends TestCase {
-	private MyNumber myNumber;
+    private MyNumber myNumber;
 
-	public JUnit3Test(String name) {
-		super(name);
-	}
+    public JUnit3Test(String name) {
+        super(name);
+    }
 
-	// 在每个测试方法执行 [之前] 都会被调用
-	@Override
-	public void setUp() throws Exception {
-		System.out.println("欢迎使用Junit进行单元测试");
-		myNumber = new MyNumber();
-	}
+    // 在每个测试方法执行 [之前] 都会被调用
+    @Override
+    public void setUp() throws Exception {
+        System.out.println("欢迎使用Junit进行单元测试");
+        myNumber = new MyNumber();
+    }
 
-	// 在每个测试方法执行 [之后] 都会被调用
-	@Override
-	public void tearDown() throws Exception {
-		System.out.println("Junit单元测试结束!!!");
-	}
+    // 在每个测试方法执行 [之后] 都会被调用
+    @Override
+    public void tearDown() throws Exception {
+        System.out.println("Junit单元测试结束!!!");
+    }
 
-	public void testDivideByZero() {
-		Throwable te = null;
-		try {
-			myNumber.divide(6, 0);
-			Assert.fail("测试失败");
-		} catch (Exception e) {
-			e.printStackTrace();
-			te = e;
-		}
-		Assert.assertEquals(Exception.class, te.getClass());
-		Assert.assertEquals("除数不能为 0 ", te.getMessage());
-	}
+    public void testDivideByZero() {
+        Throwable te = null;
+        try {
+            myNumber.divide(6, 0);
+            Assert.fail("测试失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            te = e;
+        }
+        Assert.assertEquals(Exception.class, te.getClass());
+        Assert.assertEquals("除数不能为 0 ", te.getMessage());
+    }
 }
