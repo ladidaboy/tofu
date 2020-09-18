@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +35,7 @@ import java.util.List;
  * @author hyman
  * @date 2019-12-25 18:40:54
  */
-public interface CommonAtomicController<B extends Serializable, Q, MNG extends AbstractManager<B, Q>> extends Controller {
+public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>> extends Controller {
     /**
      * 获取基于AbstractManager的业务层对象
      * @return &lt;? extends AbstractManager&gt;
