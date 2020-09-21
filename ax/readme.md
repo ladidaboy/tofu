@@ -128,3 +128,14 @@
 - @ApiModel：用于响应类上，表示一个返回响应数据的信息（这种一般用在post创建的时候，使用@RequestBody这样的场景，请求参数无法使用@ApiImplicitParam注解进行描述的时候）
   - @ApiModelProperty：用在属性上，描述响应类的属性
 
+
+#Spring 注解说明
+| 注解 | 含义 |
+|-----|-----|
+| @Component | 最普通的组件，可以被注入到spring容器进行管理 |
+| @Repository | 作用于持久层(DAO) |
+| @Service | 作用于业务逻辑层(Manager & Service & Integration) |
+| @Controller | 作用于表现层(Controller) |
+
+
+.
