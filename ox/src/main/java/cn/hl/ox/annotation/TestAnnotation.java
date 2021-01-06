@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 
 /**
  * @author hyman
- * @date 2019-10-15 13:57:00
  * @version $ Id: TestAnnotation.java, v 0.1  hyman Exp $
+ * @date 2019-10-15 13:57:00
  */
 @MyClassAnnotation(desc = "The Class", uri = "cn.hl.ox.annotation")
 @MyClassAndMethodAnnotation(classType = EnumType.UTIL)
@@ -34,7 +34,7 @@ public class TestAnnotation {
     @MyClassAndMethodAnnotation(classType = EnumType.SERVICE)
     @MyMethodAnnotation(desc = "The Class Method sayHello", uri = "cn.hl.ox.annotation#sayHello")
     public void sayHello(String name) {
-        if (name == null || name.equals("")) {
+        if (name == null || name.length() == 0) {
             System.out.println("hello world!");
         } else {
             System.out.println(name + " : Hi!");
