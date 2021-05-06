@@ -2,17 +2,20 @@ package cn.hl.ox.clone.bean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Bean Son
  */
 public class BS extends BP {
-    private String  sId;
-    private String  name;
-    private Date    birthday;
-    private Integer age;
-    private Boolean sex;
-    private Double  height;
+    private String   sId;
+    private String   name;
+    private Date     birthday;
+    private Integer  age;
+    private Boolean  sex;
+    private Double   height;
+    private List<BS> list;
+    private List<BS> subs;
 
     public String getsId() {
         return sId;
@@ -60,6 +63,22 @@ public class BS extends BP {
 
     public void setHeight(Double height) {
         this.height = height;
+    }
+
+    public List<BS> getList() {
+        return list;
+    }
+
+    public void setList(List<BS> list) {
+        this.list = list;
+    }
+
+    public List<BS> getSubs() {
+        return subs;
+    }
+
+    public void setSubs(List<BS> subs) {
+        this.subs = subs;
     }
 
     @Override

@@ -193,7 +193,7 @@ public class IfTypeVF extends VariableFormatter {
         int val = vb.getVariable().toInt();
         String txt = vb.getVariable().toString();
         if (address != null && address.contains("127.0.0.1")) {
-            String tags[] = {"*", "softwareLoopback", "ethernetCsmacd"};
+            String[] tags = {"*", "softwareLoopback", "ethernetCSMACD"};
             return val >= tags.length ? txt : tags[val];
         }
         String tag = valueMap.get(val);

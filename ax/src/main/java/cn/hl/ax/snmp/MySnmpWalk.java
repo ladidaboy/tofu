@@ -229,7 +229,7 @@ public class MySnmpWalk {
 
     public static void main(String[] args) {
         int port = 161;
-        String ip = "192.254.82.44";
+        String ip = "192.254.81.147";
         String community = "C#EDGE123";
         // 异步采集数据
         walkAsyn(ip, port, community, Mib2Library.Interfaces.getOID());

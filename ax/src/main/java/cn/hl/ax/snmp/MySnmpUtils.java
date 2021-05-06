@@ -661,7 +661,7 @@ public class MySnmpUtils {
 
     public static void main(String[] args) {
         // 107.155.19.82
-        String ip = "109.244.46.18";
+        String ip = "192.254.81.147";
         int port = 161;
         // public C#Edge123
         String community = "C#EDGE123";
@@ -684,6 +684,8 @@ public class MySnmpUtils {
                 Mib2Library.IfIndex.getOID(), //
                 Mib2Library.IfName.getOID(), //
                 Mib2Library.IfAlias.getOID(),//
+                Mib2Library.IfAdminStatus.getOID(),//
+                Mib2Library.IfOperStatus.getOID(),//
                 Mib2Library.IfHCInOctets.getOID(), //
                 //Mib2Library.IpAdEntAddr.getOID(), //
                 //Mib2Library.IpAdEntNetMask.getOID(), //

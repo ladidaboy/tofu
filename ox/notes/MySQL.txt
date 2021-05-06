@@ -205,6 +205,14 @@ SELECT * FROM my_cte;
 |   10 |
 +------+
 10 rows in set (0,00 sec)
+
+-- 获取多列最大最小值
+SELECT GREATEST(1,2,3,4);   结果：4
+SELECT LEAST(1,2,3,4);      结果：1
+
+-- 获取一列中最大最小值
+SELECT MAX(col1);  
+SELECT MIN(col1); 
 ================================================================================================================================
 程序里报错：java.sql.BatchUpdateException: Lock wait timeout exceeded; try restarting transaction
 重启服务后也没有效果，然后查看mysql官方文档如下：
