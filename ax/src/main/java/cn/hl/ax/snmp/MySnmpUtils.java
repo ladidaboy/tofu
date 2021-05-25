@@ -1,6 +1,5 @@
 package cn.hl.ax.snmp;
 
-import cn.hl.ax.CommonConst;
 import cn.hl.ax.log.LogUtils;
 import cn.hl.ax.snmp.mib.Mib;
 import cn.hl.ax.snmp.mib.Mib2Library;
@@ -23,16 +22,19 @@ import org.snmp4j.util.TableUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hyman
  * @date 2019-08-01 15:10:16
- * @version $ Id: SNMPUtils.java, v 0.1  hyman Exp $
  */
 public class MySnmpUtils {
     /**
      * 检查对象是否为空
+     *
      * @param obj 待测试对象
      * @return true:空, false:非空
      */
@@ -42,15 +44,17 @@ public class MySnmpUtils {
 
     /**
      * 检查文本是否为空
+     *
      * @param txt 待测试文本
      * @return true:空, false:非空
      */
     private static boolean checkEmpty(String txt) {
-        return txt == null || txt.trim().equals("");
+        return txt == null || "".equals(txt.trim());
     }
 
     /**
      * 检查数组是否为空
+     *
      * @param arr 待测试数组
      * @return true:空, false:非空
      */
@@ -59,108 +63,47 @@ public class MySnmpUtils {
     }
 
     /**
-     * 将16进制的时间转换成标准的时间格式
-     * @param hexString 16进制时间
-     * @return 标准时间
-     */
-    private static String hexToDateTime(String hexString) {
-        if (checkEmpty(hexString)) {
-            return "";
-        }
-        String dateTime = "";
-        try {
-            byte[] values = OctetString.fromHexString(hexString).getValue();
-            int year, month, day, hour, minute;
-
-            year = values[0] * 256 + 256 + values[1];
-            month = values[2];
-            day = values[3];
-            hour = values[4];
-            minute = values[5];
-
-            char[] formatStr = new char[22];
-            int index = 3;
-            int temp = year;
-            for (; index >= 0; index--) {
-                formatStr[index] = (char) (48 + (temp - temp / 10 * 10));
-                temp /= 10;
-            }
-            formatStr[4] = '-';
-            index = 6;
-            temp = month;
-            for (; index >= 5; index--) {
-                formatStr[index] = (char) (48 + (temp - temp / 10 * 10));
-                temp /= 10;
-            }
-            formatStr[7] = '-';
-            index = 9;
-            temp = day;
-            for (; index >= 8; index--) {
-                formatStr[index] = (char) (48 + (temp - temp / 10 * 10));
-                temp /= 10;
-            }
-            formatStr[10] = ' ';
-            index = 12;
-            temp = hour;
-            for (; index >= 11; index--) {
-                formatStr[index] = (char) (48 + (temp - temp / 10 * 10));
-                temp /= 10;
-            }
-            formatStr[13] = ':';
-            index = 15;
-            temp = minute;
-            for (; index >= 14; index--) {
-                formatStr[index] = (char) (48 + (temp - temp / 10 * 10));
-                temp /= 10;
-            }
-            dateTime = new String(formatStr, 0, formatStr.length).substring(0, 16);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dateTime;
-    }
-
-    /**
      * String左对齐
      */
-    public static String padLeft(String src, int len, char ch) {
+    private static String padLeft(String src, int len, char ch) {
         int diff = len - src.length();
         if (diff <= 0) {
             return src;
         }
 
-        char[] charr = new char[len];
-        System.arraycopy(src.toCharArray(), 0, charr, 0, src.length());
+        char[] chars = new char[len];
+        System.arraycopy(src.toCharArray(), 0, chars, 0, src.length());
         for (int i = src.length(); i < len; i++) {
-            charr[i] = ch;
+            chars[i] = ch;
         }
-        return new String(charr);
+        return new String(chars);
     }
 
     /**
      * String右对齐
      */
-    public static String padRight(String src, int len, char ch) {
+    private static String padRight(String src, int len, char ch) {
         int diff = len - src.length();
         if (diff <= 0) {
             return src;
         }
 
-        char[] charr = new char[len];
-        System.arraycopy(src.toCharArray(), 0, charr, diff, src.length());
+        char[] chars = new char[len];
+        System.arraycopy(src.toCharArray(), 0, chars, diff, src.length());
         for (int i = 0; i < diff; i++) {
-            charr[i] = ch;
+            chars[i] = ch;
         }
-        return new String(charr);
+        return new String(chars);
     }
 
     /**
      * 打印TableEvent对象
+     *
      * @param events TableEvents
      */
-    public static void printTableEvents(List<TableEvent> events, OID[] oids) {
+    private static void printTableEvents(List<TableEvent> events, OID[] oids) {
         if (!checkEmpty(events)) {
-            LogUtils.printLabel("--------========>>>> Print TableEvent`s <<<<========--------");
+            LogUtils.printLine("----------------========>>>> Print [ Table Events ] <<<<========----------------");
             int rows = events.size(), cols = oids.length;
             String[][] data = new String[rows + 1][cols];
             int[] colLenMax = new int[cols];
@@ -193,47 +136,84 @@ public class MySnmpUtils {
             String line = "+", template = "|";
             for (int len : colLenMax) {
                 line = padLeft(line, line.length() + len + 2, '-') + "+";
-                template += " %" + len + "s |";
+                template += " \033[34;0m%" + len + "s\033[0m |";
             }
-            LogUtils.printLabel(line);
-            LogUtils.printLabel(String.format(template, data[0]));
-            LogUtils.printLabel(line);
-            for (int r = 1; r < rows; r++) {
-                LogUtils.printLabel(String.format(template, data[r]));
+            for (int r = 0; r <= rows; r++) {
+                if (r < 2) {
+                    System.out.println(line);
+                }
+                System.out.println(String.format(template, data[r]));
             }
-            LogUtils.printLabel(line);
+            LogUtils.printCornerTitleEx("Found " + rows + " TableEvents", line.length());
         }
     }
 
     /**
      * 打印ResponseEvent对象
+     *
      * @param response PDU.Response
      */
-    public static void printPduResponse(PDU response) {
+    private static void printPduResponse(PDU response) {
         if (response != null) {
-            LogUtils.printLabel("--------========>>>> Print PDU.Response <<<<========--------");
+            LogUtils.printLine("----------------========>>>> Print { PDU.Response } <<<<========----------------");
             for (VariableBinding vb : response.getVariableBindings()) {
                 LogUtils.printLabel(Mib2Library.formatVB(vb));
             }
         }
     }
 
+    /**
+     * 翻译OID
+     *
+     * @param columns OIDs
+     */
+    private static String translateOid(OID... columns) {
+        return "[" + Arrays.stream(columns).map(oid -> {
+            Mib mib = Mib2Library.getMib(oid);
+            String name = oid.toString();
+            if (mib != null) {
+                name = name.replace(mib.getOidText(), mib.getName());
+            }
+            return "'" + name + "'";
+        }).collect(Collectors.joining(",")) + "]";
+    }
+
+    /**
+     * 打印错误日志
+     *
+     * @param template 模版
+     * @param messages 参数
+     */
+    private static void printError(String template, Object... messages) {
+        Exception exp = null;
+        if (!checkEmpty(messages)) {
+            int size = messages.length;
+            if (messages[size - 1] instanceof Exception) {
+                exp = (Exception) messages[size - 1];
+            }
+            template = String.format(template, messages);
+        }
+        LogUtils.printError(template, exp);
+    }
+
     // ------------------------------------------------------------------------------------------------------------------------
 
     /**
      * 采集目标设备的OID信息
-     * @param ip 网络地址
-     * @param port 地址端口
+     *
+     * @param ip        网络地址
+     * @param port      地址端口
      * @param community 共同体
-     * @param columns OID信息
+     * @param columns   OID信息
      * @return TableEvent信息
      */
-    public static List<TableEvent> collect(String ip, Integer port, String community, OID[] columns) {
+    public static List<TableEvent> collect(String ip, Integer port, String community, OID[] columns, Object... debug) {
         if (checkEmpty(ip) || checkEmpty(port) || checkEmpty(community) || checkEmpty(columns)) {
             return null;
         }
 
-        List<TableEvent> list = null;
+        String cols = translateOid(columns);
+        List<TableEvent> list;
         TransportMapping transport = null;
         Snmp snmp = null;
         try {
@@ -247,37 +227,31 @@ public class MySnmpUtils {
             String address = "udp:" + ip + "/" + port;
             //>> 设定CommunityTarget
             CommunityTarget target = new CommunityTarget();
-            target.setAddress(GenericAddress.parse(address)); //设定远程主机的地址
-            target.setCommunity(new OctetString(community)); //设置snmp共同体
-            target.setVersion(SnmpConstants.version2c); //设置使用的snmp版本
-            target.setTimeout(5000); //设置超时的时间(millisecond)
-            target.setRetries(2); //设置超时重试次数
+            //设定远程主机的地址
+            target.setAddress(GenericAddress.parse(address));
+            //设置snmp共同体
+            target.setCommunity(new OctetString(community));
+            //设置使用的snmp版本
+            target.setVersion(SnmpConstants.version2c);
+            //设置超时的时间(millisecond)
+            target.setTimeout(5000);
+            //设置超时重试次数
+            target.setRetries(2);
 
             PDUFactory factory = new DefaultPDUFactory(PDU.GETBULK);
             TableUtils tableUtils = new TableUtils(snmp, factory);
             list = tableUtils.getTable(target, columns, null, null);
             if (list.size() == 0 || (list.size() == 1 && list.get(0).getColumns() == null)) {
                 TableEvent ee = list.size() == 0 ? null : list.get(0);
-                String result = CommonConst.S_NIL;
-                String oids = "[";
-                for (OID oid : columns) {
-                    Mib mib = Mib2Library.getMib(oid);
-                    String name = oid.toString();
-                    if (mib != null) {
-                        name = name.replace(mib.getOidText(), mib.getName());
-                    }
-                    oids += "'" + name + "', ";
-                }
-                oids = oids.substring(0, oids.length() - 2) + "]";
+                String result = "Data not found";
                 if (ee != null) {
                     result = ee.getErrorMessage() + "(Status:" + ee.getStatus() + ")";
                 }
-                String msg = String.format("SnmpUtils.collect('%s', %d, '%s', %s) -> %s", ip, port, community, oids, result);
-                System.err.println(msg);
-                list = null;
+                throw new Exception(result);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            list = null;
+            printError("MySnmpUtils.collect('%s', %d, '%s', %s) error", ip, port, community, cols, e);
         } finally {
             try {
                 if (transport != null) {
@@ -286,28 +260,32 @@ public class MySnmpUtils {
                 if (snmp != null) {
                     snmp.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ee) {
+                printError("MySnmpUtils.collect('%s', %d, '%s', %s) [transport/snmp].close failed", ip, port, community, cols, ee);
             }
         }
 
-        printTableEvents(list, columns);
+        if (debug.length > 0) {
+            printTableEvents(list, columns);
+        }
         return list;
     }
 
     /**
      * 采集目标设备的OID信息
-     * @param ip 网络地址
-     * @param port 地址端口
+     *
+     * @param ip        网络地址
+     * @param port      地址端口
      * @param community 共同体
-     * @param columns OID信息
+     * @param columns   OID信息
      * @return response信息
      */
-    public static PDU snmpGet(String ip, Integer port, String community, OID[] columns) {
+    public static PDU snmpGet(String ip, Integer port, String community, OID[] columns, Object... debug) {
         if (checkEmpty(ip) || checkEmpty(port) || checkEmpty(community) || checkEmpty(columns)) {
             return null;
         }
 
+        String cols = translateOid(columns);
         TransportMapping transport = null;
         PDU response = null;
         try {
@@ -316,11 +294,16 @@ public class MySnmpUtils {
 
             //>> 定义远程主机的地址
             UdpAddress udpAddress = new UdpAddress(InetAddress.getByName(ip), port);
-            myTarget.setAddress(udpAddress); //设定远程主机的地址
-            myTarget.setCommunity(new OctetString(community)); //设置snmp共同体
-            myTarget.setVersion(SnmpConstants.version2c); //设置使用的snmp版本
-            myTarget.setTimeout(5 * 1000); //设置超时的时间
-            myTarget.setRetries(2); //设置超时重试次数
+            //设定远程主机的地址
+            myTarget.setAddress(udpAddress);
+            //设置snmp共同体
+            myTarget.setCommunity(new OctetString(community));
+            //设置使用的snmp版本
+            myTarget.setVersion(SnmpConstants.version2c);
+            //设置超时的时间
+            myTarget.setTimeout(5 * 1000);
+            //设置超时重试次数
+            myTarget.setRetries(2);
 
             //>> 设定采取的协议，设定传输协议为UDP
             transport = new DefaultUdpTransportMapping();
@@ -341,15 +324,19 @@ public class MySnmpUtils {
             ResponseEvent responseEvent = protocol.send(request, myTarget);
             //>> 通过ResponseEvent对象来获得SNMP请求的应答pdu，方法：public PDU getResponse()
             response = responseEvent.getResponse();
+
+            if (!checkEmpty(debug)) {
+                printPduResponse(response);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s) error", ip, port, community, cols, e);
         } finally {
             //调用close()方法释放该进程
             if (transport != null) {
                 try {
                     transport.close();
-                } catch (IOException e) {
-                    transport = null;
+                } catch (IOException ee) {
+                    printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s) transport.close failed", ip, port, community, cols, ee);
                 }
             }
         }
@@ -358,18 +345,20 @@ public class MySnmpUtils {
 
     /**
      * 设置目标设备的OID信息
-     * @param ip 网络地址
-     * @param port 地址端口
+     *
+     * @param ip        网络地址
+     * @param port      地址端口
      * @param community 共同体
-     * @param key OID信息
-     * @param val OID数值
+     * @param key       OID信息
+     * @param val       OID数值
      * @return response信息
      */
-    public static boolean snmpSet(String ip, Integer port, String community, OID key, String val) {
+    public static boolean snmpSet(String ip, Integer port, String community, OID key, String val, Object... debug) {
         if (checkEmpty(ip) || checkEmpty(port) || checkEmpty(community) || checkEmpty(key)) {
             return false;
         }
 
+        String cols = translateOid(key);
         TransportMapping transport = null;
         try {
             CommunityTarget target = new CommunityTarget();
@@ -390,17 +379,23 @@ public class MySnmpUtils {
 
             ResponseEvent event = snmp.send(pdu, target);
             PDU response = event.getResponse();
-            LogUtils.printLabel("SnmpSet Result: " + response.getErrorStatusText() + "(" + response.getErrorStatus() + ")");
+            if (checkEmpty(response)) {
+                throw new Exception("Not found response");
+            }
+            if (!checkEmpty(debug)) {
+                String result = response.getErrorStatusText() + "(Status:" + response.getErrorStatus() + ")";
+                printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') -> %s", ip, port, community, cols, val, result);
+            }
             return response.getErrorStatus() == 0;
-        } catch (Exception ex) {
-            LogUtils.printError("SNMP Get Error!", ex);
+        } catch (Exception e) {
+            printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') error", ip, port, community, cols, val, e);
             return false;
         } finally {
             if (transport != null) {
                 try {
                     transport.close();
-                } catch (IOException iox) {
-                    transport = null;
+                } catch (IOException ee) {
+                    printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') transport.close failed", ip, port, community, cols, val, ee);
                 }
             }
         }
@@ -408,253 +403,92 @@ public class MySnmpUtils {
     // ------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * 获取CPU利用率方法
+     * 获取CPU利用率
      */
     public static List<TableEvent> collectCPU(String ip, int port, String community) {
-        List<TableEvent> list = collect(ip, port, community, new OID[] {new OID("1.3.6.1.2.1.25.3.3.1.2")});
-        /*if (!checkEmpty(list)) {
-            int percentage = 0;
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values != null) {
-                    percentage += Integer.parseInt(values[0].getVariable().toString());
-                }
-            }
-            LogUtils.printLabel("CPU利用率为：" + percentage / list.size() + "%");
-        }*/
-        return list;
+        LogUtils.printLabel("[DEMO] 获取CPU利用率");
+        return collect(ip, port, community, new OID[] {new OID("1.3.6.1.2.1.25.3.3.1.2")}, true);
     }
 
     /**
-     * 获取内存信息方法
+     * 获取存储信息
      */
-    public static List<TableEvent> collectMemory(String ip, int port, String community) {
-        OID[] oids = {//
-                new OID("1.3.6.1.2.1.25.2.3.1.2"), //type 存储单元类型
-                new OID("1.3.6.1.2.1.25.2.3.1.3"), //descr
-                new OID("1.3.6.1.2.1.25.2.3.1.4"), //unit 存储单元大小
-                new OID("1.3.6.1.2.1.25.2.3.1.5"), //size 总存储单元数
-                new OID("1.3.6.1.2.1.25.2.3.1.6"), //used 使用存储单元数
-        };
-        String PHYSICAL_MEMORY_OID = "1.3.6.1.2.1.25.2.1.2";//物理存储
-        String VIRTUAL_MEMORY_OID = "1.3.6.1.2.1.25.2.1.3"; //虚拟存储
-        List<TableEvent> list = collect(ip, port, community, oids);
-        /*if (!checkEmpty(list)) {
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                int unit = Integer.parseInt(values[2].getVariable().toString()); //unit 存储单元大小
-                int totalSize = Integer.parseInt(values[3].getVariable().toString()); //size 总存储单元数
-                int usedSize = Integer.parseInt(values[4].getVariable().toString()); //used  使用存储单元数
-                String oid = values[0].getVariable().toString();
-                if (PHYSICAL_MEMORY_OID.equals(oid)) {
-                    LogUtils.printLabel("物理内存大小(PHYSICAL_MEMORY)：" + (long) totalSize * unit / (1024 * 1024 * 1024) + "G \t内存使用率为：" + (long) usedSize * 100 / totalSize + "%");
-                } else if (VIRTUAL_MEMORY_OID.equals(oid)) {
-                    LogUtils.printLabel("虚拟内存大小(VIRTUAL_MEMORY) ：" + (long) totalSize * unit / (1024 * 1024 * 1024) + "G \t内存使用率为：" + (long) usedSize * 100 / totalSize + "%");
-                }
-            }
-        }*/
-        return list;
+    public static List<TableEvent> collectMemoryAndDisk(String ip, int port, String community) {
+        LogUtils.printLabel("[DEMO] 获取存储信息");
+        OID[] oids = {new OID("1.3.6.1.2.1.25.2.3.1.2"), new OID("1.3.6.1.2.1.25.2.3.1.3"), new OID("1.3.6.1.2.1.25.2.3.1.4"), new OID(
+                "1.3.6.1.2.1.25.2.3.1.5"), new OID("1.3.6.1.2.1.25.2.3.1.6"),};
+        return collect(ip, port, community, oids, true);
     }
 
     /**
-     * 获取磁盘相关信息
-     */
-    public static List<TableEvent> collectDisk(String ip, int port, String community) {
-        String DISK_OID = "1.3.6.1.2.1.25.2.1.4";
-        OID[] oids = {//
-                new OID("1.3.6.1.2.1.25.2.3.1.2"), //type 存储单元类型
-                new OID("1.3.6.1.2.1.25.2.3.1.3"), //descr
-                new OID("1.3.6.1.2.1.25.2.3.1.4"), //unit 存储单元大小
-                new OID("1.3.6.1.2.1.25.2.3.1.5"), //size 总存储单元数
-                new OID("1.3.6.1.2.1.25.2.3.1.6"), //used 使用存储单元数
-        };
-        List<TableEvent> list = collect(ip, port, community, oids);
-        /*if (!checkEmpty(list)) {
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null || !DISK_OID.equals(values[0].getVariable().toString())) {
-                    continue;
-                }
-                int unit = Integer.parseInt(values[2].getVariable().toString()); //unit 存储单元大小
-                int totalSize = Integer.parseInt(values[3].getVariable().toString()); //size 总存储单元数
-                int usedSize = Integer.parseInt(values[4].getVariable().toString()); //used  使用存储单元数
-                LogUtils.printLabel(values[1].getVariable().toString() + "   磁盘大小：" + (long) totalSize * unit / (1024 * 1024 * 1024) + "G   磁盘使用率为：" + (long) usedSize * 100 / totalSize + "%");
-            }
-        }*/
-        return list;
-    }
-
-    /**
-     * 服务器进程集合信息
+     * 获取服务器进程集合
      */
     public static List<TableEvent> collectProcess(String ip, int port, String community) {
-        OID[] oids = {//
-                new OID("1.3.6.1.2.1.25.4.2.1.1"), //index
-                new OID("1.3.6.1.2.1.25.4.2.1.2"), //name
-                new OID("1.3.6.1.2.1.25.4.2.1.4"), //run path
-                new OID("1.3.6.1.2.1.25.4.2.1.6"), //type
-                new OID("1.3.6.1.2.1.25.5.1.1.1"), //cpu
-                new OID("1.3.6.1.2.1.25.5.1.1.2"), //memory
-        };
-        List<TableEvent> list = collect(ip, port, community, oids);
-        /*if (!checkEmpty(list)) {
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                String sp = "  ";
-                String[] name = Mib2Library.fmtVB(values[1]);
-                String[] cpu = Mib2Library.fmtVB(values[4]);
-                String[] memory = Mib2Library.fmtVB(values[5]);
-                String[] path = Mib2Library.fmtVB(values[2]);
-                LogUtils.printLabel(name[0] + "(name)->" + name[1] + sp + cpu[0] + "(cpu)->" + cpu[1] + sp + memory[0] + "(memory)->" + memory[1] + sp + path[0] + "(path)->" + path[1]);
-            }
-        }*/
-        return list;
+        LogUtils.printLabel("[DEMO] 获取服务器进程集合");
+        OID[] oids = {new OID("1.3.6.1.2.1.25.4.2.1.1"), new OID("1.3.6.1.2.1.25.4.2.1.2"), new OID("1.3.6.1.2.1.25.4.2.1.4"), new OID(
+                "1.3.6.1.2.1.25.4.2.1.6"), new OID("1.3.6.1.2.1.25.5.1.1.1"), new OID("1.3.6.1.2.1.25.5.1.1.2"),};
+        return collect(ip, port, community, oids, true);
     }
 
     /**
-     * 服务器系统服务集合
+     * 获取服务器系统服务集合
      */
     public static List<TableEvent> collectService(String ip, int port, String community) {
+        LogUtils.printLabel("[DEMO] 获取服务器系统服务集合");
         OID[] oids = {new OID("1.3.6.1.4.1.77.1.2.3.1.1")};
-        List<TableEvent> list = collect(ip, port, community, oids);
-        /*if (!checkEmpty(list)) {
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                String name = values[0].getVariable().toString();//name
-                LogUtils.printLabel("名称--->" + name);//中文乱码，需要转为utf-8编码
-            }
-        }*/
-        return list;
+        //中文乱码，需要转为utf-8编码
+        return collect(ip, port, community, oids, true);
     }
 
     /**
-     * 服务器接口集合
+     * 获取服务器接口集合
      */
     public static List<TableEvent> collectInterface(String ip, int port, String community) {
-        OID[] ifOIDs = {//
-                new OID("1.3.6.1.2.1.2.2.1.1"),  //Index
-                new OID("1.3.6.1.2.1.2.2.1.2"),  //descr
-                new OID("1.3.6.1.2.1.2.2.1.3"),  //type
-                new OID("1.3.6.1.2.1.2.2.1.5"),  //speed
-                new OID("1.3.6.1.2.1.2.2.1.6"),  //mac
-                new OID("1.3.6.1.2.1.2.2.1.7"),  //adminStatus
-                new OID("1.3.6.1.2.1.2.2.1.8"),  //operStatus
-                //
-                new OID("1.3.6.1.2.1.2.2.1.10"), //inOctets
-                new OID("1.3.6.1.2.1.2.2.1.16"), //outOctets
-                //new OID("1.3.6.1.2.1.2.2.1.14"), //inError
-                //new OID("1.3.6.1.2.1.2.2.1.20"), //outError
-                //new OID("1.3.6.1.2.1.2.2.1.13"), //inDiscard
-                //new OID("1.3.6.1.2.1.2.2.1.19"), //outDiscard
-                //new OID("1.3.6.1.2.1.2.2.1.11"), //inUcastPkts
-                //new OID("1.3.6.1.2.1.2.2.1.17"), //outUcastPkts
-                //new OID("1.3.6.1.2.1.2.2.1.12"), //inNUcastPkts
-                //new OID("1.3.6.1.2.1.2.2.1.18"), //outNUcastPkts
-        };
-        List<TableEvent> ifList = collect(ip, port, community, ifOIDs);
-        /*if (!checkEmpty(ifList)) {
-            for (TableEvent event : ifList) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                LogUtils.printLabel("Interface -> index=" + Mib2Library.fmtVB(values[0])[1]//
-                        + ", descr=" + Mib2Library.fmtVB(values[1])[1] //
-                        + ", type=" + Mib2Library.fmtVB(values[2])[1] //
-                        + ", speed=" + Mib2Library.fmtVB(values[3])[1] //
-                        + ", mac=" + Mib2Library.fmtVB(values[4])[1] //
-                        + ", adminStatus=" + Mib2Library.fmtVB(values[5])[1] //
-                        + ", operStatus=" + Mib2Library.fmtVB(values[6])[1]);
-            }
-        }*/
+        LogUtils.printLabel("[DEMO] 获取服务器接口集合");
+        OID[] ifOids = {new OID("1.3.6.1.2.1.2.2.1.1"), new OID("1.3.6.1.2.1.2.2.1.2"), new OID("1.3.6.1.2.1.2.2.1.3"), new OID(
+                "1.3.6.1.2.1.2.2.1.5"), new OID("1.3.6.1.2.1.2.2.1.6"), new OID("1.3.6.1.2.1.2.2.1.7"), new OID("1.3.6.1.2.1.2.2.1.8"),
+                new OID("1.3.6.1.2.1.2.2.1.10"), new OID("1.3.6.1.2.1.2.2.1.16"),};
+        List<TableEvent> ifList = collect(ip, port, community, ifOids, true);
+        if (ifList == null) {
+            ifList = new ArrayList<>();
+        }
 
-        OID[] ipOIDs = {//
-                new OID("1.3.6.1.2.1.4.20.1.1"), //ipAdEntAddr
-                new OID("1.3.6.1.2.1.4.20.1.2"), //ipAdEntIfIndex
-                new OID("1.3.6.1.2.1.4.20.1.3"), //ipAdEntNetMask
-        };
-        List<TableEvent> ipList = collect(ip, port, community, ipOIDs);
-        /*if (!checkEmpty(ipList)) {
-            for (TableEvent event : ipList) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                LogUtils.printLabel("IP -> ipAdEntAddr=" + Mib2Library.fmtVB(values[0])[1] //
-                        + ", ipAdEntIfIndex=" + Mib2Library.fmtVB(values[1])[1] //
-                        + ", ipAdEntNetMask=" + Mib2Library.fmtVB(values[2])[1]);
-            }
-        }*/
+        OID[] ipOids = {new OID("1.3.6.1.2.1.4.20.1.1"), new OID("1.3.6.1.2.1.4.20.1.2"), new OID("1.3.6.1.2.1.4.20.1.3"),};
+        List<TableEvent> ipList = collect(ip, port, community, ipOids, true);
+        if (!checkEmpty(ipList)) {
+            ifList.addAll(ipList);
+        }
+
         return ifList;
     }
 
     /**
-     * 服务器端口集合
+     * 获取服务器端口集合
      */
     public static List<TableEvent> collectPort(String ip, int port, String community) {
-        OID[] tcpOIDs = {//
-                new OID("1.3.6.1.2.1.6.13.1.3"), //port
-                new OID("1.3.6.1.2.1.6.13.1.1"), //status
-        };
-        List<TableEvent> tcpList = collect(ip, port, community, tcpOIDs);
-        /*if (!checkEmpty(tcpList)) {
-            for (TableEvent event : tcpList) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                int status = Integer.parseInt(values[0].getVariable().toString());
-                LogUtils.printLabel("status--->" + status + "   TCP_port--->" + values[1].getVariable().toString());
-            }
-        }*/
+        LogUtils.printLabel("[DEMO] 获取服务器端口集合");
+        OID[] tcpOids = {new OID("1.3.6.1.2.1.6.13.1.3"), new OID("1.3.6.1.2.1.6.13.1.1")};
+        List<TableEvent> tcpList = collect(ip, port, community, tcpOids, true);
+        if (tcpList == null) {
+            tcpList = new ArrayList<>();
+        }
 
-        OID[] udpOIDs = {new OID("1.3.6.1.2.1.7.5.1.2")};
-        List<TableEvent> udpList = collect(ip, port, community, udpOIDs);
-        /*if (!checkEmpty(udpList)) {
-            for (TableEvent event : udpList) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                String name = values[0].getVariable().toString(); //name
-                LogUtils.printLabel("UDP_port--->" + name);
-            }
-        }*/
+        OID[] udpOids = {new OID("1.3.6.1.2.1.7.5.1.2")};
+        List<TableEvent> udpList = collect(ip, port, community, udpOids, true);
+        if (!checkEmpty(udpList)) {
+            tcpList.addAll(udpList);
+        }
+
         return tcpList;
     }
 
     /**
-     * 服务器安装软件集合
+     * 获取服务器安装软件集合
      */
     public static List<TableEvent> collectSoft(String ip, int port, String community) {
-        OID[] oids = {//
-                new OID("1.3.6.1.2.1.25.6.3.1.2"), //software
-                new OID("1.3.6.1.2.1.25.6.3.1.4"), //type
-                new OID("1.3.6.1.2.1.25.6.3.1.5"), //install date
-        };
-        List<TableEvent> list = collect(ip, port, community, oids);
-        /*if (!checkEmpty(list)) {
-            for (TableEvent event : list) {
-                VariableBinding[] values = event.getColumns();
-                if (values == null) {
-                    continue;
-                }
-                String software = values[0].getVariable().toString(); //software
-                String type = values[1].getVariable().toString(); //type
-                String date = values[2].getVariable().toString(); //date
-                LogUtils.printLabel("软件名称--->" + software + "  type--->" + type + "  安装时间--->" + hexToDateTime(date.replace("'", "")));
-            }
-        }*/
-        return list;
+        LogUtils.printLabel("[DEMO] 获取服务器安装软件集合");
+        OID[] oids = {new OID("1.3.6.1.2.1.25.6.3.1.2"), new OID("1.3.6.1.2.1.25.6.3.1.4"), new OID("1.3.6.1.2.1.25.6.3.1.5")};
+        return collect(ip, port, community, oids, true);
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
@@ -665,10 +499,9 @@ public class MySnmpUtils {
         int port = 161;
         // public C#Edge123
         String community = "C#EDGE123";
-        //
+
         //collectCPU(ip, port, community);
-        //collectMemory(ip, port, community);
-        //collectDisk(ip, port, community);
+        //collectMemoryAndDisk(ip, port, community);
         //collectProcess(ip, port, community);
         //collectService(ip, port, community);
         //collectInterface(ip, port, community);
@@ -677,24 +510,21 @@ public class MySnmpUtils {
 
         //OID oid = Mib2Library.SysName.getOID();
         //snmpSet(ip, port, community, oid, "Test.System.Name");
-        //PDU retGet = snmpGet(ip, port, community, new OID[] {oid});
-        //printPduResponse(retGet);
+        //snmpGet(ip, port, community, new OID[] {oid}, true);
 
-        OID[] oids = { //
-                Mib2Library.IfIndex.getOID(), //
-                Mib2Library.IfName.getOID(), //
-                Mib2Library.IfAlias.getOID(),//
-                Mib2Library.IfAdminStatus.getOID(),//
-                Mib2Library.IfOperStatus.getOID(),//
-                Mib2Library.IfHCInOctets.getOID(), //
-                //Mib2Library.IpAdEntAddr.getOID(), //
-                //Mib2Library.IpAdEntNetMask.getOID(), //
-                //Mib2Library.IpRouteDest.getOID(), //
-                //Mib2Library.IpRouteIfIndex.getOID(), //
+        OID[] oids = {
+                /*!*/Mib2Library.IfIndex.getOID(),
+                /*!*/Mib2Library.IfName.getOID(),
+                /*!*/Mib2Library.IfAlias.getOID(),
+                /*!*/Mib2Library.IfAdminStatus.getOID(),
+                /*!*/Mib2Library.IfOperStatus.getOID(),
+                /*!*/Mib2Library.IfHCInOctets.getOID(),
+                ///*!*/Mib2Library.IpAdEntAddr.getOID(),
+                ///*!*/Mib2Library.IpAdEntNetMask.getOID(),
+                ///*!*/Mib2Library.IpRouteDest.getOID(),
+                ///*!*/Mib2Library.IpRouteIfIndex.getOID(),
         };
-        PDU result = snmpGet(ip, port, community, oids);
-        printPduResponse(result);
-        List<TableEvent> list = collect(ip, port, community, oids);
-        LogUtils.printLabel("collect : " + list.size());
+        snmpGet(ip, port, community, oids, true);
+        collect(ip, port, community, oids, true);
     }
 }

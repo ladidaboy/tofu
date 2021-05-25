@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 /**
  * @author hyman
  * @date 2020-09-14 14:38:34
- * @version $ Id: LogUtils.java, v 0.1  hyman Exp $
  */
 public class LogUtils {
     private static final String SP = "\r\n  ";
 
     /**
      * 获取简单错误日志
+     *
      * @param ths 错误对象
      * @return 错误日志
      */
@@ -46,7 +46,7 @@ public class LogUtils {
         return m;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // 打印控制台日志
 
@@ -125,8 +125,18 @@ public class LogUtils {
         System.out.println(ArrayUtil.join(ms, "\n"));
     }
 
+    // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\
+
+    public static void printLine(String msg) {
+        System.out.println(STYLE_LIN + msg + STYLE_CLR);
+    }
+
     public static void printLabel(String msg) {
         System.out.println(STYLE_LBL + msg + STYLE_CLR);
+    }
+
+    public static void printWarn(String msg) {
+        System.out.println(STYLE_WRN + msg + STYLE_CLR);
     }
 
     public static String printError(String msg, Exception... ee) {

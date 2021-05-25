@@ -6,8 +6,10 @@ import cn.hl.ax.snmp.formatter.IfTypeVF;
 import cn.hl.ax.snmp.formatter.IpForwardingVF;
 import cn.hl.ax.snmp.formatter.IpNetToMediaTypeVF;
 import cn.hl.ax.snmp.formatter.IpRouteTypeVF;
+import cn.hl.ax.snmp.formatter.OidInfoVF;
 import cn.hl.ax.snmp.formatter.TcpConnStateVF;
 import cn.hl.ax.snmp.formatter.TcpRtoAlgorithmVF;
+import cn.hl.ax.snmp.formatter.TimeTicksVF;
 import cn.hl.ax.snmp.formatter.VariableFormatter;
 import cn.hl.ax.snmp.mib.Mib.AccessMode;
 import org.snmp4j.smi.OID;
@@ -21,18 +23,27 @@ import java.util.Map;
 /**
  * @author hyman
  * @date 2019-08-05 16:18:44
- * @version $ Id: Mib2Library.java, v 0.1  hyman Exp $
  */
 public class Mib2Library {
     private static int                            maxL = 0;
     private static List<Mib>                      mibs = new ArrayList<>();
     private static Map<String, VariableFormatter> maps = new HashMap<>();
-
+    
     public static Mib put(String name, int[] oid, String dataType, AccessMode accessMode, String description) {
         Mib mib = new Mib(name, oid, dataType, accessMode.getValue(), description);
         maxL = Math.max(maxL, name.length() + 4);
         mibs.add(mib);
         return mib;
+    }
+
+    public static Mib put(String name, String oid, String dataType, AccessMode accessMode, String description) {
+        String[] cols = oid.split("[.]");
+        int[] oids = new int[cols.length];
+        int idx = 0;
+        for (String col : cols) {
+            oids[idx++] = Integer.parseInt(col);
+        }
+        return put(name, oids, dataType, accessMode, description);
     }
 
     public static Mib getMib(OID oid) {
@@ -366,9 +377,11 @@ public class Mib2Library {
      1.3.6.1.4.1.2011 - Huawei-3Com
      1.3.6.1.4.1.2021 - RedHat Linux
      1.3.6.1.4.1.2312 - RedHat Software
+
+     http://oidref.com/1.3.6.1.2.1
      */
     /**系统组 (.1.3.6.1.2.1.1)*/
-    public static final Mib System                       = put("system", new int[] {1, 3, 6, 1, 2, 1, 1}, "OctetString", AccessMode.All, "[系统组]");
+    public static final Mib System                       = put("system", "1.3.6.1.2.1.1", "OctetString", AccessMode.All, "[系统组]");
     public static final Mib SysDescr                     = put("sysDescr", System.child(1), "OctetString", AccessMode.Read, "关于该设备或实体的描述，如设备类型、硬件特性、操作系统信息等");
     public static final Mib SysObjectID                  = put("sysObjectID", System.child(2), "ObjectIdentifier", AccessMode.Read, "设备厂商的授权标识符");
     public static final Mib SysUpTime                    = put("sysUpTime", System.child(3), "TimeTicks", AccessMode.Read, "从系统(代理)的网络管理部分最后一次重新初始化以来，经过的时间量");
@@ -384,7 +397,7 @@ public class Mib2Library {
     public static final Mib SysORDescr                   = put("sysORDescr", SysOREntry.child(3), "OctetString", AccessMode.Read, "对象资源的描述，类似sysDescr对象");
     public static final Mib SysORUpTime                  = put("sysORUpTime", SysOREntry.child(4), "TimeStamp", AccessMode.Read, "包含该实例(该行)最后更新或实例化时，sysUpTime对象的值");
     /**接口组 (.1.3.6.1.2.1.2)*/
-    public static final Mib Interfaces                   = put("interfaces", new int[] {1, 3, 6, 1, 2, 1, 2}, "OctetString", AccessMode.All, "[接口组]");
+    public static final Mib Interfaces                   = put("interfaces", "1.3.6.1.2.1.2", "OctetString", AccessMode.All, "[接口组]");
     public static final Mib IfNumber                     = put("ifNumber", Interfaces.child(1), "Integer", AccessMode.Read, "本地系统中包含的网络接口总数, 解释：本机返回2");
     public static final Mib IfTable                      = put("ifTable", Interfaces.child(2), "Sequence.ifEntry", AccessMode.None, "该表的接口表项的一行");
     public static final Mib IfEntry                      = put("ifEntry", IfTable.child(1), "Sequence", AccessMode.None, "一个指定的接口表项，包含所有该对象下定义的对象");
@@ -411,14 +424,14 @@ public class Mib2Library {
     public static final Mib IfOutQlen                    = put("ifOutQlen", IfEntry.child(21), "Gauge", AccessMode.Read, "该设备上的输出报文队列长度");
     public static final Mib IfSpecific                   = put("ifSpecific", IfEntry.child(22), "ObjectIdentifier", AccessMode.Read, "MIB引用定义，指向一个用于实现该网络接口的特定介质类型");
     /**地址转换组 (.1.3.6.1.2.1.3) (!反对使用!)*/
-    public static final Mib AT                           = put("at", new int[] {1, 3, 6, 1, 2, 1, 3}, "OctetString", AccessMode.All, "[地址转换组]");
+    public static final Mib AT                           = put("at", "1.3.6.1.2.1.3", "OctetString", AccessMode.All, "[地址转换组]");
     public static final Mib atTable                      = put("atTable", AT.child(1), "Sequence.atEntry", AccessMode.Read, "网络地址和物理(数据链路)地址之间的一个映射");
     public static final Mib atEntry                      = put("atEntry", atTable.child(1), "Sequence", AccessMode.Read, "包含下面列出的其余对象的一个特定映射");
     public static final Mib atIfIndex                    = put("atIfIndex", atEntry.child(1), "Integer", AccessMode.All, "指向每个特定映射");
     public static final Mib atPhysAddress                = put("atPhysAddress", atEntry.child(2), "PhysAddress", AccessMode.All, "介质相关的物理地址(是一个有效的IP地址)");
     public static final Mib atNetAddress                 = put("atNetAddress", atEntry.child(3), "NetworkAddress", AccessMode.All, "介质相关物理地址所关联的IP地址");
     /**网际协议组 (.1.3.6.1.2.1.4)*/
-    public static final Mib IP                           = put("ip", new int[] {1, 3, 6, 1, 2, 1, 4}, "OctetString", AccessMode.All, "[网际协议组]");
+    public static final Mib IP                           = put("ip", "1.3.6.1.2.1.4", "OctetString", AccessMode.All, "[网际协议组]");
     public static final Mib IpForwarding                 = put("ipForwarding", IP.child(1), "Integer", AccessMode.All, "指出系统是否作为一个IP网关(路由器)或者仅作为一个不提供转发服务的正规主机。可取的值有Forwarding(1)和notForwarding(2)");
     public static final Mib IpDefaultTTL                 = put("ipDefaultTTL", IP.child(2), "Integer", AccessMode.All, "置于IP报文的TTL字段中的生存期值");
     public static final Mib IpInReceives                 = put("ipInReceives", IP.child(3), "Counter", AccessMode.Read, "从系统所有可操作接口接收的输入报文的总数");
@@ -468,7 +481,7 @@ public class Mib2Library {
     public static final Mib IpNetToMediaNetAddress       = put("ipNetToMediaNetAddress", IpNetToMediaEntry.child(3), "IpAddress", AccessMode.All, "对应该介质相关物理地址的IP地址");
     public static final Mib IpNetToMediaType             = put("ipNetToMediaType", IpNetToMediaEntry.child(4), "Counter", AccessMode.All, "产生地址映射的类型。类型包括：other(1)、invalid(2)、dynamic(3)和static(4)");
     /**ICMP组 (.1.3.6.1.2.1.5)*/
-    public static final Mib ICMP                         = put("ICMP", new int[] {1, 3, 6, 1, 2, 1, 5}, "OctetString", AccessMode.All, "[ICMP组]");
+    public static final Mib ICMP                         = put("ICMP", "1.3.6.1.2.1.5", "OctetString", AccessMode.All, "[ICMP组]");
     public static final Mib IcmpInMsgs                   = put("icmpInMsgs", ICMP.child(1), "Counter", AccessMode.Read, "接收到的ICMP消息的数量");
     public static final Mib IcmpInErrors                 = put("icmpInErrors", ICMP.child(2), "Counter", AccessMode.Read, "接收到的包含某些ICMP指定错误的ICMP消息的数量");
     public static final Mib IcmpInDestUnreachs           = put("icmpInDestUnreachs", ICMP.child(3), "Counter", AccessMode.Read, "接收到的ICMP目标不可达消息的数量");
@@ -496,7 +509,7 @@ public class Mib2Library {
     public static final Mib IcmpOutAddrMasks             = put("icmpOutAddrMasks", ICMP.child(25), "Counter", AccessMode.Read, "该系统发送的ICMP地址掩码请求消息的数量");
     public static final Mib IcmpOutAddrMaskReps          = put("icmpOutAddrMaskReps", ICMP.child(26), "Counter", AccessMode.Read, "该系统发送的ICMP地址掩码应答消息的数量");
     /**TCP组 (.1.3.6.1.2.1.6)*/
-    public static final Mib TCP                          = put("TCP", new int[] {1, 3, 6, 1, 2, 1, 6}, "OctetString", AccessMode.All, "[TCP组]");
+    public static final Mib TCP                          = put("TCP", "1.3.6.1.2.1.6", "OctetString", AccessMode.All, "[TCP组]");
     public static final Mib TcpRtoAlgorithm              = put("tcpRtoAlgorithm", TCP.child(1), "Counter", AccessMode.Read, "重发时间算法，可能包含的值：other(1)、constant(2)、rsre(3)和vanj(4)");
     public static final Mib TcpRtoMin                    = put("tcpRtoMin", TCP.child(2), "Counter", AccessMode.Read, "重发定时器最小值");
     public static final Mib TcpRtoMax                    = put("tcpRtoMax", TCP.child(3), "Counter", AccessMode.Read, "重发定时器最大值");
@@ -519,7 +532,7 @@ public class Mib2Library {
     public static final Mib TcpInErrors                  = put("tcpInErrors", TCP.child(14), "Counter", AccessMode.Read, "接收到错误的分组数");
     public static final Mib TcpOutRsts                   = put("tcpOutRsts", TCP.child(15), "Counter", AccessMode.Read, "发送包含RST标志的TCP分组的数量");
     /**UDP组 (.1.3.6.1.2.1.7)*/
-    public static final Mib UDP                          = put("UDP", new int[] {1, 3, 6, 1, 2, 1, 7}, "OctetString", AccessMode.All, "[UDP组]");
+    public static final Mib UDP                          = put("UDP", "1.3.6.1.2.1.7", "OctetString", AccessMode.All, "[UDP组]");
     public static final Mib UdpInDatagrams               = put("udpInDatagrams", UDP.child(1), "Counter", AccessMode.Read, "传递给上层协议和应用程序的UDP数据报的数量");
     public static final Mib UdpNoPorts                   = put("udpNoPorts", UDP.child(2), "Counter", AccessMode.Read, "接收到没有提供特定应用程序端口的UDP数据报的数量");
     public static final Mib UdpInErrors                  = put("udpInErrors", UDP.child(3), "Counter", AccessMode.Read, "接收到不能被传递的UDP数据报的数量，不能被传递的原因与有效应用程序或目标端口无关");
@@ -529,7 +542,7 @@ public class Mib2Library {
     public static final Mib UdpLocalAddress              = put("udpLocalAddress", UdpEntry.child(1), "IpAddress", AccessMode.Read, "该UDP侦听程序、服务、或应用程序的本地IP地址");
     public static final Mib UdpLocalPort                 = put("udpLocalPort", UdpEntry.child(2), "Integer", AccessMode.Read, "该UDP侦听程序、服务或应用程序的本地端口(socket)号");
     /**SNMP组 (.1.3.6.1.2.1.11)*/
-    public static final Mib SNMP                         = put("SNMP", new int[] {1, 3, 6, 1, 2, 1, 11}, "OctetString", AccessMode.All, "[SNMP组]");
+    public static final Mib SNMP                         = put("SNMP", "1.3.6.1.2.1.11", "OctetString", AccessMode.All, "[SNMP组]");
     public static final Mib snmpInPkts                   = put("snmpInPkts", SNMP.child(1), "Counter", AccessMode.Read, "传递给该代理的SNMP消息的数量");
     public static final Mib snmpOutPkts                  = put("snmpOutPkts", SNMP.child(2), "Counter", AccessMode.Read, "该代理发送出去的SNMP消息的数量");
     public static final Mib snmpInBadVersions            = put("snmpInBadVersions", SNMP.child(3), "Counter", AccessMode.Read, "传递给该代理，但该代理不支持的SNMP消息的数量");
@@ -559,9 +572,178 @@ public class Mib2Library {
     public static final Mib snmpOutTraps                 = put("snmpOutTraps", SNMP.child(29), "Counter", AccessMode.Read, "由该代理产生的 Trap PDUs 总数");
     public static final Mib snmpEnableAuthenTraps        = put("snmpEnableAuthenTraps", SNMP.child(30), "Integer", AccessMode.All, "指定该代理是否允许产生认证错误的traps，有两个值enabled和disabled");
     public static final Mib snmpSilentDrops              = put("snmpSilentDrops", SNMP.child(31), "Counter", AccessMode.Read, "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。因为要求回答的包大小大于限制的值和最大的消息大小");
-    public static final Mib snmpProxyDrops               = put("snmpProxyDrops", SNMP.child(32), "Counter", AccessMode.Read,  "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。Because the transmission of the (possibly translated) message to a proxy target failed in a manner (other than a time-out) such that no Response-PDU could be returned.");
-    /**IfMIB (.1.3.6.1.2.1.31)*/
-    public static final Mib IfMIB                        = put("ifMIB", new int[] {1, 3, 6, 1, 2, 1, 31}, "OctetString", AccessMode.Read, "[ifMIB MODULE-IDENTITY]");
+    public static final Mib snmpProxyDrops               = put("snmpProxyDrops", SNMP.child(32), "Counter", AccessMode.Read, "传递给该代理但是被丢弃的GetRequest-PDUs, GetNextRequest-PDUs, GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs 总数。Because the transmission of the (possibly translated) message to a proxy target failed in a manner (other than a time-out) such that no Response-PDU could be returned.");
+    /**Host组 (.1.3.6.1.2.1.25)*/
+    public static final Mib Host                         = put("host", "1.3.6.1.2.1.25", "OctetString", AccessMode.Read, "[hostResourcesMibModule]");
+    public static final Mib HrSystem                     = put("hrSystem", Host.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSystemUptime               = put("hrSystemUptime", HrSystem.child(1), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrSystemDate                 = put("hrSystemDate", HrSystem.child(2), "DateAndTime", AccessMode.Read, "");
+    public static final Mib HrSystemInitialLoadDevice    = put("hrSystemInitialLoadDevice", HrSystem.child(3), "Integer32", AccessMode.Read, "");
+    public static final Mib HrSystemInitialLoadParameters= put("hrSystemInitialLoadParameters", HrSystem.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSystemNumUsers             = put("hrSystem", HrSystem.child(5), "Gauge32", AccessMode.Read, "");
+    public static final Mib HrSystemProcesses            = put("hrSystemProcesses", HrSystem.child(6), "Gauge32", AccessMode.Read, "");
+    public static final Mib HrSystemMaxProcesses         = put("hrSystemMaxProcesses", HrSystem.child(7), "Integer32", AccessMode.Read, "");
+    public static final Mib HrSystemCurrentLoadDevice    = put("hrSystemCurrentLoadDevice", HrSystem.child(100), "Integer32", AccessMode.Read, "");
+    public static final Mib HrSystemDefaultPermanentStorageDevice= put("hrSystemDefaultPermanentStorageDevice", HrSystem.child(101), "Integer32", AccessMode.Read, "");
+    public static final Mib HrStorage                    = put("hrStorage", Host.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrStorageTypes               = put("hrStorageTypes", HrStorage.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrStorageOther               = put("hrStorageOther", HrStorageTypes.child(1), "Integer", AccessMode.Read, "The storage type identifier used when no other defined type is appropriate.");
+    public static final Mib HrStorageRam                 = put("hrStorageRam", HrStorageTypes.child(2), "Integer", AccessMode.Read, "The storage type identifier used for RAM.");
+    public static final Mib HrStorageVirtualMemory       = put("hrStorageVirtualMemory", HrStorageTypes.child(3), "Integer", AccessMode.Read, "The storage type identifier used for virtual memory,temporary storage of swapped or paged memory.");
+    public static final Mib HrStorageFixedDisk           = put("hrStorageFixedDisk", HrStorageTypes.child(4), "Integer", AccessMode.Read, "The storage type identifier used for non-removable rigid rotating magnetic storage devices.");
+    public static final Mib HrStorageRemovableDisk       = put("hrStorageRemovableDisk", HrStorageTypes.child(5), "Integer", AccessMode.Read, "The storage type identifier used for removable rigid rotating magnetic storage devices.");
+    public static final Mib HrStorageFloppyDisk          = put("hrStorageFloppyDisk", HrStorageTypes.child(6), "Integer", AccessMode.Read, "The storage type identifier used for non-rigid rotating magnetic storage devices.");
+    public static final Mib HrStorageCompactDisc         = put("hrStorageCompactDisc", HrStorageTypes.child(7), "Integer", AccessMode.Read, "The storage type identifier used for read-only rotating optical storage devices.");
+    public static final Mib HrStorageRamDisk             = put("hrStorageRamDisk", HrStorageTypes.child(8), "Integer", AccessMode.Read, "The storage type identifier used for a file system that is stored in RAM.");
+    public static final Mib HrStorageFlashMemory         = put("hrStorageFlashMemory", HrStorageTypes.child(9), "Integer", AccessMode.Read, "The storage type identifier used for flash memory.");
+    public static final Mib HrStorageNetworkDisk         = put("hrStorageNetworkDisk", HrStorageTypes.child(10), "Integer", AccessMode.Read, "The storage type identifier used for a networked file system.");
+    public static final Mib HrMemorySize                 = put("hrMemorySize", HrStorage.child(2), "OctetString", AccessMode.Read, "The amount of physical main memory contained by the host.");
+    public static final Mib HrStorageTable               = put("hrStorageTable", HrStorage.child(3), "Sequence.HrStorageEntry", AccessMode.Read, "The (conceptual) table of logical storage areas on the host.");
+    public static final Mib HrStorageEntry               = put("hrStorageEntry", HrStorageTable.child(1), "Sequence", AccessMode.Read, "A (conceptual) entry for one logical storage area on the host. As an example, an instance of the hrStorageType object might be named hrStorageType.3");
+    public static final Mib HrStorageIndex               = put("hrStorageIndex", HrStorageEntry.child(1), "Integer32", AccessMode.Read, "A unique value for each logical storage area contained by the host.");
+    public static final Mib HrStorageType                = put("hrStorageType", HrStorageEntry.child(2), "OctetString", AccessMode.Read, "The type of storage represented by this entry.");
+    public static final Mib HrStorageDescr               = put("hrStorageDescr", HrStorageEntry.child(3), "OctetString", AccessMode.Read, "A description of the type and instance of the storage described by this entry.");
+    public static final Mib HrStorageAllocationUnits     = put("hrStorageAllocationUnits", HrStorageEntry.child(4), "Integer32", AccessMode.Read, "The size, in bytes, of the data objects allocated from this pool. If this entry is monitoring sectors, blocks, buffers, or packets, for example, this number will commonly be greater than one. Otherwise this number will typically be one.");
+    public static final Mib HrStorageSize                = put("hrStorageSize", HrStorageEntry.child(5), "Integer32", AccessMode.Read, "The size of the storage represented by this entry,in units of hrStorageAllocationUnits.");
+    public static final Mib HrStorageUsed                = put("hrStorageUsed", HrStorageEntry.child(6), "Integer32", AccessMode.Read, "The amount of the storage represented by this entry that is allocated, in units of hrStorageAllocationUnits.");
+    public static final Mib HrStorageAllocationFailures  = put("hrStorageAllocationFailures", HrStorageEntry.child(7), "Counter32", AccessMode.Read, "The number of requests for storage represented by this entry that could not be honored due to not enough storage.");
+    public static final Mib HrDevice                     = put("hrDevice", Host.child(3), "OctetString", AccessMode.Read, "Host resources device");
+    public static final Mib HrDeviceTypes                = put("hrDeviceTypes", HrDevice.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceOther                = put("hrDeviceTypes", HrDeviceTypes.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceUnknown              = put("hrDeviceUnknown", HrDeviceTypes.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceProcessor            = put("hrDeviceProcessor", HrDeviceTypes.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceNetwork              = put("hrDeviceNetwork", HrDeviceTypes.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDevicePrinter              = put("hrDevicePrinter", HrDeviceTypes.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceDiskStorage          = put("hrDeviceDiskStorage", HrDeviceTypes.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceVideo                = put("hrDeviceVideo", HrDeviceTypes.child(10), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceAudio                = put("hrDeviceAudio", HrDeviceTypes.child(11), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceCoprocessor          = put("hrDeviceCoprocessor", HrDeviceTypes.child(12), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceKeyboard             = put("hrDeviceKeyboard", HrDeviceTypes.child(13), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceModem                = put("hrDeviceModem", HrDeviceTypes.child(14), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceParallelPort         = put("hrDeviceParallelPort", HrDeviceTypes.child(15), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDevicePointing             = put("hrDevicePointing", HrDeviceTypes.child(16), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceSerialPort           = put("hrDeviceSerialPort", HrDeviceTypes.child(17), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceTape                 = put("hrDeviceTape", HrDeviceTypes.child(18), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceClock                = put("hrDeviceClock", HrDeviceTypes.child(19), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceVolatileMemory       = put("hrDeviceVolatileMemory", HrDeviceTypes.child(20), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceNonVolatileMemory    = put("hrDeviceNonVolatileMemory", HrDeviceTypes.child(21), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceTable                = put("hrDeviceTable", HrDevice.child(2), "Sequence.HrDeviceEntry", AccessMode.Read, "");
+    public static final Mib HrDeviceEntry                = put("hrDeviceEntry", HrDeviceTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrDeviceIndex                = put("hrDeviceIndex", HrDeviceEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceType                 = put("hrDeviceType", HrDeviceEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceDescr                = put("hrDeviceDescr", HrDeviceEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceID                   = put("hrDeviceID", HrDeviceEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceStatus               = put("hrDeviceStatus", HrDeviceEntry.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceErrors               = put("hrDeviceErrors", HrDeviceEntry.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrProcessorTable             = put("hrProcessorTable", HrDevice.child(3), "Sequence.HrProcessorEntry", AccessMode.Read, "");
+    public static final Mib HrProcessorEntry             = put("hrProcessorEntry", HrProcessorTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrProcessorFrwID             = put("hrProcessorFrwID", HrProcessorEntry.child(1), "Integer", AccessMode.Read, "");
+    public static final Mib HrProcessorLoad              = put("hrProcessorLoad", HrProcessorEntry.child(2), "Integer32", AccessMode.Read, "");
+    public static final Mib HrNetworkTable               = put("hrNetworkTable", HrDevice.child(4), "Sequence.HrNetworkEntry", AccessMode.Read, "");
+    public static final Mib HrNetworkEntry               = put("hrNetworkEntry", HrNetworkTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrNetworkIfIndex             = put("hrNetworkIfIndex", HrNetworkEntry.child(1), "Integer", AccessMode.Read, "");
+    public static final Mib HrPrinterTable               = put("hrPrinterTable", HrDevice.child(5), "Sequence.HrPrinterEntry", AccessMode.Read, "");
+    public static final Mib HrPrinterEntry               = put("hrPrinterEntry", HrPrinterTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrPrinterStatus              = put("hrPrinterStatus", HrPrinterEntry.child(1), "Integer", AccessMode.Read, "");
+    public static final Mib HrPrinterDetectedErrorState  = put("hrPrinterDetectedErrorState", HrPrinterEntry.child(2), "Integer", AccessMode.Read, "");
+    public static final Mib HrDiskStorageTable           = put("hrDiskStorageTable", HrDevice.child(6), "Sequence.HrDiskStorageEntry", AccessMode.Read, "");
+    public static final Mib HrDiskStorageEntry           = put("hrDiskStorageEntry", HrDiskStorageTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrDiskStorageAccess          = put("hrDiskStorageAccess", HrDiskStorageEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDiskStorageMedia           = put("hrDiskStorageMedia", HrDiskStorageEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDiskStorageRemoveble       = put("hrDiskStorageRemoveble", HrDiskStorageEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDiskStorageCapacity        = put("hrDiskStorageCapacity", HrDiskStorageEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDiskStorageSwappable       = put("hrDiskStorageSwappable", HrDiskStorageEntry.child(100), "OctetString", AccessMode.Read, "");
+    public static final Mib HrPartitionTable             = put("hrPartitionTable", HrDevice.child(7), "Sequence.HrPartitionEntry", AccessMode.Read, "");
+    public static final Mib HrPartitionEntry             = put("hrPartitionTable", HrPartitionTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrPartitionIndex             = put("hrPartitionIndex", HrPartitionEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrPartitionLabel             = put("hrPartitionLabel", HrPartitionEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrPartitionID                = put("hrPartitionID", HrPartitionEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrPartitionSize              = put("hrPartitionSize", HrPartitionEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrPartitionFSIndex           = put("hrPartitionFSIndex", HrPartitionEntry.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSTable                    = put("hrFSTable", HrDevice.child(8), "Sequence.HrFSEntry", AccessMode.Read, "");
+    public static final Mib HrFSEntry                    = put("hrFSTable", HrFSTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrFSIndex                    = put("hrFSIndex", HrFSEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSMountPoint               = put("hrFSMountPoint", HrFSEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSRemoteMountPoint         = put("hrFSRemoteMountPoint", HrFSEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSType                     = put("hrFSType", HrFSEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSAccess                   = put("hrFSAccess", HrFSEntry.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSBootable                 = put("hrFSBootable", HrFSEntry.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSStorageIndex             = put("hrFSStorageIndex", HrFSEntry.child(7), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSLastFullBackupDate       = put("hrFSLastFullBackupDate", HrFSEntry.child(8), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrFSLastPartialBackupDate    = put("hrFSLastPartialBackupDate", HrFSEntry.child(9), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrFSTypes                    = put("hrFSTypes", HrDevice.child(9), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSOther                    = put("hrFSOther", HrFSTypes.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSUnknown                  = put("hrFSUnknown", HrFSTypes.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSBerkeleyFFS              = put("hrFSBerkeleyFFS", HrFSTypes.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSSys5FS                   = put("hrFSSys5FS", HrFSTypes.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSFat                      = put("hrFSFat", HrFSTypes.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSHPFS                     = put("hrFSHPFS", HrFSTypes.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSHFS                      = put("hrFSHFS", HrFSTypes.child(7), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSMFS                      = put("hrFSMFS", HrFSTypes.child(8), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSNTFS                     = put("hrFSNTFS", HrFSTypes.child(9), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSVNode                    = put("hrFSVNode", HrFSTypes.child(10), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSJournaled                = put("hrFSJournaled", HrFSTypes.child(11), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSiso9660                  = put("hrFSiso9660", HrFSTypes.child(12), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSRockRidge                = put("hrFSRockRidge", HrFSTypes.child(13), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSNFS                      = put("hrFSNFS", HrFSTypes.child(14), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSNetware                  = put("hrFSNetware", HrFSTypes.child(15), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSAFS                      = put("hrFSAFS", HrFSTypes.child(16), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSDFS                      = put("hrFSDFS", HrFSTypes.child(17), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSAppleshare               = put("hrFSAppleshare", HrFSTypes.child(18), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSRFS                      = put("hrFSRFS", HrFSTypes.child(19), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSDGCFS                    = put("hrFSDGCFS", HrFSTypes.child(20), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSBFS                      = put("hrFSBFS", HrFSTypes.child(21), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSFAT32                    = put("hrFSFAT32", HrFSTypes.child(22), "OctetString", AccessMode.Read, "");
+    public static final Mib HrFSLinuxExt2                = put("hrFSLinuxExt2", HrFSTypes.child(23), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRun                      = put("hrSWRun", Host.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWOSIndex                  = put("hrSWOSIndex", HrSWRun.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunTable                 = put("hrSWRunTable", HrSWRun.child(2), "Sequence.HrSWRunEntry", AccessMode.Read, "");
+    public static final Mib HrSWRunEntry                 = put("hrSWRunEntry", HrSWRunTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrSWRunIndex                 = put("hrSWRunIndex", HrSWRunEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunName                  = put("hrSWRunName", HrSWRunEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunID                    = put("hrSWRunID", HrSWRunEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunPath                  = put("hrSWRunPath", HrSWRunEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunParameters            = put("hrSWRunParameters", HrSWRunEntry.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunType                  = put("hrSWRunType", HrSWRunEntry.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunStatus                = put("hrSWRunStatus", HrSWRunEntry.child(7), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunPriority              = put("hrSWRunPriority", HrSWRunEntry.child(100), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunPerf                  = put("hrSWRunPerf", Host.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunPerfTable             = put("hrSWRunPerfTable", HrSWRunPerf.child(1), "Sequence.HrSWRunPerfEntry", AccessMode.Read, "");
+    public static final Mib HrSWRunPerfEntry             = put("hrSWRunPerfEntry", HrSWRunPerfTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrSWRunPerfCPU               = put("hrSWRunPerfCPU", HrSWRunPerfEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunPerfMem               = put("hrSWRunPerfMem", HrSWRunPerfEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalled                = put("hrSWInstalled", Host.child(6), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledLastChange      = put("hrSWInstalledLastChange", HrSWInstalled.child(1), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrSWInstalledLastUpdateTime  = put("hrSWInstalledLastUpdateTime", HrSWInstalled.child(2), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrSWInstalledTable           = put("hrSWInstalledTable", HrSWInstalled.child(3), "Sequence.HrSWInstalledEntry", AccessMode.Read, "");
+    public static final Mib HrSWInstalledEntry           = put("hrSWInstalledEntry", HrSWInstalledTable.child(1), "Sequence", AccessMode.Read, "");
+    public static final Mib HrSWInstalledIndex           = put("hrSWInstalledIndex", HrSWInstalledEntry.child(1), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledName            = put("hrSWInstalledName", HrSWInstalledEntry.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledID              = put("hrSWInstalledID", HrSWInstalledEntry.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledType            = put("hrSWInstalledType", HrSWInstalledEntry.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledDate            = put("hrSWInstalledDate", HrSWInstalledEntry.child(5), "TimeTicks", AccessMode.Read, "");
+    public static final Mib HrSWInstalledDescription     = put("hrSWInstalledDescription", HrSWInstalledEntry.child(100), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledVersion         = put("hrSWInstalledVersion", HrSWInstalledEntry.child(101), "OctetString", AccessMode.Read, "");
+    public static final Mib HrMIBAdminInfo               = put("hrMIBAdminInfo", Host.child(7), "OctetString", AccessMode.Read, "hrConformance");
+    public static final Mib HostResourcesMibModule       = put("hostResourcesMibModule", HrMIBAdminInfo.child(1), "OctetString", AccessMode.Read, "hrMIBCompliances");
+    public static final Mib HrMIBCompliances             = put("hrMIBCompliances", HrMIBAdminInfo.child(2), "OctetString", AccessMode.Read, "hrMIBGroups");
+    public static final Mib HrMIBCompliance2             = put("hrMIBCompliance2", HrMIBCompliances.child(1), "OctetString", AccessMode.Read, "hrSystemGroup");
+    public static final Mib HrStorageGroup2              = put("hrStorageGroup2", HrMIBCompliances.child(2), "OctetString", AccessMode.Read, "");
+    public static final Mib HrDeviceGroup2               = put("hrDeviceGroup2", HrMIBCompliances.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWRunGroup2                = put("hrSWRunGroup2", HrMIBCompliances.child(4), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSWInstalledGroup2          = put("hrSWInstalledGroup2", HrMIBCompliances.child(5), "OctetString", AccessMode.Read, "");
+    public static final Mib HrMIBGroups                  = put("hrMIBGroups", HrMIBAdminInfo.child(3), "OctetString", AccessMode.Read, "");
+    public static final Mib HrSystemGroup3               = put("hrSystemGroup3", HrMIBGroups.child(1), "OctetString", AccessMode.Read, "The Host Resources System Group.");
+    public static final Mib HrStorageGroup3              = put("hrStorageGroup3", HrMIBGroups.child(2), "OctetString", AccessMode.Read, "The Host Resources Storage Group.");
+    public static final Mib HrDeviceGroup3               = put("hrDeviceGroup3", HrMIBGroups.child(3), "OctetString", AccessMode.Read, "The Host Resources Device Group.");
+    public static final Mib HrSWRunGroup3                = put("hrSWRunGroup3", HrMIBGroups.child(4), "OctetString", AccessMode.Read, "The Host Resources Running Software Group.");
+    public static final Mib HrSWRunPerfGroup3            = put("hrSWRunPerfGroup3", HrMIBGroups.child(5), "OctetString", AccessMode.Read, "The Host Resources Running Software Performance Group.");
+    public static final Mib HrSWInstalledGroup3          = put("hrSWInstalledGroup3", HrMIBGroups.child(6), "OctetString", AccessMode.Read, "The Host Resources Installed Software Group.");
+    public static final Mib HostResourcesTypesModule     = put("hostResourcesTypesModule", HrMIBAdminInfo.child(4), "OctetString", AccessMode.Read, "");
+    /**
+     * IfMIB (.1.3.6.1.2.1.31)
+     */
+    public static final Mib IfMIB                        = put("ifMIB", "1.3.6.1.2.1.31", "OctetString", AccessMode.Read, "[ifMIB MODULE-IDENTITY]");
     public static final Mib IfMIBObjects                 = put("ifMIBObjects", IfMIB.child(1), "OctetString", AccessMode.Read, "");
     public static final Mib IfXTable                     = put("ifXTable", IfMIBObjects.child(1), "Sequence.ifXEntry", AccessMode.Read, "");
     public static final Mib IfXEntry                     = put("ifXEntry", IfXTable.child(1), "Sequence", AccessMode.Read, "");
@@ -626,57 +808,49 @@ public class Mib2Library {
     public static final Mib IfCompliance3                = put("ifCompliance3", IfCompliances.child(3), "Integer", AccessMode.Read, "");
 
     /*private*/
-    public static final Mib HrMemorySize             = put("hrMemorySize", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 2}, "Counter", AccessMode.Read, "获取内存大小");
-    public static final Mib HrStorageIndex           = put("hrStorageIndex", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 1}, "Integer", AccessMode.Read, "存储设备编号");
-    public static final Mib HrStorageType            = put("hrStorageType", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 2}, "Integer", AccessMode.Read, "存储设备类型");
-    public static final Mib HrStorageDescr           = put("hrStorageDescr", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 3}, "OctetString", AccessMode.Read, "存储设备描述");
-    public static final Mib HrStorageAllocationUnits = put("hrStorageAllocationUnits", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 4}, "Integer", AccessMode.Read, "簇的大小");
-    public static final Mib HrStorageSize            = put("hrStorageSize", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 5}, "Counter", AccessMode.Read, "簇的的数目");
-    public static final Mib HrStorageUsed            = put("hrStorageUsed", new int[] {1, 3, 6, 1, 2, 1, 25, 2, 3, 1, 6}, "Counter", AccessMode.Read, "使用多少，跟总容量相除就是占用率");
-    public static final Mib HrProcessorLoad          = put("hrProcessorLoad", new int[] {1, 3, 6, 1, 2, 1, 25, 3, 3, 1, 2}, "Counter", AccessMode.Read, "CPU的当前负载，N个核就有N个负载");
-    public static final Mib MemTotalSwap             = put("memTotalSwap", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 3}, "Counter", AccessMode.Read, "Total Swap Size(虚拟内存)");
-    public static final Mib MemAvailSwap             = put("memAvailSwap", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 4}, "Counter", AccessMode.Read, "Available Swap Space");
-    public static final Mib MemTotalReal             = put("memTotalReal", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 5}, "Counter", AccessMode.Read, "Total RAM in machine");
-    public static final Mib MemAvailReal             = put("memAvailReal", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 6}, "Counter", AccessMode.Read, "Total RAM used");
-    public static final Mib MemTotalFree             = put("memTotalFree", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 11}, "Counter", AccessMode.Read, "Total RAM Free");
-    public static final Mib MemShared                = put("memShared", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 13}, "Counter", AccessMode.Read, "Total RAM Shared");
-    public static final Mib MemBuffer                = put("memBuffer", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 14}, "Counter", AccessMode.Read, "Total RAM Buffered");
-    public static final Mib MemCached                = put("memCached", new int[] {1, 3, 6, 1, 4, 1, 2021, 4, 15}, "Counter", AccessMode.Read, "Total Cached Memory");
-    public static final Mib DskPath                  = put("dskPath", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 2}, "OctetString", AccessMode.Read, "Path where the disk is mounted");
-    public static final Mib DskDevice                = put("dskDevice", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 3}, "OctetString", AccessMode.Read, "Path of the device for the partition");
-    public static final Mib DskTotal                 = put("dskTotal", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 6}, "Counter", AccessMode.Read, "Total size of the disk/partion (kBytes)");
-    public static final Mib DskAvail                 = put("dskAvail", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 7}, "Counter", AccessMode.Read, "Available space on the disk");
-    public static final Mib DskUsed                  = put("dskUsed", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 8}, "Counter", AccessMode.Read, "Used space on the disk");
-    public static final Mib DskPercent               = put("dskPercent", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 9}, "Counter", AccessMode.Read, "Percentage of space used on disk");
-    public static final Mib DskPercentNode           = put("dskPercentNode", new int[] {1, 3, 6, 1, 4, 1, 2021, 9, 1, 10}, "OctetString", AccessMode.Read, "Percentage of inodes used on disk");
-    public static final Mib Load5                    = put("Load5", new int[] {1, 3, 6, 1, 4, 1, 2021, 10, 1, 3, 1}, "Integer", AccessMode.Read, "Load5");
-    public static final Mib Load10                   = put("Load10", new int[] {1, 3, 6, 1, 4, 1, 2021, 10, 1, 3, 2}, "Integer", AccessMode.Read, "Load10");
-    public static final Mib Load15                   = put("Load15", new int[] {1, 3, 6, 1, 4, 1, 2021, 10, 1, 3, 3}, "Integer", AccessMode.Read, "Load15");
-    public static final Mib SsSwapIn                 = put("ssSwapIn", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 3}, "Counter", AccessMode.Read, "ssSwapIn");
-    public static final Mib SsSwapOut                = put("SsSwapOut", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 4}, "Counter", AccessMode.Read, "SsSwapOut");
-    public static final Mib SsIOSent                 = put("ssIOSent", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 5}, "Counter", AccessMode.Read, "ssIOSent");
-    public static final Mib SsIOReceive              = put("ssIOReceive", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 6}, "Counter", AccessMode.Read, "ssIOReceive");
-    public static final Mib SsSysInterrupts          = put("ssSysInterrupts", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 7}, "Counter", AccessMode.Read, "ssSysInterrupts");
-    public static final Mib SsSysContext             = put("ssSysContext", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 8}, "Counter", AccessMode.Read, "ssSysContext");
-    public static final Mib SsCpuUser                = put("ssCpuUser", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 9}, "OctetString", AccessMode.Read, "用户CPU百分比");
-    public static final Mib SsCpuSystem              = put("ssCpuSystem", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 10}, "OctetString", AccessMode.Read, "系统CPU百分比");
-    public static final Mib SsCpuIdle                = put("ssCpuIdle", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 11}, "Counter", AccessMode.Read, "空闲CPU百分比");
-    public static final Mib SsCpuRawUser             = put("ssCpuRawUser", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 50}, "OctetString", AccessMode.Read, "原始用户CPU使用时间");
-    public static final Mib SsCpuRawNice             = put("ssCpuRawNice", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 51}, "OctetString", AccessMode.Read, "原始nice占用时间");
-    public static final Mib SsCpuRawSystem           = put("ssCpuRawSystem", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 52}, "OctetString", AccessMode.Read, "原始系统CPU使用时间");
-    public static final Mib SsCpuRawIdle             = put("ssCpuRawIdle", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 53}, "Counter", AccessMode.Read, "原始CPU空闲时间");
-    public static final Mib SsCpuRawWait             = put("ssCpuRawWait", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 54}, "Counter", AccessMode.Read, "ssCpuRawWait");
-    public static final Mib SsCpuRawInterrupt        = put("ssCpuRawInterrupt", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 56}, "Counter", AccessMode.Read, "ssCpuRawInterrupt");
-    public static final Mib SsIORawSent              = put("ssIORawSent", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 57}, "Counter", AccessMode.Read, "ssIORawSent");
-    public static final Mib SsIORawReceived          = put("ssIORawReceived", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 58}, "Counter", AccessMode.Read, "ssIORawReceived");
-    public static final Mib SsRawInterrupts          = put("ssRawInterrupts", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 59}, "Counter", AccessMode.Read, "ssRawInterrupts");
-    public static final Mib SsRawContexts            = put("ssRawContexts", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 60}, "Counter", AccessMode.Read, "ssRawContexts");
-    public static final Mib SsCpuRawSoftIRQ          = put("ssCpuRawSoftIRQ", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 61}, "Counter", AccessMode.Read, "ssCpuRawSoftIRQ");
-    public static final Mib SsRawSwapIn              = put("ssRawSwapIn", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 62}, "Counter", AccessMode.Read, "ssRawSwapIn");
-    public static final Mib SsRawSwapOut             = put("ssRawSwapOut", new int[] {1, 3, 6, 1, 4, 1, 2021, 11, 63}, "Counter", AccessMode.Read, "ssRawSwapOut");
-    public static final Mib LinkDown                 = put("linkDown", new int[] {1, 3, 6, 1, 6, 3, 1, 1, 5, 3}, "Integer", AccessMode.Read, "");
-    public static final Mib LinkUp                   = put("linkUp", new int[] {1, 3, 6, 1, 6, 3, 1, 1, 5, 4}, "Integer", AccessMode.Read, "");
-    public static final Mib IfAC                     = put("ifAC", new int[] {1, 3, 6, 1, 4, 1, 318, 1, 1, 26, 6, 3, 1, 5, 1}, "OctetString", AccessMode.Read, "");
+    public static final Mib MemTotalSwap                 = put("memTotalSwap", "1.3.6.1.4.1.2021.4.3", "Counter", AccessMode.Read, "Total Swap Size(虚拟内存)");
+    public static final Mib MemAvailSwap                 = put("memAvailSwap", "1.3.6.1.4.1.2021.4.4", "Counter", AccessMode.Read, "Available Swap Space");
+    public static final Mib MemTotalReal                 = put("memTotalReal", "1.3.6.1.4.1.2021.4.5", "Counter", AccessMode.Read, "Total RAM in machine");
+    public static final Mib MemAvailReal                 = put("memAvailReal", "1.3.6.1.4.1.2021.4.6", "Counter", AccessMode.Read, "Total RAM used");
+    public static final Mib MemTotalFree                 = put("memTotalFree", "1.3.6.1.4.1.2021.4.11", "Counter", AccessMode.Read, "Total RAM Free");
+    public static final Mib MemShared                    = put("memShared", "1.3.6.1.4.1.2021.4.13", "Counter", AccessMode.Read, "Total RAM Shared");
+    public static final Mib MemBuffer                    = put("memBuffer", "1.3.6.1.4.1.2021.4.14", "Counter", AccessMode.Read, "Total RAM Buffered");
+    public static final Mib MemCached                    = put("memCached", "1.3.6.1.4.1.2021.4.15", "Counter", AccessMode.Read, "Total Cached Memory");
+    public static final Mib DskPath                      = put("dskPath", "1.3.6.1.4.1.2021.9.1.2", "OctetString", AccessMode.Read, "Path where the disk is mounted");
+    public static final Mib DskDevice                    = put("dskDevice", "1.3.6.1.4.1.2021.9.1.3", "OctetString", AccessMode.Read, "Path of the device for the partition");
+    public static final Mib DskTotal                     = put("dskTotal", "1.3.6.1.4.1.2021.9.1.6", "Counter", AccessMode.Read, "Total size of the disk/partion (kBytes)");
+    public static final Mib DskAvail                     = put("dskAvail", "1.3.6.1.4.1.2021.9.1.7", "Counter", AccessMode.Read, "Available space on the disk");
+    public static final Mib DskUsed                      = put("dskUsed", "1.3.6.1.4.1.2021.9.1.8", "Counter", AccessMode.Read, "Used space on the disk");
+    public static final Mib DskPercent                   = put("dskPercent", "1.3.6.1.4.1.2021.9.1.9", "Counter", AccessMode.Read, "Percentage of space used on disk");
+    public static final Mib DskPercentNode               = put("dskPercentNode", "1.3.6.1.4.1.2021.9.1.10", "OctetString", AccessMode.Read, "Percentage of inodes used on disk");
+    public static final Mib Load5                        = put("Load5", "1.3.6.1.4.1.2021.10.1.3.1", "Integer", AccessMode.Read, "Load5");
+    public static final Mib Load10                       = put("Load10", "1.3.6.1.4.1.2021.10.1.3.2", "Integer", AccessMode.Read, "Load10");
+    public static final Mib Load15                       = put("Load15", "1.3.6.1.4.1.2021.10.1.3.3", "Integer", AccessMode.Read, "Load15");
+    public static final Mib SsSwapIn                     = put("ssSwapIn", "1.3.6.1.4.1.2021.11.3", "Counter", AccessMode.Read, "ssSwapIn");
+    public static final Mib SsSwapOut                    = put("SsSwapOut", "1.3.6.1.4.1.2021.11.4", "Counter", AccessMode.Read, "SsSwapOut");
+    public static final Mib SsIOSent                     = put("ssIOSent", "1.3.6.1.4.1.2021.11.5", "Counter", AccessMode.Read, "ssIOSent");
+    public static final Mib SsIOReceive                  = put("ssIOReceive", "1.3.6.1.4.1.2021.11.6", "Counter", AccessMode.Read, "ssIOReceive");
+    public static final Mib SsSysInterrupts              = put("ssSysInterrupts", "1.3.6.1.4.1.2021.11.7", "Counter", AccessMode.Read, "ssSysInterrupts");
+    public static final Mib SsSysContext                 = put("ssSysContext", "1.3.6.1.4.1.2021.11.8", "Counter", AccessMode.Read, "ssSysContext");
+    public static final Mib SsCpuUser                    = put("ssCpuUser", "1.3.6.1.4.1.2021.11.9", "OctetString", AccessMode.Read, "用户CPU百分比");
+    public static final Mib SsCpuSystem                  = put("ssCpuSystem", "1.3.6.1.4.1.2021.11.10", "OctetString", AccessMode.Read, "系统CPU百分比");
+    public static final Mib SsCpuIdle                    = put("ssCpuIdle", "1.3.6.1.4.1.2021.11.11", "Counter", AccessMode.Read, "空闲CPU百分比");
+    public static final Mib SsCpuRawUser                 = put("ssCpuRawUser", "1.3.6.1.4.1.2021.11.50", "OctetString", AccessMode.Read, "原始用户CPU使用时间");
+    public static final Mib SsCpuRawNice                 = put("ssCpuRawNice", "1.3.6.1.4.1.2021.11.51", "OctetString", AccessMode.Read, "原始nice占用时间");
+    public static final Mib SsCpuRawSystem               = put("ssCpuRawSystem", "1.3.6.1.4.1.2021.11.52", "OctetString", AccessMode.Read, "原始系统CPU使用时间");
+    public static final Mib SsCpuRawIdle                 = put("ssCpuRawIdle", "1.3.6.1.4.1.2021.11.53", "Counter", AccessMode.Read, "原始CPU空闲时间");
+    public static final Mib SsCpuRawWait                 = put("ssCpuRawWait", "1.3.6.1.4.1.2021.11.54", "Counter", AccessMode.Read, "ssCpuRawWait");
+    public static final Mib SsCpuRawInterrupt            = put("ssCpuRawInterrupt", "1.3.6.1.4.1.2021.11.56", "Counter", AccessMode.Read, "ssCpuRawInterrupt");
+    public static final Mib SsIORawSent                  = put("ssIORawSent", "1.3.6.1.4.1.2021.11.57", "Counter", AccessMode.Read, "ssIORawSent");
+    public static final Mib SsIORawReceived              = put("ssIORawReceived", "1.3.6.1.4.1.2021.11.58", "Counter", AccessMode.Read, "ssIORawReceived");
+    public static final Mib SsRawInterrupts              = put("ssRawInterrupts", "1.3.6.1.4.1.2021.11.59", "Counter", AccessMode.Read, "ssRawInterrupts");
+    public static final Mib SsRawContexts                = put("ssRawContexts", "1.3.6.1.4.1.2021.11.60", "Counter", AccessMode.Read, "ssRawContexts");
+    public static final Mib SsCpuRawSoftIRQ              = put("ssCpuRawSoftIRQ", "1.3.6.1.4.1.2021.11.61", "Counter", AccessMode.Read, "ssCpuRawSoftIRQ");
+    public static final Mib SsRawSwapIn                  = put("ssRawSwapIn", "1.3.6.1.4.1.2021.11.62", "Counter", AccessMode.Read, "ssRawSwapIn");
+    public static final Mib SsRawSwapOut                 = put("ssRawSwapOut", "1.3.6.1.4.1.2021.11.63", "Counter", AccessMode.Read, "ssRawSwapOut");
+    public static final Mib LinkDown                     = put("linkDown", "1.3.6.1.6.3.1.1.5.3", "Integer", AccessMode.Read, "");
+    public static final Mib LinkUp                       = put("linkUp", "1.3.6.1.6.3.1.1.5.4", "Integer", AccessMode.Read, "");
+    public static final Mib IfAC                         = put("ifAC", "1.3.6.1.4.1.318.1.1.26.6.3.1.5.1", "OctetString", AccessMode.Read, "");
 
     // VariableFormatter
     static {
@@ -689,6 +863,8 @@ public class Mib2Library {
         maps.put(IpNetToMediaType.getName(), new IpNetToMediaTypeVF());
         maps.put(TcpConnState.getName(), new TcpConnStateVF());
         maps.put(TcpRtoAlgorithm.getName(), new TcpRtoAlgorithmVF());
+        maps.put(HrSWInstalledDate.getName(), new TimeTicksVF());
+        maps.put(HrStorageType.getName(), new OidInfoVF());
     }
 
     // ==-TEST-CODE-===========================================================================================================
