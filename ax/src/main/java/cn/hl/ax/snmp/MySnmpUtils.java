@@ -162,6 +162,15 @@ public class MySnmpUtils {
         }
     }
 
+    private static OID[] translateMib(Mib[] mibs) {
+        OID[] oids = new OID[mibs.length];
+        int index = 0;
+        for (Mib mib : mibs) {
+            oids[index++] = mib.getOID();
+        }
+        return oids;
+    }
+
     /**
      * 翻译OID
      *
@@ -251,7 +260,7 @@ public class MySnmpUtils {
             }
         } catch (Exception e) {
             list = null;
-            printError("MySnmpUtils.collect('%s', %d, '%s', %s) error", ip, port, community, cols, e);
+            printError("MySnmpUtils.collect('%s', %d, '%s', %s)", ip, port, community, cols, e);
         } finally {
             try {
                 if (transport != null) {
@@ -261,7 +270,7 @@ public class MySnmpUtils {
                     snmp.close();
                 }
             } catch (IOException ee) {
-                printError("MySnmpUtils.collect('%s', %d, '%s', %s) [transport/snmp].close failed", ip, port, community, cols, ee);
+                printError("MySnmpUtils.collect('%s', %d, '%s', %s) [transport/snmp].close", ip, port, community, cols, ee);
             }
         }
 
@@ -269,6 +278,10 @@ public class MySnmpUtils {
             printTableEvents(list, columns);
         }
         return list;
+    }
+
+    public static List<TableEvent> collect(String ip, Integer port, String community, Mib[] columns, Object... debug) {
+        return collect(ip, port, community, translateMib(columns), debug);
     }
 
     /**
@@ -329,18 +342,22 @@ public class MySnmpUtils {
                 printPduResponse(response);
             }
         } catch (IOException e) {
-            printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s) error", ip, port, community, cols, e);
+            printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s)", ip, port, community, cols, e);
         } finally {
             //调用close()方法释放该进程
             if (transport != null) {
                 try {
                     transport.close();
                 } catch (IOException ee) {
-                    printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s) transport.close failed", ip, port, community, cols, ee);
+                    printError("MySnmpUtils.snmpGet('%s', %d, '%s', %s) transport.close", ip, port, community, cols, ee);
                 }
             }
         }
         return response;
+    }
+
+    public static PDU snmpGet(String ip, Integer port, String community, Mib[] columns, Object... debug) {
+        return snmpGet(ip, port, community, translateMib(columns), debug);
     }
 
     /**
@@ -388,18 +405,23 @@ public class MySnmpUtils {
             }
             return response.getErrorStatus() == 0;
         } catch (Exception e) {
-            printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') error", ip, port, community, cols, val, e);
+            printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s')", ip, port, community, cols, val, e);
             return false;
         } finally {
             if (transport != null) {
                 try {
                     transport.close();
                 } catch (IOException ee) {
-                    printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') transport.close failed", ip, port, community, cols, val, ee);
+                    printError("MySnmpUtils.snmpSet('%s', %d, '%s', %s, '%s') transport.close", ip, port, community, cols, val, ee);
                 }
             }
         }
     }
+
+    public static boolean snmpSet(String ip, Integer port, String community, Mib key, String val, Object... debug) {
+        return snmpSet(ip, port, community, key.getOID(), val, debug);
+    }
+
     // ------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -494,10 +516,9 @@ public class MySnmpUtils {
     // ------------------------------------------------------------------------------------------------------------------------
 
     public static void main(String[] args) {
-        // 107.155.19.82
-        String ip = "192.254.81.147";
+        // 107.155.19.82  192.254.81.147  C#Edge123
+        String ip = "104.166.168.3";
         int port = 161;
-        // public C#Edge123
         String community = "C#EDGE123";
 
         //collectCPU(ip, port, community);
@@ -508,23 +529,22 @@ public class MySnmpUtils {
         //collectPort(ip, port, community);
         //collectSoft(ip, port, community);
 
-        //OID oid = Mib2Library.SysName.getOID();
-        //snmpSet(ip, port, community, oid, "Test.System.Name");
-        //snmpGet(ip, port, community, new OID[] {oid}, true);
+        snmpSet(ip, port, community, Mib2Library.SysName, "Test.System.Name", true);
+        snmpGet(ip, port, community, new Mib[] {Mib2Library.SysName, Mib2Library.SysDescr}, true);
 
-        OID[] oids = {
-                /*!*/Mib2Library.IfIndex.getOID(),
-                /*!*/Mib2Library.IfName.getOID(),
-                /*!*/Mib2Library.IfAlias.getOID(),
-                /*!*/Mib2Library.IfAdminStatus.getOID(),
-                /*!*/Mib2Library.IfOperStatus.getOID(),
-                /*!*/Mib2Library.IfHCInOctets.getOID(),
-                ///*!*/Mib2Library.IpAdEntAddr.getOID(),
-                ///*!*/Mib2Library.IpAdEntNetMask.getOID(),
-                ///*!*/Mib2Library.IpRouteDest.getOID(),
-                ///*!*/Mib2Library.IpRouteIfIndex.getOID(),
+        Mib[] mibs = {
+                /*!*/Mib2Library.IfIndex,
+                /*!*/Mib2Library.IfName,
+                /*!*/Mib2Library.IfAlias,
+                /*!*/Mib2Library.IfAdminStatus,
+                /*!*/Mib2Library.IfOperStatus,
+                /*!*/Mib2Library.IfHCInOctets,
+                /*!*/Mib2Library.IfHCOutOctets,
+                ///*!*/Mib2Library.IpAdEntAddr,
+                ///*!*/Mib2Library.IpAdEntNetMask,
+                ///*!*/Mib2Library.IpRouteDest,
+                ///*!*/Mib2Library.IpRouteIfIndex,
         };
-        snmpGet(ip, port, community, oids, true);
-        collect(ip, port, community, oids, true);
+        collect(ip, port, community, mibs, true);
     }
 }

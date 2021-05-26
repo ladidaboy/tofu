@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Hyman
  * @date 2019-08-05 13:20:48
- * @version $ Id: MySnmpWalk.java, v 0.1  hyman Exp $
  */
 public class MySnmpWalk {
     /**
@@ -36,7 +35,8 @@ public class MySnmpWalk {
      * 5) targetOID.leftMostCompare(targetOID.size(),responsePDU.get(0).getOid())!=0 <br>
      * 6) Null.isExceptionSyntax(responsePDU.get(0).getVariable().getSyntax()) <br>
      * 7) responsePDU.get(0).getOid().compareTo(targetOID) <= 0 <br>
-     * @param targetOID 目标OID
+     *
+     * @param targetOID   目标OID
      * @param responsePDU 响应PDU
      * @return true: Finished, false:NotFinished
      */
@@ -87,8 +87,9 @@ public class MySnmpWalk {
 
     /**
      * Create default CommunityTarget
-     * @param ip 地址
-     * @param port 端口
+     *
+     * @param ip        地址
+     * @param port      端口
      * @param community 共同体
      * @return CommunityTarget
      */
@@ -97,7 +98,7 @@ public class MySnmpWalk {
         target.setAddress(GenericAddress.parse("udp:" + ip + "/" + port));
         target.setCommunity(new OctetString(community));
         target.setVersion(SnmpConstants.version2c);
-        target.setTimeout(3000); // milliseconds
+        target.setTimeout(3000);
         target.setRetries(2);
         return target;
     }
@@ -121,10 +122,11 @@ public class MySnmpWalk {
 
     /**
      * 异步采集数据
-     * @param ip 地址
-     * @param port 端口
+     *
+     * @param ip        地址
+     * @param port      端口
      * @param community 共同体
-     * @param oid OID信息
+     * @param oid       OID信息
      */
     public static void walkAsyn(String ip, int port, String community, OID oid) {
         final CommunityTarget target = createDefault(ip, port, community);
@@ -182,10 +184,11 @@ public class MySnmpWalk {
 
     /**
      * 同步采集数据
-     * @param ip 地址
-     * @param port 端口
+     *
+     * @param ip        地址
+     * @param port      端口
      * @param community 共同体
-     * @param oid OID信息
+     * @param oid       OID信息
      */
     public static void walkSync(String ip, int port, String community, OID oid) {
         CommunityTarget target = createDefault(ip, port, community);
@@ -229,11 +232,11 @@ public class MySnmpWalk {
 
     public static void main(String[] args) {
         int port = 161;
-        String ip = "192.254.81.147";
+        String ip = "192.254.81.145";
         String community = "C#EDGE123";
         // 异步采集数据
-        walkAsyn(ip, port, community, Mib2Library.Interfaces.getOID());
+        walkAsyn(ip, port, community, Mib2Library.System.getOID());
         // 同步采集数据
-        walkSync(ip, port, community, Mib2Library.IfMIB.getOID());
+        walkSync(ip, port, community, Mib2Library.Host.getOID());
     }
 }
