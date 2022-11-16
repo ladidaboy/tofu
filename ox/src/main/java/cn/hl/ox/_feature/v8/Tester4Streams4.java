@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 /**
  * @author hyman
  * @date 2020-01-07 15:15:42
- * @version $ Id: Tester4Streams4.java, v 0.1  hyman Exp $
  */
 public class Tester4Streams4 {
     public static void main(String[] args) {

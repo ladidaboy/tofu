@@ -32,18 +32,21 @@ import java.util.List;
  * <li>Anchor: 使用主键id查询数据, 再以B模型输出数据</li>
  * <li>Delete: 使用主键id删除数据, 输出影响数量</li>
  * </ol>
+ *
  * @author hyman
  * @date 2019-12-25 18:40:54
  */
 public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>> extends Controller {
     /**
      * 获取基于AbstractManager的业务层对象
+     *
      * @return &lt;? extends AbstractManager&gt;
      */
     MNG getManager();
 
     /**
      * Select
+     *
      * @param search query
      * @return PageInfo&lt;B&gt;
      */
@@ -64,6 +67,7 @@ public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>>
 
     /**
      * Create
+     *
      * @param data biz
      * @return B
      */
@@ -100,6 +104,7 @@ public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>>
 
     /**
      * Anchor
+     *
      * @param ids #
      * @return List&lt;B&gt;
      */
@@ -124,7 +129,8 @@ public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>>
 
     /**
      * Update
-     * @param ids #
+     *
+     * @param ids  #
      * @param data biz
      * @return int affectRows
      */
@@ -153,6 +159,7 @@ public interface CommonAtomicController<B, Q, MNG extends AbstractManager<B, Q>>
 
     /**
      * Delete
+     *
      * @param ids #
      * @return int affectRows
      */

@@ -5,7 +5,6 @@ import org.junit.Test;
 /**
  * @author hyman
  * @date 2020-09-16 11:02:34
- * @version $ Id: AryTransferTests.java, v 0.1  hyman Exp $
  */
 public class AryTransferTests {
     @Test

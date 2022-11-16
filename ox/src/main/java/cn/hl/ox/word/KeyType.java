@@ -3,7 +3,6 @@ package cn.hl.ox.word;
 /**
  * @author hyman
  * @date 2019-09-17 10:52:24
- * @version $ Id: KeyType.java, v 0.1  hyman Exp $
  */
 public enum KeyType {
     ERROR,

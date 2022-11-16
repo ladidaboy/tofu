@@ -7,7 +7,6 @@ import java.io.Serializable;
 /**
  * @author hyman
  * @date 2020-09-16 20:09:32
- * @version $ Id: ResultInfo.java, v 0.1  hyman Exp $
  */
 public class ResultInfo<T> implements Serializable {
     /**

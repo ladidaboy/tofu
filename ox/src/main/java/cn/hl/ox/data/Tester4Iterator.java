@@ -14,7 +14,6 @@ import java.util.Random;
 /**
  * @author hyman
  * @date 2020-01-07 10:21:49
- * @version $ Id: Tester4Iterator.java, v 0.1  hyman Exp $
  */
 public class Tester4Iterator {
     private static final String KEY = "XX";

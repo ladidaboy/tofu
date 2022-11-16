@@ -12,7 +12,6 @@ import java.util.Random;
 /**
  * @author hyman
  * @date 2020-09-16 17:05:30
- * @version $ Id: Tester.java, v 0.1  hyman Exp $
  */
 public class Tester {
     private static final Random RD = new Random();

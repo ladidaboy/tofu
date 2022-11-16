@@ -7,12 +7,14 @@ package cn.hl.ax.enums;
 public interface BaseEnumInterface {
     /**
      * 获取 标记值
+     *
      * @return 标记值
      */
     int getValue();
 
     /**
      * 是否是 标记值
+     *
      * @param val 标记值
      * @return true.是当前枚举值; false.不是当前枚举值
      */
@@ -22,6 +24,7 @@ public interface BaseEnumInterface {
 
     /**
      * 是否是 标记值
+     *
      * @param val 标记值
      * @return true.是当前枚举值; false.不是当前枚举值
      */
@@ -39,6 +42,7 @@ public interface BaseEnumInterface {
 
     /**
      * 是否有一个一致
+     *
      * @param es enum数组
      * @return true: 发现; false: 未发现
      */

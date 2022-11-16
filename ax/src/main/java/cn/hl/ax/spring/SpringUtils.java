@@ -14,9 +14,9 @@ import java.util.Map;
 
 /**
  * Spring ApplicationContext 工具类
+ *
  * @author hyman
  * @date 2020-02-13 10:24:08
- * @version $ Id: SpringUtils.java, v 0.1  hyman Exp $
  */
 @Component
 public class SpringUtils implements ApplicationContextAware {

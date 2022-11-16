@@ -8,7 +8,6 @@ import java.util.Map;
 /**
  * @author hyman
  * @date 2020-03-03 15:11:10
- * @version $ Id: Example.java, v 0.1  hyman Exp $
  */
 @Data
 public class Example {

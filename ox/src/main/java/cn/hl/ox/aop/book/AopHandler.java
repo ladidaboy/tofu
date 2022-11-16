@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 /**
  * @author hyman
  * @date 2020-04-02 19:16:00
- * @version $ Id: AopHandler.java, v 0.1  hyman Exp $
  */
 public class AopHandler implements InvocationHandler {
     //通过构造方法接受一个没有被代理的原来的对象

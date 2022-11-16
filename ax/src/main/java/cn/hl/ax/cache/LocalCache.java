@@ -17,18 +17,19 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 @Slf4j
 public class LocalCache<K, V> {
-    private static ScheduledExecutorService swapExpiredPool = new ScheduledThreadPoolExecutor(10);
+    private static final ScheduledExecutorService swapExpiredPool = new ScheduledThreadPoolExecutor(10);
 
-    private ConcurrentHashMap<K, Node<K, V>> cache = new ConcurrentHashMap<>(1024);
+    private final ConcurrentHashMap<K, Node<K, V>> cache = new ConcurrentHashMap<>(1024);
 
     /**
      * 让过期时间最小的数据排在队列前，在清除过期数据时，只需查看缓存最近的过期数据，而不用扫描全部缓存
+     *
      * @see Node#compareTo(Node)
      * @see SwapExpiredNodeWorker#run()
      */
-    private PriorityQueue<Node<K, V>> expireQueue = new PriorityQueue<>(1024);
+    private final PriorityQueue<Node<K, V>> expireQueue = new PriorityQueue<>(1024);
 
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     public static void stopCache() {
         try {
@@ -39,7 +40,7 @@ public class LocalCache<K, V> {
         }
     }
 
-    private static class Node<K, V> implements Comparable<Node> {
+    private static class Node<K, V> implements Comparable<Node<K, V>> {
         private K    key;
         private V    value;
         private long expireTime;
@@ -67,7 +68,7 @@ public class LocalCache<K, V> {
             while (true) {
                 lock.lock();
                 try {
-                    Node node = expireQueue.peek();
+                    Node<K, V> node = expireQueue.peek();
                     //没有数据了，或者数据都是没有过期的了
                     if (node == null || node.expireTime > now) {
                         return;
@@ -91,6 +92,7 @@ public class LocalCache<K, V> {
 
     /**
      * 本地缓存
+     *
      * @param delay 清理线程运行间隔(单位: 秒) [2seconds, 2hours]
      */
     public LocalCache(int delay) {
@@ -103,10 +105,10 @@ public class LocalCache<K, V> {
 
     /**
      * 缓存数据
-     * @param key 键值
+     *
+     * @param key   键值
      * @param value 键值
-     * @param ttl 生存时间(Time To Live)(单位: 秒)
-     * @return
+     * @param ttl   生存时间(Time To Live)(单位: 秒)
      */
     public V set(K key, V value, long ttl) {
         if (key == null || ttl <= 0) {

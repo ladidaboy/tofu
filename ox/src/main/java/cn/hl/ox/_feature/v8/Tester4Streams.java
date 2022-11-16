@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 /**
  * @author hyman
  * @date 2019-07-16 17:58:31
- * @version $ Id: Tester4Streams.java, v 0.1  hyman Exp $
  */
 public class Tester4Streams {
     /*

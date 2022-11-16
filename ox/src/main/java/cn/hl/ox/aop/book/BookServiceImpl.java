@@ -3,7 +3,6 @@ package cn.hl.ox.aop.book;
 /**
  * @author hyman
  * @date 2020-04-02 19:13:15
- * @version $ Id: BookServiceImpl.java, v 0.1  hyman Exp $
  */
 public class BookServiceImpl implements BookService {
 

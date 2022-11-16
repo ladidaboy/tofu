@@ -13,12 +13,14 @@ import java.util.function.Supplier;
  * <li>提供默认方法拷贝对象之间的同名属性值</li>
  * <li>忽略名称不相同的属性以及值为空的属性</li>
  * </ol>
+ *
  * @author hyman
  * @date 2019-12-05 23:35:09
  */
 public interface CopyConverter<T> {
     /**
      * 从 T模型对象 拷贝数据到 当前对象中
+     *
      * @param source 数据源
      */
     default void from(T source) {
@@ -27,6 +29,7 @@ public interface CopyConverter<T> {
 
     /**
      * 将 当前对象数据 拷贝出一个 T模型对象
+     *
      * @return T
      */
     default T to() {
@@ -47,10 +50,11 @@ public interface CopyConverter<T> {
 
     /**
      * 拷贝器
-     * @param source 来源对象
+     *
+     * @param source   来源对象
      * @param supplier 当前对象无参构造方法
-     * @param <T> 来源对象 target
-     * @param <M> 当前对象 myself
+     * @param <T>      来源对象 target
+     * @param <M>      当前对象 myself
      * @return myself
      */
     static <T, M extends CopyConverter<T>> M copier(T source, Supplier<M> supplier) {

@@ -3,7 +3,6 @@ package cn.hl.ax.snmp.formatter;
 /**
  * @author hyman
  * @date 2019-08-06 15:45:04
- * @version $ Id: IpForwardingVF.java, v 0.1  hyman Exp $
  */
 public class IpForwardingVF extends VariableFormatter {
 

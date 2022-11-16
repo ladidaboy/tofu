@@ -7,7 +7,6 @@ import java.lang.reflect.Proxy;
 /**
  * @author hyman
  * @date 2020-04-02 19:14:11
- * @version $ Id: Test.java, v 0.1  hyman Exp $
  */
 public class Test {
     public static void main(String[] args) {

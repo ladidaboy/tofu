@@ -6,7 +6,6 @@ import org.snmp4j.smi.OID;
 /**
  * @author hyman
  * @date 2019-08-05 16:18:52
- * @version $ Id: Mib.java, v 0.1  hyman Exp $
  */
 public class Mib {
     private int[]  oid;

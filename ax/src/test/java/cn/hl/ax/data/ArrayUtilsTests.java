@@ -13,7 +13,6 @@ import static cn.hl.ax.data.ArrayUtils.union;
 /**
  * @author hyman
  * @date 2020-09-16 10:46:49
- * @version $ Id: ArrayUtilsTests.java, v 0.1  hyman Exp $
  */
 @Slf4j
 public class ArrayUtilsTests {

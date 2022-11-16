@@ -7,6 +7,7 @@ package cn.hl.ax.spring.base.bean;
  * <li>用于持久层(Dao层)对外提供数据</li>
  * <li>弱化DTO在各层之间传输数据的特性，强化它作为DO扩展对象的特性</li>
  * </ul>
+ *
  * @author hyman
  * @date 2019-12-30 11:24:30
  */

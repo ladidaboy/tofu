@@ -131,8 +131,9 @@ public class MyExample {
     /**
      * 针对字段做多条件的 in 查询(条件值只有一个时，做 equal 处理)
      * <br/>MySQL: OR或者IN所在列有索引的情况下，执行效率差异不大。所在列无索引的情况下，IN的效率更高一些。推荐用IN。
+     *
      * @param property 待查询字段
-     * @param values 待查询条件值
+     * @param values   待查询条件值
      * @return MyCriteria(非空) 需判定MyCriteria是否有效并加入到Example中
      */
     public MyCriteria andConditions(MyCriteria criteria, Enum property, List values) {

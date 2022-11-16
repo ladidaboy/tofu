@@ -3,7 +3,6 @@ package cn.hl.ox.enums;
 /**
  * @author hyman
  * @date 2019-08-22 09:43:58
- * @version $ Id: EnumTest.java, v 0.1  hyman Exp $
  */
 public enum Week {
     /**Monday*/ MON,

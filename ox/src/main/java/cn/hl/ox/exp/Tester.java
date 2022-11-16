@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author hyman
  * @date 2019-08-27 17:52:11
- * @version $ Id: Tester.java, v 0.1  hyman Exp $
  */
 public class Tester {
     static Log logger = LogFactory.getLog(Tester.class);

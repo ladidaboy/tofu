@@ -34,7 +34,6 @@ import java.net.UnknownHostException;
 /**
  * @author hyman
  * @date 2019-08-01 16:56:39
- * @version $ Id: LearnSnmp.java, v 0.1  hyman Exp $
  */
 public class LearnSnmp {
     /*

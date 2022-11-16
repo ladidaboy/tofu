@@ -22,7 +22,6 @@ import java.util.zip.GZIPInputStream;
 /**
  * @author hyman
  * @date 2019-09-02 14:23:16
- * @version $ Id: HttpsConsumer.java, v 0.1  hyman Exp $
  */
 public class HttpsConsumer {
     private static final Log    logger            = LogFactory.getLog(HttpsConsumer.class);
@@ -78,13 +77,13 @@ public class HttpsConsumer {
 
     /**
      * 发起请求
-     * @param uri 地址
-     * @param params 参数
-     * @param method GET | POST | DELETE
+     *
+     * @param uri      地址
+     * @param params   参数
+     * @param method   GET | POST | DELETE
      * @param headDate 时间戳
      * @param headHash 哈希值
      * @return responseText
-     * @throws IOException 打开远程地址过程中会发生IOException
      */
     public static String request(String uri, Object params, String method, String headDate, String headHash) {
         try {

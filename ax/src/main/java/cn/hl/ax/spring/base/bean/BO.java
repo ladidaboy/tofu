@@ -8,6 +8,7 @@ package cn.hl.ax.spring.base.bean;
  * <li>用于业务层(Biz层)对外提供数据</li>
  * <li>也可用于控制层(Web层)对外提供数据(此时等同于 VO)</li>
  * </ul>
+ *
  * @author hyman
  * @date 2019-11-29 11:35:52
  */

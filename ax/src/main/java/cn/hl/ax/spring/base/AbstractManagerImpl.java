@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
  * <li>当D↔B转换复杂时，可覆写internalD2B/internalB2D方法</li>
  * </ul>
  * <p>本类主要是以B模型为主D模型为辅进行相关数据操作，并以B模型对外提供数据，而Q模型主要用于封装查询参数</p><br/>
+ *
  * @author hyman
  * @date 2019-11-28 15:09:01
  */
@@ -92,6 +93,7 @@ public abstract class AbstractManagerImpl<B, D, Q, DAO extends AbstractDao<D, Q>
 
     /**
      * 获取 数据库模型主键
+     *
      * @return BO Id field
      */
     @Override
@@ -104,6 +106,7 @@ public abstract class AbstractManagerImpl<B, D, Q, DAO extends AbstractDao<D, Q>
     /**
      * 数据库模型对象 ==> 业务模型对象
      * <br>复杂业务对象转换时请在子类覆写此方法
+     *
      * @param dbo 数据库模型对象
      * @return 业务模型对象
      */
@@ -126,6 +129,7 @@ public abstract class AbstractManagerImpl<B, D, Q, DAO extends AbstractDao<D, Q>
     /**
      * 业务模型对象 ==> 数据库模型对象
      * <br>复杂业务对象转换时请在子类覆写此方法
+     *
      * @param biz 业务模型对象
      * @return 数据库模型对象
      */

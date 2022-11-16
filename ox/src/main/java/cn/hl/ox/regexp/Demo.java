@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 /**
  * @author hyman
- * @version $ Id: Demo.java, v 0.1  hyman Exp $
  * @date 2021-05-06 15:20:05
  */
 public class Demo {

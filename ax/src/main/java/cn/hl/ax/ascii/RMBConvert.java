@@ -37,6 +37,7 @@ public class RMBConvert {
      * <li>最大支持<font color='red'>百万亿</font>(15位整数，2位小数) ；或<font color='red'>仟万亿</font>(16位整数)</li>
      * <li>超过最大支持<font color='red'>仟万亿</font>(16位整数)，只输出大写数字</li> <li>整数部分越大，则小数部分输出越不精确</li>
      * <li>负数，则忽略负号</li>
+     *
      * @param amount 金额
      * @return 大写金额
      */
@@ -44,7 +45,7 @@ public class RMBConvert {
         amount = amount.abs();
         StringBuilder result = new StringBuilder();
         //= 整数部分 ======================================================================================================
-        StringBuffer sbInteger = new StringBuffer();
+        StringBuilder sbInteger = new StringBuilder();
         long integerVal = amount.longValue();
         // 转成大写
         String integerTxt = getUpper(integerVal);
@@ -67,7 +68,7 @@ public class RMBConvert {
             String tmpIntegerTxt = sbInteger.toString();
             int tmpIntegerLen = tmpIntegerTxt.length();
             // 加权后, 未处理连续零
-            sbInteger = new StringBuffer();
+            sbInteger = new StringBuilder();
             if (txtLen >= 13) {
                 // 万亿 ,合并连续的 零X
                 String str = tmpIntegerTxt.substring(0, tmpIntegerLen - 12 * 2).replaceAll(regex_01, regex_0);
@@ -75,19 +76,19 @@ public class RMBConvert {
             }
             if (txtLen >= 9) {
                 // 亿 ,合并连续的 零X
-                int start = tmpIntegerLen - 12 * 2 < 0 ? 0 : tmpIntegerLen - 12 * 2;
+                int start = Math.max(tmpIntegerLen - 12 * 2, 0);
                 String str = tmpIntegerTxt.substring(start, tmpIntegerLen - 8 * 2).replaceAll(regex_01, regex_0);
                 sbInteger.append(str.charAt(str.length() - 1) == zero ? str.substring(0, str.length() - 1) + '亿' : str);
             }
             if (txtLen >= 5) {
                 // 万 ,合并连续的 零X
-                int start = tmpIntegerLen - 8 * 2 < 0 ? 0 : tmpIntegerLen - 8 * 2;
+                int start = Math.max(tmpIntegerLen - 8 * 2, 0);
                 String str = tmpIntegerTxt.substring(start, tmpIntegerLen - 4 * 2).replaceAll(regex_01, regex_0);
                 sbInteger.append(str.charAt(str.length() - 1) == zero ? str.substring(0, str.length() - 1) + '万' : str);
             }
             if (txtLen >= 1) {
                 // 元 ,合并连续的 零X
-                int start = tmpIntegerLen - 4 * 2 < 0 ? 0 : tmpIntegerLen - 4 * 2;
+                int start = Math.max(tmpIntegerLen - 4 * 2, 0);
                 String str = tmpIntegerTxt.substring(start, tmpIntegerLen).replaceAll(regex_01, regex_0);
                 sbInteger.append(str.charAt(str.length() - 1) == zero ? str.substring(0, str.length() - 1) + '元' : str);
             }
@@ -96,13 +97,13 @@ public class RMBConvert {
             if (lastIntegerTxt.length() == 1) {
                 // 元
                 lastIntegerTxt = zero + lastIntegerTxt;
-                sbInteger = new StringBuffer(lastIntegerTxt);
+                sbInteger = new StringBuilder(lastIntegerTxt);
             } else {
                 // XX亿万玖仟元 -> XX亿零玖仟元
                 int wIndex = lastIntegerTxt.lastIndexOf('万');
                 if (txtLen >= 9 && wIndex > 0 && lastIntegerTxt.charAt(wIndex - 1) == '亿') {
                     lastIntegerTxt = lastIntegerTxt.substring(0, wIndex) + zero + lastIntegerTxt.substring(wIndex + 1);
-                    sbInteger = new StringBuffer(lastIntegerTxt);
+                    sbInteger = new StringBuilder(lastIntegerTxt);
                 }
             }
         } else {
@@ -116,7 +117,7 @@ public class RMBConvert {
             // 处理连续零
             result.append(sbInteger.toString().replaceAll(regex_00, String.valueOf(zero)));
         } else {
-            result.append(sbInteger.toString());
+            result.append(sbInteger);
         }
 
         //= 小数部分 (保留二位小数) 0.01 ========================================================================================
@@ -155,11 +156,13 @@ public class RMBConvert {
 
     /**
      * 将人民币金额大写转小写
+     *
      * @param rmbUpperCase 大写的人民币金额
      * @return 小写金额
      */
     public static BigDecimal format(String rmbUpperCase) throws Exception {
-        if (rmbUpperCase == null || rmbUpperCase.trim().length() == 0 || !Pattern.matches("^[零壹贰叁肆伍陆柒捌玖拾佰仟万亿元角分整]+$", rmbUpperCase)) {
+        if (rmbUpperCase == null || rmbUpperCase.trim().length() == 0 || !Pattern.matches("^[零壹贰叁肆伍陆柒捌玖拾佰仟万亿元角分整]+$",
+                rmbUpperCase)) {
             throw new Exception("Convert Error!");
         }
 

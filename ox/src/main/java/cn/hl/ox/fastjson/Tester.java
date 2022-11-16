@@ -14,7 +14,6 @@ import com.alibaba.fastjson.serializer.ValueFilter;
 /**
  * @author hyman
  * @date 2019-10-15 10:59:41
- * @version $ Id: Tester.java, v 0.1  hyman Exp $
  */
 public class Tester {
     public static void main(String[] args) {

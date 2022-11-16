@@ -5,7 +5,6 @@ import org.apache.commons.lang3.SystemUtils;
 /**
  * @author hyman
  * @date 2019-08-26 16:34:04
- * @version $ Id: Tester4SystemUtils.java, v 0.1  hyman Exp $
  */
 public class Tester4SystemUtils {
     /*

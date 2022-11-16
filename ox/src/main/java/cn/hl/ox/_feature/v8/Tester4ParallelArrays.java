@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author hyman
  * @date 2019-07-16 18:42:36
- * @version $ Id: Tester4ParallelArrays.java, v 0.1  hyman Exp $
  */
 public class Tester4ParallelArrays {
     public static void main(String[] args) {

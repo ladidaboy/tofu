@@ -3,7 +3,6 @@ package cn.hl.ox.gis;
 /**
  * @author hyman
  * @date 2019-08-08 13:02:22
- * @version $ Id: Location.java, v 0.1  hyman Exp $
  */
 public class Location {
     /**GIS格式化地址*/

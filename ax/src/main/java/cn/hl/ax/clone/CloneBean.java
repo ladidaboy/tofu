@@ -13,12 +13,13 @@ import java.util.List;
 
 /**
  * 可序列化(可复制拷贝)的实体父类
+ *
  * @author Hyman.Li
  */
-@SuppressWarnings("serial")
 public class CloneBean implements Serializable {
     /**
      * 对当前对象的深度拷贝(JAVA对象数值拷贝)
+     *
      * @return 拷贝对象
      */
     @SuppressWarnings("unchecked")
@@ -28,6 +29,7 @@ public class CloneBean implements Serializable {
 
     /**
      * 对指定对象的深度拷贝(JAVA对象数值拷贝)
+     *
      * @param obj 指定对象
      * @return 拷贝对象
      */
@@ -46,6 +48,7 @@ public class CloneBean implements Serializable {
 
     /**
      * 对当前对象的浅度拷贝(JAVA对象引用拷贝)
+     *
      * @return 拷贝对象
      */
     public <T extends CloneBean> T selfClone() throws Exception {
@@ -54,6 +57,7 @@ public class CloneBean implements Serializable {
 
     /**
      * 对当前对象的浅度拷贝(JAVA对象引用拷贝)
+     *
      * @param copySuper 是否拷贝父对象属性
      * @return 拷贝对象
      */
@@ -64,7 +68,8 @@ public class CloneBean implements Serializable {
 
     /**
      * 对指定对象的浅度拷贝(JAVA对象引用拷贝)
-     * @param obj 指定对象
+     *
+     * @param obj       指定对象
      * @param copySuper 是否拷贝父对象属性
      * @return 拷贝对象
      */
@@ -82,7 +87,6 @@ public class CloneBean implements Serializable {
         return val;
     }
 
-    @SuppressWarnings({"rawtypes"})
     private static <T> void cloneFieldValue(Class<T> clz, T obj, T val) throws Exception {
         List<Field> fields = getAllFields(clz);
         Method methodSet, methodGet;
@@ -111,8 +115,9 @@ public class CloneBean implements Serializable {
     /**
      * 按照from对象的属性拷贝值到toClz实体中<br>
      * 此方法适用于从{父级对象实体}中拷贝出一个{子级对象实体}
+     *
      * @param fromBean 来源实体对象
-     * @param toClz 目标实体JAVA类
+     * @param toClz    目标实体JAVA类
      * @return toClz.newInstance
      */
     public static <T> Object cloneSameField(T fromBean, Class<?> toClz) throws Exception {
@@ -123,8 +128,9 @@ public class CloneBean implements Serializable {
 
     /**
      * 按照from对象的属性拷贝值到to对象中(只拷贝两个对象中都有的属性)
+     *
      * @param from 来源实体对象
-     * @param to 目标实体对象
+     * @param to   目标实体对象
      */
     public static void cloneSameField(Object from, Object to) throws Exception {
         cloneSameFieldEx(from, to, false);
@@ -132,8 +138,9 @@ public class CloneBean implements Serializable {
 
     /**
      * 按照from对象的属性拷贝值到to对象中(只拷贝两个对象中都有的属性)
-     * @param from 来源实体对象
-     * @param to 目标实体对象
+     *
+     * @param from               来源实体对象
+     * @param to                 目标实体对象
      * @param onlyCopyValidValue 只拷贝有值的属性
      */
     public static void cloneSameFieldEx(Object from, Object to, boolean onlyCopyValidValue) throws Exception {
@@ -181,6 +188,7 @@ public class CloneBean implements Serializable {
 
     /**
      * 获取类中所有的属性，包括父类中的
+     *
      * @param clazz 类对象
      * @return 属性列表
      */

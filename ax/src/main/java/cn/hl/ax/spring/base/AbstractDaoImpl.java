@@ -62,6 +62,7 @@ import static cn.hl.ax.data.DataUtils.safeEmpty;
  * <br>若非BATCH时仍然没有影响行数，可在jdbc连接中加一句话：useAffectedRows=true</li>
  * </ol>
  * <p>本类主要是按照D模型进行数据持久化相关操作，而Q模型主要用于封装查询参数</p><br/>
+ *
  * @author hyman
  * @date 2019-12-02 14:54:48
  */
@@ -111,6 +112,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 判定搜索条件对象是否合法
+     *
      * @param example 搜索条件对象
      */
     protected final boolean isValidExample(Example example) {
@@ -128,6 +130,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 获取 数据库模型类名
+     *
      * @return DO class
      */
     protected final Class<D> getDOClass() {
@@ -136,6 +139,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 获取 参数模型类名
+     *
      * @return QO class
      */
     protected final Class<Q> getQOClass() {
@@ -144,6 +148,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 获取 数据库映射器
+     *
      * @return DO Mapper
      */
     protected final M getMapper() {
@@ -152,6 +157,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 获取 数据库映射器 类对象
+     *
      * @return Clazz
      */
     protected final Class<M> getMapperClass() {
@@ -161,6 +167,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 设定数据源
+     *
      * @param sessionFactory
      */
     public void setSqlSessionFactory(SqlSessionFactory sessionFactory) {
@@ -170,6 +177,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
     /**
      * 获取 数据库模型主键
      * <br/><i>若DO类中未使用`@Id`指定，可在子类中覆写此方法</i>
+     *
      * @return DO Id field
      */
     @Override
@@ -179,6 +187,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 设置批量操作时刷新上下文的阙值
+     *
      * @param batchFlushCount flushStatements count
      */
     protected final void setBatchFlushCount(int batchFlushCount) {
@@ -189,7 +198,8 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 处理关键词查询(keyword)
-     * @param search 查询参数对象
+     *
+     * @param search  查询参数对象
      * @param example Mapper条件对象
      */
     private void processSelectKeyword(SelectKeywordQO search, Example example) {
@@ -230,7 +240,8 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 处理条件词查询(condition)
-     * @param search 查询参数对象
+     *
+     * @param search  查询参数对象
      * @param example Mapper条件对象
      */
     private void processSelectCondition(SelectKeywordQO search, Example example) {
@@ -281,6 +292,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 处理排序查询
+     *
      * @param orderBy 查询参数对象
      * @param example Mapper条件对象
      */
@@ -292,6 +304,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 生成排序字段串
+     *
      * @param sortBies
      * @return
      */
@@ -311,7 +324,8 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
     /**
      * 查询数据时，将QO里自定义的查询条件转换成Example条件
      * <br/>MySQL: OR或者IN所在列有索引的情况下，执行效率差异不大。所在列无索引的情况下，IN的效率更高一些。推荐用IN。
-     * @param param QO模型(非空)
+     *
+     * @param param   QO模型(非空)
      * @param example Example对象(非空)
      */
     protected abstract void internalProcessQO(Q param, Example example);
@@ -322,6 +336,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
      * <li>自动分析 SelectKeywordQO / SelectOrderByQO, 并设置搜索条件</li>
      * <li>调用 internalProcessQO 设置用户自定义搜索条件</li>
      * </ol>
+     *
      * @param param QO条件对象
      * @return Mapper条件对象
      */
@@ -350,6 +365,7 @@ public abstract class AbstractDaoImpl<D, Q, M extends Mapper<D>> implements Abst
 
     /**
      * 根据DO对象生成有值的字段组成的Example
+     *
      * @param dbo DO对象
      * @return Mapper条件对象
      */

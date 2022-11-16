@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 /**
  * @author hyman
  * @date 2020-01-07 12:48:58
- * @version $ Id: Tester4Streams3.java, v 0.1  hyman Exp $
  */
 public class Tester4Streams3 {
     private static final Random rd = new Random();

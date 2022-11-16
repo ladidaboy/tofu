@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * @author hyman
  * @date 2019-12-30 13:21:17
- * @version $ Id: DemoRO.java, v 0.1  hyman Exp $
  */
 @Data
 public class DemoRO implements RO {

@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2020 All Rights Reserved.
- */
 package cn.hl.ax.json;
 
 import cn.hl.ax.enums.BaseEnumInterface;
@@ -18,7 +14,6 @@ import java.lang.reflect.Type;
 /**
  * @author hyman
  * @date 2020-08-22 13:32:52
- * @version $ Id: FastJsonEnumDeserializer.java, v 0.1  hyman Exp $
  */
 @Slf4j
 public class FastJsonEnumDeserializer implements ObjectDeserializer {

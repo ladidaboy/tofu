@@ -10,7 +10,6 @@ import java.util.Collection;
 /**
  * @author hyman
  * @date 2019-07-16 14:10:09
- * @version $ Id: Tester4Annotations.java, v 0.1  hyman Exp $
  */
 public class Tester4Annotations {
     /*

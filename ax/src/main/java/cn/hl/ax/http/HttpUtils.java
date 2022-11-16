@@ -11,6 +11,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 
+import static cn.hl.ax.data.DataUtils.rightPadEx;
+
 public class HttpUtils {
     public static int DETAIL_REQUEST = 1;
     public static int DETAIL_SESSION = 2;
@@ -22,45 +24,45 @@ public class HttpUtils {
 
     /**
      * 现实请求上下文详细信息
-     * @param request
+     *
      * @param type 信息类型: request, session, header
      */
     public static void displayRequestDetails(HttpServletRequest request, int type) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("\r\n---------------------------------- Request Details ---------------------------------------------------------------------------");
+        StringBuilder sb = new StringBuilder();
+        sb.append("\r\n------------------------ Request Details ---------------------------------------------------------------------");
         int maxLen = 33;
 
         // >> Request Information
         if (DataUtils.statusHasFlag(type, DETAIL_REQUEST)) {
             sb.append("\r\n\t[ Request information ]");
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("AuthType", maxLen)).append("\t: ").append(request.getAuthType());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("CharacterEncoding", maxLen)).append("\t: ").append(request.getCharacterEncoding());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContentLength", maxLen)).append("\t: ").append(request.getContentLength());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContentType", maxLen)).append("\t: ").append(request.getContentType());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ContextPath", maxLen)).append("\t: ").append(request.getContextPath());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalAddr", maxLen)).append("\t: ").append(request.getLocalAddr());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalName", maxLen)).append("\t: ").append(request.getLocalName());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("LocalPort", maxLen)).append("\t: ").append(request.getLocalPort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Method", maxLen)).append("\t: ").append(request.getMethod());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("PathInfo", maxLen)).append("\t: ").append(request.getPathInfo());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("PathTranslated", maxLen)).append("\t: ").append(request.getPathTranslated());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Protocol", maxLen)).append("\t: ").append(request.getProtocol());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("QueryString", maxLen)).append("\t: ").append(request.getQueryString());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteAddr", maxLen)).append("\t: ").append(request.getRemoteAddr());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteHost", maxLen)).append("\t: ").append(request.getRemoteHost());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemotePort", maxLen)).append("\t: ").append(request.getRemotePort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RemoteUser", maxLen)).append("\t: ").append(request.getRemoteUser());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RequestedSessionId", maxLen)).append("\t: ").append(request.getRequestedSessionId());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("RequestURI", maxLen)).append("\t: ").append(request.getRequestURI());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("Scheme", maxLen)).append("\t: ").append(request.getScheme());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServerName", maxLen)).append("\t: ").append(request.getServerName());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServerPort", maxLen)).append("\t: ").append(request.getServerPort());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("ServletPath", maxLen)).append("\t: ").append(request.getServletPath());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromCookie", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromCookie());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromUrl", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromUrl());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdFromURL", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromURL());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isRequestedSessionIdValid", maxLen)).append("\t: ").append(request.isRequestedSessionIdValid());
-            sb.append("\r\n\t - ").append(DataUtils.rightPadEx("isSecure", maxLen)).append("\t: ").append(request.isSecure());
+            sb.append("\r\n\t - ").append(rightPadEx("AuthType", maxLen)).append("\t: ").append(request.getAuthType());
+            sb.append("\r\n\t - ").append(rightPadEx("CharacterEncoding", maxLen)).append("\t: ").append(request.getCharacterEncoding());
+            sb.append("\r\n\t - ").append(rightPadEx("ContentLength", maxLen)).append("\t: ").append(request.getContentLength());
+            sb.append("\r\n\t - ").append(rightPadEx("ContentType", maxLen)).append("\t: ").append(request.getContentType());
+            sb.append("\r\n\t - ").append(rightPadEx("ContextPath", maxLen)).append("\t: ").append(request.getContextPath());
+            sb.append("\r\n\t - ").append(rightPadEx("LocalAddr", maxLen)).append("\t: ").append(request.getLocalAddr());
+            sb.append("\r\n\t - ").append(rightPadEx("LocalName", maxLen)).append("\t: ").append(request.getLocalName());
+            sb.append("\r\n\t - ").append(rightPadEx("LocalPort", maxLen)).append("\t: ").append(request.getLocalPort());
+            sb.append("\r\n\t - ").append(rightPadEx("Method", maxLen)).append("\t: ").append(request.getMethod());
+            sb.append("\r\n\t - ").append(rightPadEx("PathInfo", maxLen)).append("\t: ").append(request.getPathInfo());
+            sb.append("\r\n\t - ").append(rightPadEx("PathTranslated", maxLen)).append("\t: ").append(request.getPathTranslated());
+            sb.append("\r\n\t - ").append(rightPadEx("Protocol", maxLen)).append("\t: ").append(request.getProtocol());
+            sb.append("\r\n\t - ").append(rightPadEx("QueryString", maxLen)).append("\t: ").append(request.getQueryString());
+            sb.append("\r\n\t - ").append(rightPadEx("RemoteAddr", maxLen)).append("\t: ").append(request.getRemoteAddr());
+            sb.append("\r\n\t - ").append(rightPadEx("RemoteHost", maxLen)).append("\t: ").append(request.getRemoteHost());
+            sb.append("\r\n\t - ").append(rightPadEx("RemotePort", maxLen)).append("\t: ").append(request.getRemotePort());
+            sb.append("\r\n\t - ").append(rightPadEx("RemoteUser", maxLen)).append("\t: ").append(request.getRemoteUser());
+            sb.append("\r\n\t - ").append(rightPadEx("RequestedSessionId", maxLen)).append("\t: ").append(request.getRequestedSessionId());
+            sb.append("\r\n\t - ").append(rightPadEx("RequestURI", maxLen)).append("\t: ").append(request.getRequestURI());
+            sb.append("\r\n\t - ").append(rightPadEx("Scheme", maxLen)).append("\t: ").append(request.getScheme());
+            sb.append("\r\n\t - ").append(rightPadEx("ServerName", maxLen)).append("\t: ").append(request.getServerName());
+            sb.append("\r\n\t - ").append(rightPadEx("ServerPort", maxLen)).append("\t: ").append(request.getServerPort());
+            sb.append("\r\n\t - ").append(rightPadEx("ServletPath", maxLen)).append("\t: ").append(request.getServletPath());
+            sb.append("\r\n\t - ").append(rightPadEx("isRequestedSessionIdFromCookie", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromCookie());
+            sb.append("\r\n\t - ").append(rightPadEx("isRequestedSessionIdFromUrl", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromUrl());
+            sb.append("\r\n\t - ").append(rightPadEx("isRequestedSessionIdFromURL", maxLen)).append("\t: ").append(request.isRequestedSessionIdFromURL());
+            sb.append("\r\n\t - ").append(rightPadEx("isRequestedSessionIdValid", maxLen)).append("\t: ").append(request.isRequestedSessionIdValid());
+            sb.append("\r\n\t - ").append(rightPadEx("isSecure", maxLen)).append("\t: ").append(request.isSecure());
         }
 
         String name;
@@ -73,7 +75,7 @@ public class HttpUtils {
             while (sessionNames.hasMoreElements()) {
                 name = (String) sessionNames.nextElement();
                 value = session.getAttribute(name);
-                sb.append("\r\n\t - ").append(DataUtils.rightPadEx(name, maxLen)).append("\t: ").append(value);
+                sb.append("\r\n\t - ").append(rightPadEx(name, maxLen)).append("\t: ").append(value);
             }
         }
 
@@ -84,20 +86,17 @@ public class HttpUtils {
             while (headerNames.hasMoreElements()) {
                 name = (String) headerNames.nextElement();
                 value = request.getHeader(name);
-                sb.append("\r\n\t - ").append(DataUtils.rightPadEx(name, maxLen)).append("\t: ").append(value);
+                sb.append("\r\n\t - ").append(rightPadEx(name, maxLen)).append("\t: ").append(value);
             }
         }
 
         // >> Log
-        sb.append("\r\n------------------------------------------------------------------------------------------------------------------------------");
+        sb.append("\r\n--------------------------------------------------------------------------------------------------------------");
         System.out.println(sb.toString());
     }
 
     /**
      * 获取站点的ROOT
-     * @param request
-     * @param needContextPath
-     * @return
      */
     public static String getRequestRoot(HttpServletRequest request, boolean needContextPath) {
         return request.getScheme() + "://" + request.getLocalAddr() + (needContextPath ? request.getContextPath() : "");
@@ -105,8 +104,6 @@ public class HttpUtils {
 
     /**
      * 获取站点的DOMAIN
-     * @param request
-     * @return
      */
     public static String getDomain(HttpServletRequest request) {
         String domain = request.getServerName();
@@ -119,16 +116,14 @@ public class HttpUtils {
 
     /**
      * 设置COOKIE
-     * @param request
-     * @param response
-     * @param name COOKIE名称
-     * @param value COOKIE值
-     * @param expiry COOKIE时效(单位: 秒)
-     * @return
+     *
+     * @param expiry 时效(单位: 秒)
      */
     @SuppressWarnings("deprecation")
     public static boolean setCookie(HttpServletRequest request, HttpServletResponse response, String name, String value, int expiry) {
-        if (request == null && response == null && DataUtils.isInvalid(name)) return false;
+        if (request == null || response == null || DataUtils.isInvalid(name)) {
+            return false;
+        }
 
         try {
             value = URLEncoder.encode(value, "UTF-8");
@@ -139,7 +134,9 @@ public class HttpUtils {
         Cookie cookie = new Cookie(name, value);
         cookie.setDomain(getDomain(request));
         cookie.setPath("/");
-        if (expiry > 0) cookie.setMaxAge(expiry);
+        if (expiry > 0) {
+            cookie.setMaxAge(expiry);
+        }
 
         response.addCookie(cookie);
         //
@@ -148,13 +145,12 @@ public class HttpUtils {
 
     /**
      * 读取COOKIE
-     * @param request
-     * @param name
-     * @return
      */
     @SuppressWarnings("deprecation")
     public static String readCookie(HttpServletRequest request, String name) {
-        if (request == null && DataUtils.isInvalid(name)) return null;
+        if (request == null || DataUtils.isInvalid(name)) {
+            return null;
+        }
         //
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
@@ -173,13 +169,11 @@ public class HttpUtils {
 
     /**
      * 删除COOKIE
-     * @param request
-     * @param response
-     * @param name
-     * @return
      */
     public static boolean delCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        if (request == null && response == null && DataUtils.isInvalid(name)) return false;
+        if (request == null || response == null || DataUtils.isInvalid(name)) {
+            return false;
+        }
         //
         Cookie cookie = new Cookie(name, null);
         cookie.setDomain(getDomain(request));
@@ -193,11 +187,11 @@ public class HttpUtils {
 
     /**
      * 处理HTML特殊字符
-     * @param text
-     * @return
      */
     public static String htmlSpecialChars(String text) {
-        if (DataUtils.isInvalid(text)) return text;
+        if (DataUtils.isInvalid(text)) {
+            return text;
+        }
         text = text.replaceAll("&", "&amp;");
         text = text.replaceAll("<", "&lt;");
         text = text.replaceAll(">", "&gt;");

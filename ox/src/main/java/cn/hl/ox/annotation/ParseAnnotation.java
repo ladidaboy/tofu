@@ -12,7 +12,6 @@ import java.util.Arrays;
 /**
  * @author hyman
  * @date 2019-10-15 13:59:53
- * @version $ Id: ParseAnnotation.java, v 0.1  hyman Exp $
  */
 public class ParseAnnotation {
     /**

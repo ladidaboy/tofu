@@ -12,7 +12,6 @@ import static cn.hl.ax.ascii.RMBConvert.parse;
 /**
  * @author hyman
  * @date 2020-09-16 10:38:33
- * @version $ Id: RMBConvertTests.java, v 0.1  hyman Exp $
  */
 @Slf4j
 public class RMBConvertTests {

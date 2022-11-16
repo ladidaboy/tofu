@@ -5,7 +5,6 @@ import java.util.Optional;
 /**
  * @author hyman
  * @date 2019-07-16 17:54:21
- * @version $ Id: Tester4Optional.java, v 0.1  hyman Exp $
  */
 public class Tester4Optional {
     /*

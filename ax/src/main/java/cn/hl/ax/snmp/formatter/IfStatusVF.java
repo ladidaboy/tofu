@@ -3,7 +3,6 @@ package cn.hl.ax.snmp.formatter;
 /**
  * @author hyman
  * @date 2019-08-06 14:07:52
- * @version $ Id: IfOperStatusVF.java, v 0.1  hyman Exp $
  */
 public class IfStatusVF extends VariableFormatter {
 

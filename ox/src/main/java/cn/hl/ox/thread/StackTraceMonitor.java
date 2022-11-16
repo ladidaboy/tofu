@@ -7,7 +7,6 @@ import java.util.Map;
 /**
  * @author hyman
  * @date 2020-03-19 15:51:49
- * @version $ Id: StackTraceMonitor.java, v 0.1  hyman Exp $
  */
 public class StackTraceMonitor {
     public static void main(String[] args) {

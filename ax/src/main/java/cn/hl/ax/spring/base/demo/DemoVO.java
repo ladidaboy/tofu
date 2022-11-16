@@ -8,7 +8,6 @@ import lombok.Data;
 /**
  * @author hyman
  * @date 2019-12-30 13:22:41
- * @version $ Id: DemoVO.java, v 0.1  hyman Exp $
  */
 @Data
 public class DemoVO implements VO, CopyConverter<DemoBO> {

@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -136,9 +137,9 @@ public class DataUtils {
         if (matcher.matches()) {
             matcher = CommonConst.P_YMD.matcher(datetime);
             if (matcher.matches()) {
-                int y = Integer.valueOf(matcher.group(1));
-                int m = Integer.valueOf(matcher.group(2));
-                int d = Integer.valueOf(matcher.group(3));
+                int y = Integer.parseInt(matcher.group(1));
+                int m = Integer.parseInt(matcher.group(2));
+                int d = Integer.parseInt(matcher.group(3));
                 if (d > 28) {
                     Calendar c = Calendar.getInstance();
                     c.set(y, m - 1, 1);
@@ -491,7 +492,7 @@ public class DataUtils {
             digits 显示的数字位数
             为格式化对象设定小数点后的显示的最多位,显示的最后位是舍入的
         */
-        return new BigDecimal(value).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return new BigDecimal(value).setScale(digits, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -501,7 +502,7 @@ public class DataUtils {
      * @return T
      * @throws RuntimeException When `data` is blank / `percent` not in valid range.
      */
-    public static <T extends Comparable> T getPercentIndex(T[] data, double percent) {
+    public static <T extends Comparable<T>> T getPercentIndex(T[] data, double percent) {
         if (isInvalid(data)) {
             throw new RuntimeException("`data` is empty");
         }
@@ -520,7 +521,7 @@ public class DataUtils {
      * @return T
      * @throws RuntimeException When `data` is blank / `percent` not in valid range.
      */
-    public static <T extends Comparable> T getPercentIndex(List<T> data, double percent) {
+    public static <T extends Comparable<T>> T getPercentIndex(List<T> data, double percent) {
         if (isInvalid(data)) {
             throw new RuntimeException("`data` is empty");
         }
@@ -561,7 +562,7 @@ public class DataUtils {
             if (isValidDateTime(val2.toString())) {
                 val2 = convert2Date(val2);
             }
-            Class clz1 = val1.getClass(), clz2 = val2.getClass();
+            Class<?> clz1 = val1.getClass(), clz2 = val2.getClass();
             if (clz1 == clz2 && clz1 != String.class) {
                 if (clz1 == BigDecimal.class) {
                     return ((BigDecimal) val1).compareTo((BigDecimal) val2) == 0;
@@ -669,8 +670,8 @@ public class DataUtils {
             text = text.replaceAll("\n", " ");
             // 空白符号/中文空格 转成 空格
             text = text.replaceAll("[\\s 　]", " ");
-            // 多个空格(\t\n) 转成 一个空格
-            text = text.replaceAll("\\p{Blank}{2,}", " ").trim();
+            // 多个空格(\t\n) 转成 一个空格 \\p{Blank}{2,}
+            text = text.replaceAll("[ \\t]{2,}", " ").trim();
         }
         return text;
     }
@@ -1091,7 +1092,7 @@ public class DataUtils {
      * @return 数组[sec1, sec2, sec3, sec4, bit, mask]
      */
     public static int[] getNumericIpV4(String ip) {
-        String[] segments = ip.split("[/]");
+        String[] segments = ip.split("/");
         String[] sections = segments[0].split("[.]");
         if (sections.length != 4) {
             throw new RuntimeException("Wrong IP address[" + ip + "]");
@@ -1310,7 +1311,7 @@ public class DataUtils {
 
     //-------------------------------------------------------------------------------------------------------------------------
 
-    private static HashMap<String, ArrayList<Integer>> RANDOM_NUMBERS = new HashMap<>();
+    private static final HashMap<String, ArrayList<Integer>> RANDOM_NUMBERS = new HashMap<>();
 
     public static void randomCycleClear() {
         RANDOM_NUMBERS.clear();
@@ -1369,7 +1370,7 @@ public class DataUtils {
      * Get a random half collection
      * @return Collection
      */
-    public static <T extends Collection> Collection<T> randomHalf(Collection<T> data) {
+    public static <T extends Collection<T>> Collection<T> randomHalf(Collection<T> data) {
         if (data == null || data.size() < 2) {
             return data;
         }

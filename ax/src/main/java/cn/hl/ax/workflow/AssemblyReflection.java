@@ -23,19 +23,20 @@ import java.util.regex.Pattern;
 /**
  * <b>装配流程-反射机制</b><br/>
  * 主要是将指定的`源数据对象`按照`数据转换映射配置`装配成指定的`目标数据对象`<br/>
+ *
  * @author hyman
  * @date 2020-03-03 10:59:52
- * @version $ Id: AssemblyReflection.java, v 0.1  hyman Exp $
  */
 public class AssemblyReflection {
     /**
      * 处理 数据转换映射流程 <br/>
      * 将source中的数据按照mappers映射到target中 <br>
      * 具体映射规则参见 FlowRefectionMapper
-     * @see FlowRefectionMapper
+     *
      * @param source
      * @param target
      * @param mappers
+     * @see FlowRefectionMapper
      */
     public static void doProcess(Object source, Object target, List<FlowRefectionMapper> mappers) {
         if (source == null || target == null || DataUtils.isInvalid(mappers)) {
@@ -252,6 +253,7 @@ public class AssemblyReflection {
 
     /**
      * Map对象仅支持 *Map&lt;String, ?&gt;
+     *
      * @param object
      * @param fieldName
      * @param newInstanceWhenNull
@@ -670,8 +672,8 @@ public class AssemblyReflection {
         FlowRefectionMapper.addIn(mappers, true, "children[*]{ remark, email, classNumber, name }",
                 "biz_pw_cx_SAN.SAN_form2.tableList[*] { ContactPhone, ContactMail, EscalationLevel, ContactPerson }");
         // 2
-        FlowRefectionMapper.addIn(mappers, "letter", "biz_pw_cx_QA.qaForm0.OperateRecord",
-                "biz_pw_cx_monitor.cxMonitor.OperateRecord", "biz_pw_cx_acceptance.acceptance1.OperateRecord");
+        FlowRefectionMapper.addIn(mappers, "letter", "biz_pw_cx_QA.qaForm0.OperateRecord", "biz_pw_cx_monitor.cxMonitor.OperateRecord",
+                "biz_pw_cx_acceptance.acceptance1.OperateRecord");
         // 3
         FlowRefectionMapper.addIn(mappers, true, "parent.family[record].name", "biz_pw_cx_inputResourceData.resourceForm1.device.label");
 

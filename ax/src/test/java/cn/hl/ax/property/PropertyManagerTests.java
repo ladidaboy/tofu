@@ -7,7 +7,6 @@ import java.io.File;
 /**
  * @author hyman
  * @date 2020-09-16 19:29:32
- * @version $ Id: PropertyManagerTests.java, v 0.1  hyman Exp $
  */
 public class PropertyManagerTests {
     @Test

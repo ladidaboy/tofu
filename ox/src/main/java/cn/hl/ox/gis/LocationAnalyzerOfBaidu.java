@@ -11,7 +11,6 @@ import java.net.URLConnection;
 /**
  * @author hyman
  * @date 2019-08-08 11:55:31
- * @version $ Id: GetLatAndLngByBaidu.java, v 0.1  hyman Exp $
  */
 public class LocationAnalyzerOfBaidu {
     private static final String MAP_AK  = "Puzsuhx0wmeNTQFoHgfDEf9U";

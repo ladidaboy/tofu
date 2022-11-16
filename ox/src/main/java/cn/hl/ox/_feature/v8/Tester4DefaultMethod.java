@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 /**
  * @author hyman
  * @date 2019-07-16 11:52:27
- * @version $ Id: Tester4DefaultMethod.java, v 0.1  hyman Exp $
  */
 public class Tester4DefaultMethod {
     /*

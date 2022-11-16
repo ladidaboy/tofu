@@ -5,6 +5,7 @@ import tk.mybatis.mapper.entity.Example;
 
 /**
  * 默认进行逻辑删除对象
+ *
  * @author hyman
  * @date 2019-12-01 01:49:25
  */
@@ -20,6 +21,7 @@ public interface TypicalDeleteDO extends TypicalBaseDO {
 
     /**
      * 查询时设置搜索条件
+     *
      * @param example 条件对象
      */
     default void prepare4queryE(Example example) {
@@ -28,6 +30,7 @@ public interface TypicalDeleteDO extends TypicalBaseDO {
 
     /**
      * 查询时设置搜索条件
+     *
      * @param dbo DO数据对象
      */
     default void prepare4queryD(Object dbo) {
@@ -36,6 +39,7 @@ public interface TypicalDeleteDO extends TypicalBaseDO {
 
     /**
      * 插入时设置默认数据
+     *
      * @param dbo DO数据对象
      */
     default void prepare4create(Object dbo) {
@@ -44,6 +48,7 @@ public interface TypicalDeleteDO extends TypicalBaseDO {
 
     /**
      * 删除时设置默认数据
+     *
      * @param dbo DO数据对象
      */
     default void prepare4delete(Object dbo) {

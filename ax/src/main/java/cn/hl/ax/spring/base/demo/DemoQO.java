@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 示例搜索模型
+ *
  * @author hyman
  * @date 2019-11-30 02:05:36
  */

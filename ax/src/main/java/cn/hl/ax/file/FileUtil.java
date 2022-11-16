@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class FileUtil {
     public static void createFile(File file) throws IOException {
@@ -42,7 +44,7 @@ public class FileUtil {
      */
     public static void copyFile(File file, String newPath) throws Exception {
         if (file.exists()) {
-            InputStream input = new FileInputStream(file);
+            InputStream input = Files.newInputStream(file.toPath());
             FileOutputStream fos = new FileOutputStream(newPath + file.getName());
             byte[] buffer = new byte[8192];
             int length = 0;
@@ -62,7 +64,7 @@ public class FileUtil {
         File file = new File(fileName);
         createFile(file);
         FileOutputStream fos = new FileOutputStream(file, true);
-        fos.write(content.getBytes("UTF-8"));
+        fos.write(content.getBytes(StandardCharsets.UTF_8));
         fos.flush();
         fos.close();
         /*FileWriter fw = new FileWriter(file, true);

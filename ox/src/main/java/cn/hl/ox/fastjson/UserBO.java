@@ -5,7 +5,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 /**
  * @author hyman
  * @date 2019-10-15 11:00:39
- * @version $ Id: UserBO.java, v 0.1  hyman Exp $
  */
 public class UserBO {
     private Long   uid;

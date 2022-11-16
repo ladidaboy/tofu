@@ -23,6 +23,7 @@ import java.util.List;
  * <li>Q - Query Object</li>
  * <li>MNG - Biz Manager</li>
  * </ul>
+ *
  * @author hyman
  * @date 2019-11-30 00:26:36
  */
@@ -58,6 +59,7 @@ public abstract class AbstractController<B, Q, MNG extends AbstractManager<B, Q>
 
     /**
      * 组装列表查询模型
+     *
      * @param keyword 关键词
      * @return QO
      */
@@ -65,9 +67,10 @@ public abstract class AbstractController<B, Q, MNG extends AbstractManager<B, Q>
 
     /**
      * 组装分页查询模型
-     * @param pageNum 分页页码
+     *
+     * @param pageNum  分页页码
      * @param pageSize 分页大小
-     * @param keyword 关键词
+     * @param keyword  关键词
      * @return QO
      */
     protected abstract Q internalPageQO(Integer pageNum, Integer pageSize, String keyword);

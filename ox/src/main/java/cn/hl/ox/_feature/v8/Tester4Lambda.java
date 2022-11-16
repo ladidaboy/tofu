@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @author hyman
  * @date 2019-07-16 11:31:51
- * @version $ Id: Tester4Lambda.java, v 0.1  hyman Exp $
  */
 public class Tester4Lambda {
     public static void main(String args[]) {

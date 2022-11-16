@@ -5,7 +5,6 @@ import java.lang.reflect.Proxy;
 /**
  * @author hyman
  * @date 2020-04-02 19:07:12
- * @version $ Id: JdkProxyTest.java, v 0.1  hyman Exp $
  */
 public class JdkProxyTest {
     public static IPersonService getProxy() {

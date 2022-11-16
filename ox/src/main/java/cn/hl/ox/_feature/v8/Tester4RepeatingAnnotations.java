@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 /**
  * @author hyman
  * @date 2019-07-16 12:13:36
- * @version $ Id: Tester4RepeatingAnnotations.java, v 0.1  hyman Exp $
  */
 public class Tester4RepeatingAnnotations {
     /*

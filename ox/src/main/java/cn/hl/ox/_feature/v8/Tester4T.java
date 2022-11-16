@@ -3,7 +3,6 @@ package cn.hl.ox._feature.v8;
 /**
  * @author hyman
  * @date 2019-07-16 14:06:47
- * @version $ Id: Tester4T.java, v 0.1  hyman Exp $
  */
 
 /**

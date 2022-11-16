@@ -3,7 +3,6 @@ package cn.hl.ax.snmp.formatter;
 /**
  * @author hyman
  * @date 2019-08-06 17:23:09
- * @version $ Id: TcpRtoAlgorithmVF.java, v 0.1  hyman Exp $
  */
 public class TcpRtoAlgorithmVF extends VariableFormatter {
 

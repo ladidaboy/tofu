@@ -6,15 +6,17 @@ import java.util.EnumSet;
 
 /**
  * Enumeration Utils
+ *
  * @author hyman
  * @date 2019-08-22 15:33:44
  */
 public class EnumUtils {
     /**
      * 通过name获取对应的Enum Class
-     * @param clz class
+     *
+     * @param clz  class
      * @param name 名称
-     * @param <E> enum *
+     * @param <E>  enum *
      * @return E
      */
     public static <E extends Enum<E>> E fromName(Class<E> clz, String name) {
@@ -29,9 +31,10 @@ public class EnumUtils {
 
     /**
      * 通过ordinal获取对应的Enum Class
-     * @param clz class
+     *
+     * @param clz     class
      * @param ordinal 序号
-     * @param <E> enum *
+     * @param <E>     enum *
      * @return E
      */
     public static <E extends Enum<E>> E fromOrdinal(Class<E> clz, int ordinal) {
@@ -46,10 +49,11 @@ public class EnumUtils {
 
     /**
      * 通过指定的field获取对应的Enum Class
-     * @param clz class
+     *
+     * @param clz   class
      * @param field 属性
      * @param value 数值
-     * @param <E> enum *
+     * @param <E>   enum *
      * @return E
      */
     public static <E extends Enum<E>> E fromField(Class<E> clz, String field, Object value) {
@@ -71,9 +75,10 @@ public class EnumUtils {
 
     /**
      * 是否一致
-     * @param e enum
+     *
+     * @param e    enum
      * @param flag 标识
-     * @param <E> 枚举类
+     * @param <E>  枚举类
      * @return true: 一致; false: 不一致
      */
     public static <E extends Enum<E>> boolean isSame(E e, String flag) {

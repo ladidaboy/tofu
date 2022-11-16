@@ -5,7 +5,6 @@ import cn.hl.ax.enums.BaseEnumInterface;
 /**
  * @author hyman
  * @date 2019-08-22 17:24:30
- * @version $ Id: MyEnum.java, v 0.1  hyman Exp $
  */
 public enum MyEnum implements BaseEnumInterface {
     /**Ci*/ CIC("CiCi", 1),

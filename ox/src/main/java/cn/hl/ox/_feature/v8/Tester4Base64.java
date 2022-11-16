@@ -6,7 +6,6 @@ import java.util.Base64;
 /**
  * @author hyman
  * @date 2019-07-16 18:40:21
- * @version $ Id: Tester4Base64.java, v 0.1  hyman Exp $
  */
 public class Tester4Base64 {
     public static void main(String[] args) {

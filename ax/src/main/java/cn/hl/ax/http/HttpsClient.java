@@ -37,13 +37,13 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -56,7 +56,6 @@ import java.util.Map.Entry;
 /**
  * @author hyman
  * @date 2019-09-02 16:05:36
- * @version $ Id: MyClient.java, v 0.1  hyman Exp $
  */
 public class HttpsClient {
     private static String               TAG       = "ⓘHttpsClient";
@@ -362,7 +361,7 @@ public class HttpsClient {
                 throw new IOException("Download File not found!");
             }
             byte[] b = EntityUtils.toByteArray(entity);
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(localFileName)));
+            OutputStream out = new BufferedOutputStream(Files.newOutputStream(new File(localFileName).toPath()));
             out.write(b);
             out.flush();
             out.close();

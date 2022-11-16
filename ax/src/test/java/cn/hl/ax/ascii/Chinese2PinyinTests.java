@@ -8,7 +8,6 @@ import static cn.hl.ax.ascii.Chinese2Pinyin.getFullSpell;
 /**
  * @author hyman
  * @date 2020-09-16 10:33:51
- * @version $ Id: Chinese2PinyinTests.java, v 0.1  hyman Exp $
  */
 @Slf4j
 public class Chinese2PinyinTests {

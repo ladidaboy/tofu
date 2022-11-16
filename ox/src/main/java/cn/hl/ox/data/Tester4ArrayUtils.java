@@ -5,7 +5,6 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * @author hyman
  * @date 2019-08-26 16:33:51
- * @version $ Id: Tester4ArrayUtils.java, v 0.1  hyman Exp $
  */
 public class Tester4ArrayUtils {
     /*

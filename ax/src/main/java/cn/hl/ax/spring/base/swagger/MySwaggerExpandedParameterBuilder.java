@@ -31,9 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @see SwaggerExpandedParameterBuilder
  * @author hyman
  * @date 2019-12-27 13:27:41
+ * @see SwaggerExpandedParameterBuilder
  */
 @Slf4j
 @Primary

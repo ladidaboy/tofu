@@ -6,7 +6,6 @@ import java.lang.reflect.Parameter;
 /**
  * @author hyman
  * @date 2019-07-16 14:14:34
- * @version $ Id: Tester4ParameterNames.java, v 0.1  hyman Exp $
  */
 public class Tester4ParameterNames {
     /*

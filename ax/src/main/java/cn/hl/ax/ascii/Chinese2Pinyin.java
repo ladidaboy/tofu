@@ -9,8 +9,8 @@ import java.util.LinkedHashMap;
 
 @Slf4j
 public class Chinese2Pinyin {
-    private static LinkedHashMap<String, Integer> spellMap     = new LinkedHashMap<>();
-    private static int                            spellMapSize = 0;
+    private static final LinkedHashMap<String, Integer> spellMap     = new LinkedHashMap<>();
+    private static int                                  spellMapSize = 0;
 
     static {
         initialize();
@@ -121,7 +121,7 @@ public class Chinese2Pinyin {
         } catch (Exception e) {
             log.error(LogUtils.getSimpleMessages(e));
         }
-        if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
+        if (bytes == null || bytes.length > 2 || bytes.length == 0) {
             // 错误
             return 0;
         }

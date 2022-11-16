@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 /**
  * @author hyman
  * @date 2019-07-16 12:04:51
- * @version $ Id: Tester4MethodReferences.java, v 0.1  hyman Exp $
  */
 public class Tester4MethodReferences {
     public static class Car {

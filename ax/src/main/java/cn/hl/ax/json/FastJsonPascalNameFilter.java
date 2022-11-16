@@ -1,7 +1,3 @@
-/*
- * Zenlayer.com Inc.
- * Copyright (c) 2014-2020 All Rights Reserved.
- */
 package cn.hl.ax.json;
 
 import cn.hl.ax.data.DataUtils;
@@ -34,6 +30,7 @@ public class FastJsonPascalNameFilter implements NameFilter {
 
     /**
      * FastJSON属性名称过滤器
+     *
      * @param nameIndex 多个别名时(alternateNames): 使用的别名序号,从0开始
      */
     public FastJsonPascalNameFilter(int nameIndex) {
@@ -42,6 +39,7 @@ public class FastJsonPascalNameFilter implements NameFilter {
 
     /**
      * FastJSON属性名称过滤器
+     *
      * @param useFirst 多个别名时(alternateNames): true-优先使用第一个; false-优先使用最后一个
      */
     public FastJsonPascalNameFilter(boolean useFirst) {

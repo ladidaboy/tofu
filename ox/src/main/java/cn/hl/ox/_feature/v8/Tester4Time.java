@@ -12,7 +12,6 @@ import java.time.ZonedDateTime;
 /**
  * @author hyman
  * @date 2019-07-16 18:22:37
- * @version $ Id: Tester4Time.java, v 0.1  hyman Exp $
  */
 public class Tester4Time {
     /*

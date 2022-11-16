@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 /**
  * @author hyman
  * @date 2019-10-15 13:54:32
- * @version $ Id: MyAnnotation.java, v 0.1  hyman Exp $
  */
 public class MyAnnotation {
     /**

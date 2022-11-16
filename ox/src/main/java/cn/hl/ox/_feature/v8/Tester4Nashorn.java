@@ -7,7 +7,6 @@ import javax.script.ScriptException;
 /**
  * @author hyman
  * @date 2019-07-16 18:38:14
- * @version $ Id: Tester4Nashorn.java, v 0.1  hyman Exp $
  */
 public class Tester4Nashorn {
     /*

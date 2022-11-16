@@ -23,9 +23,9 @@ import java.util.List;
  * </ul>
  * <b>扩展映射在一个KEY中最多只能出现一次并且在末尾。例如错误示范: tt[*]{aa, b, c}.ff</b><br>
  * <u>以上两种映射方式都会受checkValidValue限制</u>
+ *
  * @author hyman
  * @date 2020-03-03 16:36:48
- * @version $ Id: FlowRefectionMapper.java, v 0.1  hyman Exp $
  */
 public class FlowRefectionMapper {
     private String   targetKey;
@@ -38,7 +38,8 @@ public class FlowRefectionMapper {
 
     /**
      * 反射机制映射关系对象
-     * @param targetKey 目标属性
+     *
+     * @param targetKey  目标属性
      * @param sourceKeys 数据来源属性列表(优先级: 越靠后优先级越高)
      * @param filterNull 只复制有效值(拷贝数值前判断是否有效，无效值不拷贝)
      */

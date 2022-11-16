@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
  * <li>可覆写相关方法以达到定制化操作数据</li>
  * <li>必须复写</li>
  * </ol>
+ *
  * @author hyman
  * @date 2019-12-01 01:49:25
  */
@@ -32,7 +33,8 @@ public interface TypicalBaseDO {
     /**
      * 设置DO对象的属性值<br>
      * 此方法提供公共操作，覆写时考虑好影响范围
-     * @param dbo DO对象实例
+     *
+     * @param dbo   DO对象实例
      * @param field 属性名称
      * @param value 属性数值
      */
@@ -53,6 +55,7 @@ public interface TypicalBaseDO {
      * 获取当前用户编号
      * <i>UUID.randomUUID().toString();</i>
      * <i>SubjectUtil.getContextSubjectUserId();</i>
+     *
      * @return UID
      */
     String getCurrentUserId();

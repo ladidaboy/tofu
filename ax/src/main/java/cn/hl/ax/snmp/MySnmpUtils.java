@@ -517,7 +517,7 @@ public class MySnmpUtils {
 
     public static void main(String[] args) {
         // 107.155.19.82  192.254.81.147  C#Edge123
-        String ip = "104.166.168.3";
+        String ip = "128.1.65.13";
         int port = 161;
         String community = "C#EDGE123";
 
@@ -529,8 +529,8 @@ public class MySnmpUtils {
         //collectPort(ip, port, community);
         //collectSoft(ip, port, community);
 
-        snmpSet(ip, port, community, Mib2Library.SysName, "Test.System.Name", true);
-        snmpGet(ip, port, community, new Mib[] {Mib2Library.SysName, Mib2Library.SysDescr}, true);
+        //snmpSet(ip, port, community, Mib2Library.SysName, "Test.System.Name", true);
+        //snmpGet(ip, port, community, new Mib[] {Mib2Library.SysName, Mib2Library.SysDescr}, true);
 
         Mib[] mibs = {
                 /*!*/Mib2Library.IfIndex,
@@ -540,10 +540,7 @@ public class MySnmpUtils {
                 /*!*/Mib2Library.IfOperStatus,
                 /*!*/Mib2Library.IfHCInOctets,
                 /*!*/Mib2Library.IfHCOutOctets,
-                ///*!*/Mib2Library.IpAdEntAddr,
-                ///*!*/Mib2Library.IpAdEntNetMask,
-                ///*!*/Mib2Library.IpRouteDest,
-                ///*!*/Mib2Library.IpRouteIfIndex,
+                /*!*/Mib2Library.IfPhysAddress,
         };
         collect(ip, port, community, mibs, true);
     }

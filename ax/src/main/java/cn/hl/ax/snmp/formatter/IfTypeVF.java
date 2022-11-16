@@ -8,10 +8,9 @@ import java.util.Map;
 /**
  * @author hyman
  * @date 2019-08-06 11:17:59
- * @version $ Id: IfTypeVariableFormatter.java, v 0.1  hyman Exp $
  */
 public class IfTypeVF extends VariableFormatter {
-    private static Map<Integer, String> valueMap = new HashMap<>();
+    private static final Map<Integer, String> valueMap = new HashMap<>();
 
     static {
         valueMap.put(0, "Virtual(0)");

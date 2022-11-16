@@ -8,7 +8,6 @@ import java.io.Serializable;
 /**
  * @author hyman
  * @date 2020-01-08 10:45:01
- * @version $ Id: SimpleInfo.java, v 0.1  hyman Exp $
  */
 @Data
 public class SimpleInfo implements Serializable {

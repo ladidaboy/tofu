@@ -20,18 +20,21 @@ import java.util.List;
  * <li>Q - Query Object</li>
  * <li>MNG - Biz Manager</li>
  * </ul>
+ *
  * @author hyman
  * @date 2019-12-31 21:14:26
  */
 public interface CommonQueryController<B, Q, MNG extends AbstractManager<B, Q>> extends Controller {
     /**
      * 获取基于AbstractManager的业务层对象
+     *
      * @return &lt;? extends AbstractManager&gt;
      */
     MNG getManager();
 
     /**
      * 组装列表查询模型
+     *
      * @param keyword 关键词
      * @return QO
      */
@@ -39,9 +42,10 @@ public interface CommonQueryController<B, Q, MNG extends AbstractManager<B, Q>> 
 
     /**
      * 组装分页查询模型
-     * @param pageNum 分页页码
+     *
+     * @param pageNum  分页页码
      * @param pageSize 分页大小
-     * @param keyword 关键词
+     * @param keyword  关键词
      * @return QO
      */
     Q internalPageQO(Integer pageNum, Integer pageSize, String keyword);
@@ -73,8 +77,8 @@ public interface CommonQueryController<B, Q, MNG extends AbstractManager<B, Q>> 
 
     /**
      * 根据关键词查询数据
-     * @param keyword 查询关键词
      *
+     * @param keyword 查询关键词
      * @return List&lt;B&gt;
      */
     @GetMapping("list/{keyword}")
@@ -91,9 +95,9 @@ public interface CommonQueryController<B, Q, MNG extends AbstractManager<B, Q>> 
 
     /**
      * 分页查询数据
-     * @param pageNum 页码
-     * @param pageSize 分页大小
      *
+     * @param pageNum  页码
+     * @param pageSize 分页大小
      * @return PageInfo&lt;B&gt;
      */
     @GetMapping("page/{pageNum}/{pageSize}")
@@ -106,10 +110,10 @@ public interface CommonQueryController<B, Q, MNG extends AbstractManager<B, Q>> 
 
     /**
      * 根据关键词分页查询数据
-     * @param pageNum 页码
-     * @param pageSize 分页大小
-     * @param keyword 查询关键词
      *
+     * @param pageNum  页码
+     * @param pageSize 分页大小
+     * @param keyword  查询关键词
      * @return PageInfo&lt;B&gt;
      */
     @GetMapping("page/{pageNum}/{pageSize}/{keyword}")

@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  * @author hyman
  * @date 2020-03-03 15:11:31
- * @version $ Id: ExampleChild.java, v 0.1  hyman Exp $
  */
 @Data
 public class ExampleChild {

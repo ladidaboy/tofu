@@ -6,6 +6,7 @@ package cn.hl.ax.spring.base.select;
  * <li>拥有默认查询行为的参数模型</li>
  * <li>可覆写相关方法以达到定制化查询数据</li>
  * </ol>
+ *
  * @author hyman
  * @date 2019-12-03 14:13:38
  */

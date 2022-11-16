@@ -3,7 +3,6 @@ package cn.hl.ax.snmp.formatter;
 /**
  * @author hyman
  * @date 2019-11-21 17:34:51
- * @version $ Id: TcpConnStateVF.java, v 0.1  hyman Exp $
  */
 public class TcpConnStateVF extends VariableFormatter {
     //Closed(1), Listen(2), SynSent(3), SynReceived(4), Established(5),

@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 /**
  * @author hyman
  * @date 2019-08-22 09:44:34
- * @version $ Id: Tester.java, v 0.1  hyman Exp $
  */
 public class Tester {
     public static void main(String[] args) {

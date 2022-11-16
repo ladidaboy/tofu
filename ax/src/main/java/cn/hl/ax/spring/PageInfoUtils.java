@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * @author hyman
  * @date 2020-09-16 20:19:48
- * @version $ Id: PageInfoUtils.java, v 0.1  hyman Exp $
  */
 public class PageInfoUtils {
     public static <E> void copyPageInfoBasic(PageInfo<?> source, PageInfo<E> target, List<E> list) {

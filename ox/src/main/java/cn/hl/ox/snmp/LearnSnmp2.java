@@ -28,7 +28,6 @@ import java.io.IOException;
 /**
  * @author hyman
  * @date 2019-08-01 15:20:08
- * @version $ Id: Snmp4jFirstDemo.java, v 0.1  hyman Exp $
  */
 public class LearnSnmp2 {
 
