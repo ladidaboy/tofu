@@ -7,7 +7,7 @@
     <artifactId>spring-rpc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>rpc-api</module>
+        <module>base-rpc</module>
         <module>by-amqp</module>
         <module>by-hessian</module>
         <module>by-http</module>
