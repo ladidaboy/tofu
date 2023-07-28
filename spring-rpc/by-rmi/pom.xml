@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.hl.sbc.rpc</groupId>
-            <artifactId>rpc-api</artifactId>
+            <artifactId>base-rpc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
