@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class TimeUtils extends DateUtils {
@@ -253,7 +254,7 @@ public class TimeUtils extends DateUtils {
         TimeZone timeZone = calendar.getTimeZone();
         TimeZone timeZone1 = TimeZone.getDefault();
         TimeZone timeZone2 = TimeZone.getTimeZone("Europe/Copenhagen");
-        System.out.println("> timeZone = " + (timeZone.getDisplayName() == timeZone1.getDisplayName()));
+        System.out.println("> timeZone = " + (Objects.equals(timeZone.getDisplayName(), timeZone1.getDisplayName())));
 
         /**
          * 相当于

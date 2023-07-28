@@ -18,35 +18,7 @@ import java.util.regex.Pattern;
  * @date 2021-05-06 15:20:05
  */
 public class Demo {
-    public static void main(String[] args) throws InterruptedException {
-        /*String input = "super[32].child[1].name";
-        String regex = "([a-zA-Z]+)\\[(.*?)]";*/
-
-        /*String input = "{attribute:1,\n\"term|f84a5d5f23e542f19fedbb57bffa0df7|\":\n\"23\"\",\n\"attribute\":20200202}";
-        String regex = "[ ]?['\"]?([a-zA-z0-9|]+)['\"]?:[ ]?['\"]?([a-zA-z0-9\\u4e00-\\u9fa5\":-]*?)['\"]?[,}]";*/
-
-        /*String input = "zzz[x].abcd.  efg [*] {hi,   jk,  lmn}.  oo";
-        String regex = "([a-zA-Z]+)[ ]?\\[([0-9* ]*?)][ ]?\\{(.*?)}";*/
-
-        String input = "CUS:cid(5334):st(SEA192865):W(49699):vll(D07068):bw(100M)";
-        String regex = ":([a-zA-Z]+)\\(([0-9a-zA-Z:/-]+)\\)";
-
-        input = DataUtils.compressText(input);
-        System.out.println("\nInput: " + input);
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-        while (matcher.find()) {
-            System.out.println("\33[35;0m____________////// matcher.find \\\\\\\\\\\\____________\33[0m");
-            Thread.sleep(5);
-            int count = matcher.groupCount();
-            for (int i = 0; i <= count; i++) {
-                System.out.println(matcher.group(i));
-            }
-            int start = matcher.start(), end = matcher.end();
-            System.out.println("\33[33;0m[[ start: " + start + " ~ end: " + end + " | length: " + input.length() + " ]]\33[0m");
-        }
-
-        //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
+    private static void test4copyRecord() {
         List<BS> list = new ArrayList<>();
         BS v1 = new BS();
         v1.setName("Hyman");
@@ -74,5 +46,35 @@ public class Demo {
         DataUtils.copyRecord(data, rd, fieldMap, false);
         System.err.println("\n>>>>>>>>>>>>>>>> After copyRecord <<<<<<<<<<<<<<<<");
         System.out.println(JSON.toJSONString(rd.getColumns(), SerializerFeature.PrettyFormat, SerializerFeature.UseISO8601DateFormat));
+    }
+
+    private static void test4regex(String input, String regex) throws InterruptedException {
+        input = DataUtils.compressText(input);
+        System.out.println("\nInput: " + input);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            System.out.println("\33[35;0m____________////// matcher.find \\\\\\\\\\\\____________\33[0m");
+            Thread.sleep(5);
+            int count = matcher.groupCount();
+            for (int i = 0; i <= count; i++) {
+                System.out.println(matcher.group(i));
+            }
+            int start = matcher.start(), end = matcher.end();
+            System.out.println("\33[33;0m[[ start: " + start + " ~ end: " + end + " | length: " + input.length() + " ]]\33[0m");
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        //test4copyRecord();
+
+        //^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\_/^\\
+
+        /*test4regex("super[32].child[1].name", "([a-zA-Z]+)\\[(.*?)]");
+        test4regex("{attribute:1,\n\"term|f84a5d5f23e542f19fedbb57bffa0df7|\":\n\"23\"\",\n\"attribute\":20200202}",
+                "[ ]?['\"]?([a-zA-z0-9|]+)['\"]?:[ ]?['\"]?([a-zA-z0-9\\u4e00-\\u9fa5\":-]*?)['\"]?[,}]");
+        test4regex("zzz[x].abcd.  efg [*] {hi,   jk,  lmn}.  oo", "([a-zA-Z]+)[ ]?\\[([0-9* ]*?)][ ]?\\{(.*?)}");
+        test4regex("CUS:cid(5334):st(SEA192865):W(49699):vll(D07068):bw(100M)", ":([a-zA-Z]+)\\(([0-9a-zA-Z:/-]+)\\)");*/
+        test4regex("(sa:1234.56789)", "\\(sa:([0-9]*(\\.[0-9]*)?)\\)");
     }
 }

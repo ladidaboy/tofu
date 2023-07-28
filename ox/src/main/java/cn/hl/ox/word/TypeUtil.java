@@ -49,8 +49,8 @@ public class TypeUtil {
      * @return boolean
      */
     public boolean isOperator(char ch) {
-        for (int i = 0; i < OPERATORS.length; i++) {
-            if (ch == OPERATORS[i]) {
+        for (char operator : OPERATORS) {
+            if (ch == operator) {
                 return true;
             }
         }
@@ -63,8 +63,8 @@ public class TypeUtil {
      * @return boolean
      */
     public boolean isSeparators(char ch) {
-        for (int i = 0; i < SEPARATORS.length; i++) {
-            if (ch == SEPARATORS[i]) {
+        for (char separator : SEPARATORS) {
+            if (ch == separator) {
                 return true;
             }
         }

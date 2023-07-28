@@ -56,9 +56,9 @@ public class Tester {
         for (String key : keys) {
             date = cache.get(key);
             if (date == null) {
-                System.err.println(String.format("%20s => %s", key, cache.get(key)));
+                System.err.printf("%20s => %s%n", key, cache.get(key));
             } else {
-                System.out.println(String.format("%20s => %s", key, cache.get(key)));
+                System.out.printf("%20s => %s%n", key, cache.get(key));
                 key2s.add(key);
             }
         }
@@ -69,9 +69,9 @@ public class Tester {
         for (String key : key2s) {
             date = cache.get(key);
             if (date == null) {
-                System.err.println(String.format("%20s => %s", key, cache.get(key)));
+                System.err.printf("%20s => %s%n", key, cache.get(key));
             } else {
-                System.out.println(String.format("%20s => %s", key, cache.get(key)));
+                System.out.printf("%20s => %s%n", key, cache.get(key));
             }
         }
         //

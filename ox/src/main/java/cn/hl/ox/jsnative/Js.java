@@ -46,7 +46,7 @@ JDK1.6加入了对Script(JSR223)的支持。这是一个脚本框架，提供了
 public class Js {
 
     private static void simple() {
-        execute("function someFunction(p){ return 'This is test js in java, ' + eval(p) }");
+        execute("function someFunction(p){ return 'This is test js in java, ' + eval(p) }");
     }
 
     private static void advance() {
@@ -91,9 +91,6 @@ public class Js {
         }
     }
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         simple();
         LogUtils.printSplitLine();

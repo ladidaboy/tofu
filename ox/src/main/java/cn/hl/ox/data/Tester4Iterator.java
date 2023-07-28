@@ -57,11 +57,12 @@ public class Tester4Iterator {
         System.out.println(list);*/
 
         // [ERROR] 示例二：这种情况不会报错，因为最后一个元素未被遍历到就程序跳出了循环遍历
-        for (String str : list) {
+        /*for (String str : list) {
             if (str.equals(KEY)) {
                 list.remove(str);
             }
-        }
+        }*/
+        list.removeIf(str -> str.equals(KEY));
         System.out.println(list);
 
         // 方法一：for循环遍历
@@ -78,7 +79,7 @@ public class Tester4Iterator {
 
         // 方法二：使用集合的迭代器
         Iterator<String> it = list.iterator();
-        for (; it.hasNext(); ) {
+        while (it.hasNext()) {
             if (KEY.equals(it.next())) {
                 //使用迭代器的删除方法,不要使用集合对象的删除方法remove
                 it.remove();
