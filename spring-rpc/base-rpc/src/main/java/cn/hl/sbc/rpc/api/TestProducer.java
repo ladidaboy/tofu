@@ -11,13 +11,14 @@ import cn.hl.sbc.rpc.api.core.BaseProducer;
 import javax.jws.WebService;
 
 /**
- * @ WebService 注解只用于 ws 提供的RPC服务
  * @author H
+ * @ WebService 注解只用于 ws 提供的RPC服务
  */
 @WebService
 public interface TestProducer {
     /**
      * 获取测试对象信息
+     *
      * @param type 类型
      * @return TestBean
      */
